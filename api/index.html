@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prof. Daniel Seidman</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f0f4f4;
+    --surface: #ffffff;
+    --surface2: #e4eeee;
+    --accent: #0e6b6b;
+    --accent-soft: #d0e8e8;
+    --gold: #c9a84c;
+    --gold-soft: #f7edd8;
+    --text: #0d1f1f;
+    --text-mid: #3d5c5c;
+    --text-light: #7a9e9e;
+    --border: #cddede;
+    --radius: 16px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  body.rtl { direction: rtl; }
+  body.rtl .response-body ul { margin: 8px 20px 12px 0; }
+  body.rtl .disclaimer { border-left: none; border-right: 3px solid var(--gold); }
+  body.rtl .lang-toggle { margin-left: 0; margin-right: auto; }
+  body.rtl .doctor-badge { flex-direction: row-reverse; }
+
+  /* ── Header ── */
+  header {
+    padding: 0;
+    background: var(--accent);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .header-top {
+    padding: 16px 28px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .avatar {
+    width: 42px; height: 42px;
+    border-radius: 50%;
+    background: var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'DM Serif Display', serif;
+    font-size: 17px;
+    color: white;
+    flex-shrink: 0;
+    letter-spacing: 0.5px;
+  }
+
+  .header-names { flex: 1; }
+
+  .doctor-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 18px;
+    color: white;
+    letter-spacing: -0.2px;
+    line-height: 1.2;
+  }
+
+  .doctor-title {
+    font-size: 11px;
+    color: rgba(255,255,255,0.55);
+    letter-spacing: 0.4px;
+    margin-top: 1px;
+  }
+
+  .lang-toggle {
+    margin-left: auto;
+    display: flex;
+    gap: 3px;
+    background: rgba(255,255,255,0.12);
+    border-radius: 100px;
+    padding: 4px;
+  }
+
+  .lang-btn {
+    padding: 5px 15px;
+    border-radius: 100px;
+    border: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    color: rgba(255,255,255,0.65);
+    background: transparent;
+  }
+
+  .lang-btn.active { background: var(--gold); color: var(--text); }
+
+  .header-tagline {
+    padding: 10px 28px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 0.3px;
+  }
+
+  /* ── Main ── */
+  main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    max-width: 780px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 32px 24px 100px;
+    gap: 22px;
+  }
+
+  /* ── Intro card ── */
+  .intro-card {
+    background: var(--accent);
+    border-radius: var(--radius);
+    padding: 28px 30px;
+    color: white;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .intro-card::after {
+    content: '';
+    position: absolute;
+    top: -30px; right: -30px;
+    width: 160px; height: 160px;
+    background: var(--gold);
+    opacity: 0.13;
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  body.rtl .intro-card::after { right: auto; left: -30px; }
+
+  .doctor-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.12);
+    border-radius: 100px;
+    padding: 5px 14px 5px 8px;
+    margin-bottom: 14px;
+  }
+
+  .badge-dot {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'DM Serif Display', serif;
+    font-size: 10px;
+    color: white;
+    flex-shrink: 0;
+  }
+
+  .badge-text {
+    font-size: 12px;
+    color: rgba(255,255,255,0.8);
+    letter-spacing: 0.2px;
+  }
+
+  .intro-card h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 25px;
+    line-height: 1.3;
+    margin-bottom: 10px;
+    font-weight: 400;
+    position: relative;
+  }
+
+  .intro-card p {
+    font-size: 14.5px;
+    opacity: 0.8;
+    line-height: 1.65;
+    max-width: 560px;
+    position: relative;
+  }
+
+  /* ── Section label ── */
+  .section-label {
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.9px;
+    color: var(--text-light);
+    display: block;
+    margin-bottom: 10px;
+  }
+
+  /* ── Phase pills ── */
+  .phase-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+
+  .phase-pill {
+    padding: 8px 16px;
+    border-radius: 100px;
+    border: 1.5px solid var(--border);
+    background: var(--surface);
+    font-size: 13px;
+    color: var(--text-mid);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .phase-pill:hover { border-color: var(--accent); color: var(--accent); }
+  .phase-pill.active { background: var(--accent); border-color: var(--accent); color: white; }
+
+  /* ── Input ── */
+  .input-card {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .input-card:focus-within { border-color: var(--accent); }
+
+  .input-label {
+    padding: 16px 20px 0;
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.9px;
+    color: var(--text-light);
+  }
+
+  textarea {
+    width: 100%;
+    border: none;
+    outline: none;
+    resize: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    color: var(--text);
+    background: transparent;
+    padding: 12px 20px 16px;
+    line-height: 1.6;
+    min-height: 100px;
+  }
+
+  textarea::placeholder { color: var(--text-light); }
+
+  .input-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    border-top: 1px solid var(--border);
+    background: var(--surface2);
+    gap: 12px;
+  }
+
+  .input-hint { font-size: 12px; color: var(--text-light); }
+
+  .send-btn {
+    background: var(--gold);
+    color: var(--text);
+    border: none;
+    border-radius: 100px;
+    padding: 10px 22px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: opacity 0.15s, transform 0.1s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .send-btn:hover { opacity: 0.85; }
+  .send-btn:active { transform: scale(0.97); }
+  .send-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  /* ── Quick prompts ── */
+  .quick-prompts { display: flex; flex-wrap: wrap; gap: 8px; }
+
+  .quick-btn {
+    padding: 8px 14px;
+    border-radius: 10px;
+    border: 1.5px solid var(--border);
+    background: var(--surface);
+    font-size: 13px;
+    color: var(--text-mid);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    font-family: 'DM Sans', sans-serif;
+    text-align: start;
+    line-height: 1.4;
+  }
+
+  .quick-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+
+  /* ── Response ── */
+  .response-card {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    display: none;
+  }
+
+  .response-card.visible { display: block; }
+
+  .response-header {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--surface2);
+  }
+
+  .response-dot { width: 8px; height: 8px; background: var(--gold); border-radius: 50%; }
+
+  .response-title {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-mid);
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+  }
+
+  .response-body {
+    padding: 24px 28px;
+    font-size: 15px;
+    line-height: 1.75;
+    color: var(--text);
+  }
+
+  .response-body h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 19px;
+    font-weight: 400;
+    color: var(--accent);
+    margin: 22px 0 8px;
+  }
+
+  .response-body h3:first-child { margin-top: 0; }
+  .response-body p { margin-bottom: 12px; }
+  .response-body p:last-child { margin-bottom: 0; }
+  .response-body ul { margin: 8px 0 12px 20px; }
+  .response-body li { margin-bottom: 6px; }
+
+  .disclaimer {
+    margin-top: 20px;
+    padding: 14px 16px;
+    background: var(--gold-soft);
+    border-radius: 10px;
+    font-size: 13px;
+    color: var(--text-mid);
+    line-height: 1.55;
+    border-left: 3px solid var(--gold);
+  }
+
+  /* ── Loading ── */
+  .loading {
+    display: none;
+    padding: 32px 28px;
+    align-items: center;
+    gap: 14px;
+    color: var(--text-mid);
+    font-size: 14px;
+  }
+
+  .loading.visible { display: flex; }
+  .dots { display: flex; gap: 5px; }
+
+  .dot {
+    width: 7px; height: 7px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: bounce 1.2s infinite ease-in-out;
+    opacity: 0.6;
+  }
+
+  .dot:nth-child(2) { animation-delay: 0.2s; }
+  .dot:nth-child(3) { animation-delay: 0.4s; }
+
+  @keyframes bounce {
+    0%, 80%, 100% { transform: translateY(0); opacity: 0.6; }
+    40% { transform: translateY(-6px); opacity: 1; }
+  }
+
+  .error-msg { padding: 20px 28px; color: #b94b2b; font-size: 14px; display: none; }
+  .error-msg.visible { display: block; }
+
+  /* ── Footer note ── */
+  .footer-note {
+    text-align: center;
+    font-size: 12px;
+    color: var(--text-light);
+    padding: 0 20px 20px;
+    line-height: 1.6;
+  }
+
+  @media (max-width: 600px) {
+    main { padding: 20px 14px 80px; }
+    .intro-card { padding: 22px; }
+    .intro-card h1 { font-size: 21px; }
+    .header-top { padding: 14px 16px; }
+    .header-tagline { padding: 8px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-top">
+    <div class="avatar">DS</div>
+    <div class="header-names">
+      <div class="doctor-name" id="doctorName">Prof. Daniel Seidman</div>
+      <div class="doctor-title" id="doctorTitle">Reproductive Endocrinology & Infertility</div>
+    </div>
+    <div class="lang-toggle">
+      <button class="lang-btn active" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" onclick="setLang('he')">עב</button>
+    </div>
+  </div>
+  <div class="header-tagline" id="headerTagline">A personal guide to understanding your fertility journey</div>
+</header>
+
+<main>
+
+  <div class="intro-card">
+    <div class="doctor-badge">
+      <div class="badge-dot">DS</div>
+      <span class="badge-text" id="badgeText">Prof. Seidman's Patient Resource</span>
+    </div>
+    <h1 id="introTitle">What did we discuss at your appointment today?</h1>
+    <p id="introDesc">Enter your results or questions here — hormone levels, follicle counts, embryo updates — and receive a clear, expert explanation of what they mean and what comes next.</p>
+  </div>
+
+  <div>
+    <span class="section-label" id="phaseLabel">Your current phase</span>
+    <div class="phase-pills" id="phasePills"></div>
+  </div>
+
+  <div class="input-card">
+    <div class="input-label" id="inputLabel">Your results or question</div>
+    <textarea id="userInput" rows="4"></textarea>
+    <div class="input-footer">
+      <span class="input-hint" id="inputHint">Private & confidential — nothing is stored.</span>
+      <button class="send-btn" id="sendBtn" onclick="sendMessage()">
+        <span id="sendBtnText">Explain this</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div>
+    <div class="section-label" id="quickLabel">Frequently asked questions</div>
+    <div class="quick-prompts" id="quickPrompts"></div>
+  </div>
+
+  <div class="response-card" id="responseCard">
+    <div class="response-header">
+      <div class="response-dot"></div>
+      <span class="response-title" id="responseTitle">Clinical explanation</span>
+    </div>
+    <div class="loading" id="loadingIndicator">
+      <div class="dots">
+        <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+      </div>
+      <span id="loadingText">Preparing your explanation…</span>
+    </div>
+    <div class="error-msg" id="errorMsg"></div>
+    <div class="response-body" id="responseBody"></div>
+  </div>
+
+  <div class="footer-note" id="footerNote">
+    This resource was created by Prof. Daniel Seidman to help his patients better understand their fertility journey.
+  </div>
+
+</main>
+
+<script>
+let currentLang = 'en';
+let selectedPhase = '';
+
+const content = {
+  en: {
+    doctorName: 'Prof. Daniel Seidman',
+    doctorTitle: 'Reproductive Endocrinology & Infertility',
+    headerTagline: 'A personal guide to understanding your fertility journey',
+    badgeText: "From the practice of Prof. Seidman",
+    introTitle: 'What did we discuss at your appointment today?',
+    introDesc: 'Enter your results or questions here — hormone levels, follicle counts, embryo updates — and receive a clear, expert explanation of what they mean and what comes next.',
+    phaseLabel: 'Your current phase',
+    inputLabel: 'Your results or question',
+    inputPlaceholder: "e.g. Day 6 of stims. Estradiol: 1,240 pg/mL. Ultrasound showed 5 follicles at 16mm, 3 at 14mm, 2 at 12mm. What does this mean?",
+    inputHint: 'Private & confidential — nothing is stored.',
+    sendBtn: 'Explain this',
+    quickLabel: 'Frequently asked questions',
+    responseTitle: 'Clinical explanation',
+    loadingText: 'Preparing your explanation…',
+    errorText: 'Something went wrong. Please try again.',
+    footerNote: 'This resource was created by Prof. Daniel Seidman to help his patients better understand their fertility journey.',
+    phases: [
+      { label: '💉 IVF Stimulation', value: 'IVF stimulation', sample: 'Day 6 of stims. Estradiol: 1,240 pg/mL. Ultrasound: 5 follicles at 16mm, 3 at 14mm, 2 at 12mm. Is my response on track?' },
+      { label: '🥚 Retrieval & Recovery', value: 'egg retrieval and recovery', sample: 'They retrieved 9 eggs, 7 were mature. I\'m feeling bloated and crampy. Is this normal, and what happens to my eggs now?' },
+      { label: '🔬 Embryo Development', value: 'embryo development in the lab', sample: 'Day 5 report: 2 blastocysts graded 4AA and 3BB, 1 still developing. What do these grades mean and should I wait for day 6?' },
+      { label: '🌱 FET Prep', value: 'frozen embryo transfer preparation', sample: 'Day 10 of estrogen priming. Lining is 7.4mm, trilaminar pattern. When will I be ready for transfer?' },
+      { label: '❄️ Fertility Preservation', value: 'fertility preservation (egg or embryo freezing)', sample: 'I\'m 34, AMH is 1.8, AFC is 11. How many eggs should I aim to freeze and how many cycles might I need?' },
+      { label: '💙 After a Difficult Cycle', value: 'processing a failed or difficult cycle', sample: 'Our transfer didn\'t work. We have one frozen embryo left. I don\'t know what questions to ask at our next appointment.' },
+    ],
+    quickPrompts: [
+      'What does AMH of 1.1 ng/mL mean for my IVF chances?',
+      'My embryo was graded 3BB — is that good?',
+      'Day 8 stims: E2 is 3,400, trigger tonight. Why so fast?',
+      'We got 10 eggs but only 2 blastocysts. What happened?',
+      'PGT-A showed 1 euploid out of 4 embryos. Is that normal?',
+      'My lining is 7.2mm on day 10 of FET prep. Is it thick enough?',
+    ],
+    systemPrompt: (phase) => `You are a clinical patient education tool created by Prof. Daniel Seidman, one of Israel's most respected reproductive endocrinologists and IVF specialists. You help his patients understand their fertility results and treatment journey.
+
+Your role:
+1. Explain results clearly and accurately, as Prof. Seidman's practice would — warm but precise
+2. Put results in the context of where the patient is in their cycle
+3. Explain what to expect next, practically and honestly
+4. End with 1-2 specific questions the patient might bring to their next appointment with Prof. Seidman
+
+Tone: balanced — warm and reassuring, but clinically grounded. These are Prof. Seidman's patients; they expect expertise. Never alarmist. Acknowledge difficulty when relevant. Be specific — avoid vague reassurances.
+
+Use markdown headers (###) to structure your response into clear sections. Max 4-5 sections. Always end with a "Questions to ask Prof. Seidman:" section.
+
+End with a brief note that this explanation was prepared by Prof. Seidman's practice to help patients understand their journey. Respond in English.
+
+Patient's current treatment phase: ${phase}`
+  },
+  he: {
+    doctorName: 'פרופ׳ דניאל זיידמן',
+    doctorTitle: 'רפואת פוריות ואנדוקרינולוגיה',
+    headerTagline: 'מדריך אישי להבנת מחזור טיפול IVF',
+    badgeText: 'מהמרפאה של פרופ׳ זיידמן',
+    introTitle: 'מה דיברנו בביקור שלך היום?',
+    introDesc: 'הכניסי כאן את התוצאות שלך או שאלות — רמות הורמונים, ספירת זקיקים, עדכוני עוברים — וקבלי הסבר מקצועי וברור על מה שהן אומרות ומה הצעד הבא.',
+    phaseLabel: 'השלב הנוכחי שלך',
+    inputLabel: 'התוצאות שלך או שאלה',
+    inputPlaceholder: 'לדוגמה: יום 6 של גירוי. אסטרדיול: 1,240. אולטרסאונד הראה 5 זקיקים של 16 מ"מ, 3 של 14 מ"מ, 2 של 12 מ"מ. מה זה אומר?',
+    inputHint: 'פרטי וחסוי — שום דבר לא נשמר.',
+    sendBtn: 'הסבירי לי',
+    quickLabel: 'שאלות נפוצות',
+    responseTitle: 'הסבר קליני',
+    loadingText: 'מכינה את ההסבר שלך…',
+    errorText: 'משהו השתבש. אנא נסי שוב.',
+    footerNote: 'פרופ׳ דניאל זיידמן',
+    phases: [
+      { label: '💉 גירוי הורמונלי (IVF)', value: 'גירוי הורמונלי לטיפול IVF', sample: 'יום 6 של גירוי. אסטרדיול: 1,240. אולטרסאונד: 5 זקיקים של 16 מ"מ, 3 של 14 מ"מ, 2 של 12 מ"מ. האם התגובה שלי תקינה?' },
+      { label: '🥚 שאיבה והתאוששות', value: 'שאיבת ביציות והתאוששות', sample: 'שאבו 9 ביציות, 7 היו בשלות. אני מרגישה נפיחות וכאבים. האם זה תקין ומה קורה לביציות עכשיו?' },
+      { label: '🔬 התפתחות עוברים', value: 'התפתחות עוברים במעבדה', sample: 'דיווח יום 5: 2 בלסטוציסטים בדרגה 4AA ו-3BB, אחד עדיין מתפתח. מה אומרות הדרגות האלה?' },
+      { label: '🌱 הכנה ל-FET', value: 'הכנה להחזרת עובר קפוא (FET)', sample: 'יום 10 לאסטרוגן. רירית 7.4 מ"מ, תבנית שלוש שכבות. מתי אהיה מוכנה להחזרה?' },
+      { label: '❄️ שימור פוריות', value: 'שימור פוריות (הקפאת ביציות או עוברים)', sample: 'אני בת 34, AMH 1.8, AFC 11. כמה ביציות כדאי לי לשמר וכמה מחזורים אצטרך?' },
+      { label: '💙 אחרי מחזור קשה', value: 'עיבוד מחזור שנכשל או היה קשה', sample: 'ההחזרה לא הצליחה. נשאר לנו עובר קפוא אחד. אני לא יודעת אילו שאלות לשאול בפגישה הבאה.' },
+    ],
+    quickPrompts: [
+      'מה אומרת רמת AMH של 1.1 על הסיכויים שלי ב-IVF?',
+      'העובר שלי קיבל ציון 3BB — האם זה טוב?',
+      'יום 8 של גירוי: E2 הוא 3,400, טריגר הלילה. למה כל כך מהר?',
+      'שאבו 10 ביציות אבל רק 2 הגיעו לבלסטוציסט. מה קרה?',
+      'PGT-A הראה 1 נורמלי מתוך 4 עוברים. האם זה רגיל?',
+      'רירית הרחם שלי 7.2 מ"מ ביום 10 של הכנה ל-FET. האם מספיק עבה?',
+    ],
+    systemPrompt: (phase) => `את כלי חינוך קליני למטופלות שנוצר על ידי פרופ׳ דניאל זיידמן, אחד ממומחי הפוריות המובילים בישראל. את עוזרת למטופלותיו להבין את תוצאות הפוריות שלהן ואת מסע הטיפול.
+
+תפקידך:
+1. להסביר תוצאות בצורה ברורה ומדויקת, בסגנון של מרפאת פרופ׳ זיידמן — חמה אך מדויקת
+2. להציב את התוצאות בהקשר של שלב הטיפול
+3. להסביר מה צפוי להיות הצעד הבא, בצורה מעשית וכנה
+4. לסיים עם 1-2 שאלות ספציפיות שהמטופלת יכולה להביא לפגישה הבאה עם פרופ׳ זיידמן
+
+טון: מאוזן — חמה ומרגיעה, אבל מבוססת קלינית. אלה מטופלות של פרופ׳ זיידמן; הן מצפות למומחיות. לא מדאיגה. הכירי בקושי כשרלוונטי. היי ספציפית — הימנעי מהרגעה מעורפלת.
+
+השתמשי בכותרות markdown (###) לארגון התשובה לחלקים ברורים. עד 4-5 חלקים. תמיד סיימי עם חלק "שאלות לפרופ׳ זיידמן:".
+
+סיימי עם הערה קצרה שהסבר זה הוכן על ידי מרפאת פרופ׳ זיידמן כדי לסייע למטופלות להבין את מסעם. השיבי בעברית.
+
+שלב הטיפול הנוכחי של המטופלת: ${phase}`
+  }
+};
+
+function setLang(lang) {
+  currentLang = lang;
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  document.body.classList.toggle('rtl', lang === 'he');
+  document.documentElement.lang = lang;
+  document.getElementById('responseCard').classList.remove('visible');
+  renderUI();
+}
+
+function renderUI() {
+  const c = content[currentLang];
+  document.getElementById('doctorName').textContent = c.doctorName;
+  document.getElementById('doctorTitle').textContent = c.doctorTitle;
+  document.getElementById('headerTagline').textContent = c.headerTagline;
+  document.getElementById('badgeText').textContent = c.badgeText;
+  document.getElementById('introTitle').textContent = c.introTitle;
+  document.getElementById('introDesc').textContent = c.introDesc;
+  document.getElementById('phaseLabel').textContent = c.phaseLabel;
+  document.getElementById('inputLabel').textContent = c.inputLabel;
+  document.getElementById('userInput').placeholder = c.inputPlaceholder;
+  document.getElementById('inputHint').textContent = c.inputHint;
+  document.getElementById('sendBtnText').textContent = c.sendBtn;
+  document.getElementById('quickLabel').textContent = c.quickLabel;
+  document.getElementById('responseTitle').textContent = c.responseTitle;
+  document.getElementById('loadingText').textContent = c.loadingText;
+  document.getElementById('footerNote').textContent = c.footerNote;
+
+  const pillsContainer = document.getElementById('phasePills');
+  pillsContainer.innerHTML = '';
+  c.phases.forEach((phase, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'phase-pill' + (i === 0 ? ' active' : '');
+    btn.textContent = phase.label;
+    btn.dataset.value = phase.value;
+    btn.onclick = () => {
+      document.querySelectorAll('.phase-pill').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      selectedPhase = phase.value;
+      if (phase.sample) {
+        document.getElementById('userInput').value = phase.sample;
+      }
+    };
+    pillsContainer.appendChild(btn);
+  });
+  selectedPhase = c.phases[0].value;
+  document.getElementById('userInput').value = c.phases[0].sample || '';
+
+  const quickContainer = document.getElementById('quickPrompts');
+  quickContainer.innerHTML = '';
+  c.quickPrompts.forEach(prompt => {
+    const btn = document.createElement('button');
+    btn.className = 'quick-btn';
+    btn.textContent = prompt;
+    btn.onclick = () => {
+      document.getElementById('userInput').value = prompt;
+      document.getElementById('userInput').focus();
+    };
+    quickContainer.appendChild(btn);
+  });
+}
+
+function formatResponse(text) {
+  text = text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  text = text.replace(/^### (.+)$/gm, '<h3>$1</h3>');
+  text = text.replace(/^## (.+)$/gm, '<h3>$1</h3>');
+  text = text.replace(/^# (.+)$/gm, '<h3>$1</h3>');
+  const lines = text.split('\n');
+  const result = [];
+  let inList = false;
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (trimmed.startsWith('- ') || trimmed.startsWith('• ')) {
+      if (!inList) { result.push('<ul>'); inList = true; }
+      result.push(`<li>${trimmed.slice(2)}</li>`);
+    } else {
+      if (inList) { result.push('</ul>'); inList = false; }
+      if (trimmed.startsWith('<h3>') || trimmed === '') result.push(trimmed);
+      else if (trimmed) result.push(`<p>${trimmed}</p>`);
+    }
+  }
+  if (inList) result.push('</ul>');
+  return result.join('\n');
+}
+
+async function sendMessage() {
+  const input = document.getElementById('userInput').value.trim();
+  if (!input) return;
+
+  const c = content[currentLang];
+  const card = document.getElementById('responseCard');
+  const loading = document.getElementById('loadingIndicator');
+  const body = document.getElementById('responseBody');
+  const errorMsg = document.getElementById('errorMsg');
+  const btn = document.getElementById('sendBtn');
+
+  card.classList.add('visible');
+  loading.classList.add('visible');
+  body.innerHTML = '';
+  errorMsg.classList.remove('visible');
+  btn.disabled = true;
+
+  try {
+    const response = await fetch("/api/chat", {
+      method: "POST",
+      headers: {
+          "Content-Type": "application/json"
+        },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 1000,
+        system: c.systemPrompt(selectedPhase),
+        messages: [{ role: "user", content: input }]
+      })
+    });
+
+    const data = await response.json();
+    if (data.error) throw new Error(data.error.message);
+
+    const text = data.content?.map(b => b.text || '').join('') || '';
+    loading.classList.remove('visible');
+
+    const paragraphs = text.split('\n\n');
+    const lastPara = paragraphs[paragraphs.length - 1];
+    const disclaimerKeywords = ['not a substitute', 'educational', 'care team', 'clinical decisions', 'אינו תחליף', 'חינוכי', 'צוות הטיפול', 'החלטות קליניות'];
+    let mainText = text;
+    let disclaimer = '';
+
+    if (lastPara && disclaimerKeywords.some(k => lastPara.toLowerCase().includes(k.toLowerCase()))) {
+      disclaimer = lastPara.replace(/^#+\s*/, '');
+      mainText = paragraphs.slice(0, -1).join('\n\n');
+    }
+
+    body.innerHTML = formatResponse(mainText);
+    if (disclaimer) body.innerHTML += `<div class="disclaimer">${disclaimer}</div>`;
+
+  } catch (err) {
+    loading.classList.remove('visible');
+    errorMsg.textContent = c.errorText;
+    errorMsg.classList.add('visible');
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+document.getElementById('userInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) sendMessage();
+});
+
+renderUI();
+</script>
+</body>
+</html>
