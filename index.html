@@ -440,7 +440,7 @@
     <div class="avatar">DS</div>
     <div class="header-names">
       <div class="doctor-name" id="doctorName">Prof. Daniel Seidman</div>
-      <div class="doctor-title" id="doctorTitle">Reproductive Endocrinology & Infertility</div>
+      <div class="doctor-title" id="doctorTitle">Reproductive Endocrinology & Infertility · <a href="https://ivf-clinic.co.il/" target="_blank" id="clinicLink" style="color:rgba(255,255,255,0.7);text-decoration:none;border-bottom:1px solid rgba(255,255,255,0.3);">ALMA Clinic</a></div>
     </div>
     <div class="lang-toggle">
       <button class="lang-btn active" onclick="setLang('en')">EN</button>
@@ -514,6 +514,7 @@ const content = {
   en: {
     doctorName: 'Prof. Daniel Seidman',
     doctorTitle: 'Reproductive Endocrinology & Infertility',
+    clinicLink: 'ALMA Clinic',
     headerTagline: 'A personal guide to understanding your fertility journey',
     badgeText: "From the practice of Prof. Seidman",
     introTitle: 'What did we discuss at your appointment today?',
@@ -563,7 +564,8 @@ Patient's current treatment phase: ${phase}`
   },
   he: {
     doctorName: 'פרופ׳ דניאל זיידמן',
-    doctorTitle: 'רפואת פוריות ואנדוקרינולוגיה',
+    doctorTitle: 'רפואת פריון ואנדוקרינולוגיה',
+    clinicLink: 'מרפאת עלמה',
     headerTagline: 'מדריך אישי להבנת מחזור טיפול IVF',
     badgeText: 'מהמרפאה של פרופ׳ זיידמן',
     introTitle: 'מה דיברנו בביקור שלך היום?',
@@ -626,7 +628,8 @@ function setLang(lang) {
 function renderUI() {
   const c = content[currentLang];
   document.getElementById('doctorName').textContent = c.doctorName;
-  document.getElementById('doctorTitle').textContent = c.doctorTitle;
+  document.getElementById('doctorTitle').childNodes[0].textContent = c.doctorTitle + ' · ';
+  document.getElementById('clinicLink').textContent = c.clinicLink;
   document.getElementById('headerTagline').textContent = c.headerTagline;
   document.getElementById('badgeText').textContent = c.badgeText;
   document.getElementById('introTitle').textContent = c.introTitle;
