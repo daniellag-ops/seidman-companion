@@ -1,7 +1,296 @@
-DS
-seidman-ai.com
-PATIENT LINK GENERATOR
-Admin access
-Enter the admin key to generate patient links.
-ADMIN KEY
-Continue
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seidman-AI — Patient Link Generator</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --accent: #0e6b6b;
+    --gold: #c9a84c;
+    --bg: #f0f4f4;
+    --surface: #fff;
+    --border: #cddede;
+    --text: #0d1f1f;
+    --text-mid: #3d5c5c;
+    --text-light: #7a9e9e;
+    --radius: 14px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+
+  .card {
+    background: var(--surface);
+    border-radius: var(--radius);
+    border: 1.5px solid var(--border);
+    padding: 40px;
+    max-width: 560px;
+    width: 100%;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 28px;
+  }
+
+  .avatar {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    background: var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'DM Serif Display', serif;
+    font-size: 14px;
+    color: white;
+    flex-shrink: 0;
+  }
+
+  .logo-name { font-family: 'DM Serif Display', serif; font-size: 18px; }
+  .logo-sub { font-size: 11px; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.6px; }
+
+  h1 { font-family: 'DM Serif Display', serif; font-size: 24px; font-weight: 400; margin-bottom: 8px; }
+
+  p { font-size: 14px; color: var(--text-mid); line-height: 1.6; margin-bottom: 24px; }
+
+  label { display: block; font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-light); margin-bottom: 7px; }
+
+  input {
+    width: 100%;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.15s;
+    margin-bottom: 16px;
+  }
+
+  input:focus { border-color: var(--accent); }
+
+  .generate-btn {
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 100px;
+    padding: 13px 28px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: opacity 0.15s;
+    width: 100%;
+    margin-top: 4px;
+  }
+
+  .generate-btn:hover { opacity: 0.85; }
+  .generate-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .result {
+    display: none;
+    margin-top: 20px;
+    padding: 18px;
+    background: #e6f4f4;
+    border-radius: 10px;
+    border: 1.5px solid var(--accent);
+  }
+
+  .result.visible { display: block; }
+  .result-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.8px; color: var(--accent); margin-bottom: 8px; }
+  .result-link { font-size: 14px; color: var(--text); word-break: break-all; line-height: 1.5; margin-bottom: 12px; font-weight: 500; }
+
+  .copy-btn {
+    background: var(--gold);
+    color: var(--text);
+    border: none;
+    border-radius: 100px;
+    padding: 8px 20px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+
+  .copy-btn:hover { opacity: 0.85; }
+
+  .error-msg { display: none; margin-top: 16px; padding: 12px 16px; background: #fde8e8; border-radius: 10px; font-size: 13px; color: #b94b2b; border-left: 3px solid #b94b2b; }
+  .error-msg.visible { display: block; }
+
+  .links-list { margin-top: 32px; border-top: 1px solid var(--border); padding-top: 24px; display: none; }
+  .links-list h2 { font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-light); margin-bottom: 14px; }
+
+  .link-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); gap: 12px; }
+  .link-item:last-child { border-bottom: none; }
+  .link-name { font-size: 14px; font-weight: 500; color: var(--text); }
+  .link-time { font-size: 12px; color: var(--text-light); }
+
+  .copy-small {
+    background: none;
+    border: 1.5px solid var(--border);
+    border-radius: 100px;
+    padding: 5px 12px;
+    font-size: 12px;
+    color: var(--text-mid);
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: all 0.15s;
+  }
+
+  .copy-small:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* Login screen */
+  .login-screen { display: block; }
+  .main-screen { display: none; }
+  .main-screen.visible { display: block; }
+  .login-screen.hidden { display: none; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="logo">
+    <div class="avatar">DS</div>
+    <div>
+      <div class="logo-name">seidman-ai.com</div>
+      <div class="logo-sub">Patient Link Generator</div>
+    </div>
+  </div>
+
+  <!-- Login -->
+  <div class="login-screen" id="loginScreen">
+    <h1>Admin access</h1>
+    <p>Enter the admin key to generate patient links.</p>
+    <label>Admin key</label>
+    <input type="password" id="adminKeyInput" placeholder="Enter admin key" />
+    <button class="generate-btn" onclick="login()">Continue</button>
+    <div class="error-msg" id="loginError">Incorrect key. Please try again.</div>
+  </div>
+
+  <!-- Main -->
+  <div class="main-screen" id="mainScreen">
+    <h1>Generate a patient link</h1>
+    <p>Enter the patient's name and generate a unique private link. It's saved automatically — just copy and send via WhatsApp.</p>
+
+    <label>Patient name</label>
+    <input type="text" id="patientName" placeholder="e.g. Sarah Cohen" />
+
+    <button class="generate-btn" id="generateBtn" onclick="generateLink()">Generate private link</button>
+
+    <div class="result" id="result">
+      <div class="result-label">Link for <span id="resultName"></span></div>
+      <div class="result-link" id="resultLink"></div>
+      <button class="copy-btn" onclick="copyLink()">Copy link</button>
+    </div>
+
+    <div class="error-msg" id="generateError"></div>
+
+    <div class="links-list" id="linksList">
+      <h2>Generated this session</h2>
+      <div id="linksContainer"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  let adminKey = '';
+  const generated = [];
+
+  function login() {
+    const input = document.getElementById('adminKeyInput').value.trim();
+    if (!input) return;
+    adminKey = input;
+    document.getElementById('loginScreen').classList.add('hidden');
+    document.getElementById('mainScreen').classList.add('visible');
+  }
+
+  document.getElementById('adminKeyInput')?.addEventListener('keydown', e => {
+    if (e.key === 'Enter') login();
+  });
+
+  async function generateLink() {
+    const name = document.getElementById('patientName').value.trim();
+    if (!name) return;
+
+    const btn = document.getElementById('generateBtn');
+    const errorEl = document.getElementById('generateError');
+    btn.disabled = true;
+    btn.textContent = 'Generating…';
+    errorEl.classList.remove('visible');
+
+    try {
+      const res = await fetch('/api/generate-token', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, adminKey })
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) throw new Error(data.error || 'Failed to generate link');
+
+      generated.push({ name: data.name, link: data.link });
+
+      document.getElementById('resultName').textContent = data.name;
+      document.getElementById('resultLink').textContent = data.link;
+      document.getElementById('result').classList.add('visible');
+      document.getElementById('patientName').value = '';
+      renderList();
+
+    } catch (err) {
+      errorEl.textContent = err.message;
+      errorEl.classList.add('visible');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Generate private link';
+    }
+  }
+
+  function copyLink() {
+    navigator.clipboard.writeText(document.getElementById('resultLink').textContent);
+    const btn = document.querySelector('.copy-btn');
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = 'Copy link', 2000);
+  }
+
+  function renderList() {
+    if (generated.length === 0) return;
+    document.getElementById('linksList').style.display = 'block';
+    document.getElementById('linksContainer').innerHTML = generated.map((g, i) => `
+      <div class="link-item">
+        <div>
+          <div class="link-name">${g.name}</div>
+        </div>
+        <button class="copy-small" onclick="copyItem(${i})">Copy link</button>
+      </div>
+    `).join('');
+  }
+
+  function copyItem(i) {
+    navigator.clipboard.writeText(generated[i].link);
+    const btns = document.querySelectorAll('.copy-small');
+    btns[i].textContent = 'Copied!';
+    setTimeout(() => btns[i].textContent = 'Copy link', 2000);
+  }
+
+  document.getElementById('patientName')?.addEventListener('keydown', e => {
+    if (e.key === 'Enter') generateLink();
+  });
+</script>
+</body>
+</html>
