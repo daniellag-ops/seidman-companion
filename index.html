@@ -406,6 +406,16 @@
   .error-msg.visible { display: block; }
 
   /* ── Footer note ── */
+  .disclaimer-banner {
+    background: var(--gold-soft);
+    border: 1.5px solid var(--gold);
+    border-radius: var(--radius);
+    padding: 14px 18px;
+    font-size: 13px;
+    color: var(--text-mid);
+    line-height: 1.6;
+  }
+
   .footer-note {
     text-align: center;
     font-size: 12px;
@@ -450,6 +460,8 @@
     <h1 id="introTitle">What did we discuss at your appointment today?</h1>
     <p id="introDesc">Enter your results or questions here — hormone levels, follicle counts, embryo updates — and receive a clear, expert explanation of what they mean and what comes next.</p>
   </div>
+
+  <div class="disclaimer-banner" id="disclaimerBanner"></div>
 
   <div>
     <span class="section-label" id="phaseLabel">Your current phase</span>
@@ -516,6 +528,7 @@ const content = {
     loadingText: 'Preparing your explanation…',
     errorText: 'Something went wrong. Please try again.',
     footerNote: 'This resource was created by Prof. Daniel Seidman to help his patients better understand their fertility journey.',
+    disclaimer: 'This tool is for educational purposes only. It helps you understand your results and prepare for your conversations with Prof. Seidman. Any clinical questions or concerns will be addressed directly by Prof. Seidman and his team.',
     phases: [
       { label: '💉 IVF Stimulation', value: 'IVF stimulation', sample: 'Day 6 of stims. Estradiol: 1,240 pg/mL. Ultrasound: 5 follicles at 16mm, 3 at 14mm, 2 at 12mm. Is my response on track?' },
       { label: '🥚 Retrieval & Recovery', value: 'egg retrieval and recovery', sample: 'They retrieved 9 eggs, 7 were mature. I\'m feeling bloated and crampy. Is this normal, and what happens to my eggs now?' },
@@ -565,6 +578,7 @@ Patient's current treatment phase: ${phase}`
     loadingText: 'מכינה את ההסבר שלך…',
     errorText: 'משהו השתבש. אנא נסי שוב.',
     footerNote: 'פרופ׳ דניאל זיידמן',
+    disclaimer: 'כלי זה נועד למטרות מידע בלבד. הוא נועד לסייע לך להבין את תוצאות הבדיקה ולהיערך לשיחה עם פרופ׳ זיידמן. מענה על שאלות רפואיות או בירור חששות קליניים יינתנו ישירות על ידי פרופ׳ זיידמן וצוותו.',
     phases: [
       { label: '💉 גירוי הורמונלי (IVF)', value: 'גירוי הורמונלי לטיפול IVF', sample: 'יום 6 של גירוי. אסטרדיול: 1,240. אולטרסאונד: 5 זקיקים של 16 מ"מ, 3 של 14 מ"מ, 2 של 12 מ"מ. האם התגובה שלי תקינה?' },
       { label: '🥚 שאיבה והתאוששות', value: 'שאיבת ביציות והתאוששות', sample: 'שאבו 9 ביציות, 7 היו בשלות. אני מרגישה נפיחות וכאבים. האם זה תקין ומה קורה לביציות עכשיו?' },
@@ -626,6 +640,7 @@ function renderUI() {
   document.getElementById('responseTitle').textContent = c.responseTitle;
   document.getElementById('loadingText').textContent = c.loadingText;
   document.getElementById('footerNote').textContent = c.footerNote;
+  document.getElementById('disclaimerBanner').textContent = c.disclaimer;
 
   const pillsContainer = document.getElementById('phasePills');
   pillsContainer.innerHTML = '';
