@@ -684,6 +684,12 @@ function formatResponse(text) {
   return result.join('\n');
 }
 
+// Read patient token from URL — supports both /p/sarah-cohen and ?token=sarah-cohen
+const pathSlug = window.location.pathname.startsWith('/p/') 
+  ? window.location.pathname.split('/p/')[1] 
+  : null;
+const patientToken = pathSlug || new URLSearchParams(window.location.search).get('token');
+
 async function sendMessage() {
   const input = document.getElementById('userInput').value.trim();
   if (!input) return;
@@ -694,6 +700,15 @@ async function sendMessage() {
   const body = document.getElementById('responseBody');
   const errorMsg = document.getElementById('errorMsg');
   const btn = document.getElementById('sendBtn');
+
+  if (!patientToken) {
+    card.classList.add('visible');
+    errorMsg.textContent = currentLang === 'he'
+      ? 'קישור לא תקין. אנא פנה למרפאה של פרופ׳ זיידמן לקבלת קישור אישי.'
+      : 'Invalid link. Please contact Prof. Seidman\'s clinic for your personal link.';
+    errorMsg.classList.add('visible');
+    return;
+  }
 
   card.classList.add('visible');
   loading.classList.add('visible');
@@ -708,6 +723,7 @@ async function sendMessage() {
           "Content-Type": "application/json"
         },
       body: JSON.stringify({
+        token: patientToken,
         model: "claude-sonnet-4-20250514",
         max_tokens: 1000,
         system: c.systemPrompt(selectedPhase),
@@ -716,7 +732,7 @@ async function sendMessage() {
     });
 
     const data = await response.json();
-    if (data.error) throw new Error(data.error.message);
+    if (data.error) throw new Error(data.error);
 
     const text = data.content?.map(b => b.text || '').join('') || '';
     loading.classList.remove('visible');
@@ -737,7 +753,7 @@ async function sendMessage() {
 
   } catch (err) {
     loading.classList.remove('visible');
-    errorMsg.textContent = c.errorText;
+    errorMsg.textContent = err.message || c.errorText;
     errorMsg.classList.add('visible');
   } finally {
     btn.disabled = false;
