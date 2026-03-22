@@ -773,6 +773,13 @@ async function sendMessage() {
       body: JSON.stringify({ token: patientToken, phase: selectedPhase, question: input })
     }).catch(() => {});
 
+    // Silently log the question regardless of outcome
+    fetch('/api/log-question', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token: patientToken, phase: selectedPhase, question: input })
+    }).catch(() => {});
+
     if (data.error) throw new Error(data.error);
 
     const text = data.content?.map(b => b.text || '').join('') || '';
