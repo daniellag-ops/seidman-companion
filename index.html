@@ -878,7 +878,7 @@
       <!-- Add medication -->
       <div class="meds-add">
         <div class="meds-add-row">
-          <select id="medName" class="med-select med-select-name" onchange="onMedNameChange()">
+          <select id="medName" class="med-select med-select-name" onchange="onMedNameChange()" onclick="onMedNameChange()">
             <option value="">— Select medication —</option>
             <optgroup id="grpStim" label="💉 Stimulation (FSH/LH)">
               <option value="Gonal-F">Gonal-F</option>
@@ -1436,17 +1436,18 @@ function checkProactiveMessage(dates) {
   const tomorrow = new Date(Date.now() + 86400000).toISOString().split('T')[0];
   const isHe = currentLang === 'he';
 
+  // Fixed-date messages (retrieval day, transfer day, beta day)
   const messages = {
     retrieval: {
-      [tomorrow]: { icon: '🥚', en: { title: 'Retrieval is tomorrow', body: "Your egg retrieval is tomorrow. Don't eat or drink after midnight. Arrive relaxed — your body has done the hard work." }, he: { title: 'מחר היא שאיבת הביציות', body: 'מחר מתבצעת שאיבת הביציות שלך. אל תאכלי ואל תשתי מחצות. הגיעי רגועה — הגוף שלך עשה את העבודה הקשה.' } },
-      [today]: { icon: '🥚', en: { title: 'Today is retrieval day', body: "Today is the day! Your follicles are ready. Rest well afterwards — some bloating is completely normal." }, he: { title: 'היום הוא יום השאיבה', body: 'היום זה קורה! הזקיקים שלך מוכנים. נוחי היטב אחר כך — נפיחות מסוימת היא תופעה נורמלית לחלוטין.' } }
+      [tomorrow]: { icon: '🥚', en: { title: 'Retrieval is tomorrow', body: "Your egg retrieval is tomorrow. Don't eat or drink after midnight. Arrive relaxed — your body has done the hard work." }, he: { title: 'מחר שאיבת הביציות שלך', body: 'מחר תתבצע שאיבת הביציות. הגיעי רגועה – הגוף שלך עשה את שלו, ועכשיו תורנו לדאוג לשאר. נא לא לאכול או לשתות החל מחצות.' } },
+      [today]: { icon: '🥚', en: { title: 'Today is retrieval day', body: "Today is the day! Your follicles are ready. Rest well afterwards — some bloating and discomfort is completely normal." }, he: { title: 'היום יום השאיבה', body: 'היום זה קורה! הזקיקים שלך מוכנים. נוחי היטב אחרי השאיבה — נפיחות ואי נוחות הן תופעות נורמליות לגמרי.' } }
     },
     transfer: {
-      [tomorrow]: { icon: '🌱', en: { title: 'Transfer is tomorrow', body: "Your embryo transfer is tomorrow. Come with a full bladder, bring someone you love, and remember — you've made it this far." }, he: { title: 'מחר היא ההחזרה', body: 'מחר היא החזרת העובר. הגיעי עם שלפוחית שתן מלאה, הביאי מישהו שאת אוהבת, וזכרי — הגעת עד לכאן.' } },
-      [today]: { icon: '🌱', en: { title: 'Today is transfer day', body: "Today your embryo comes home 💙 Rest, stay warm, and be kind to yourself. The next two weeks will feel long — we're here." }, he: { title: 'היום הוא יום ההחזרה', body: 'היום העובר חוזר הביתה 💙 נוחי, הישארי חמה והיי סלחנית עם עצמך. שבועיים הקרובים ירגישו ארוכים — אנחנו כאן.' } }
+      [tomorrow]: { icon: '🌱', en: { title: 'Transfer is tomorrow', body: "Your embryo transfer is tomorrow. Come with a full bladder, bring someone you love, and remember — you've made it this far." }, he: { title: 'מחר ההחזרה', body: 'מחר מתבצעת החזרת העובר. הגיעי עם שלפוחית שתן מלאה, קחי איתך מישהו שאת אוהבת, וזכרי — הגעת עד לכאן.' } },
+      [today]: { icon: '🌱', en: { title: 'Today is transfer day', body: "Today your embryo comes home 💙 Rest, stay warm, and be kind to yourself. The next two weeks will feel long — we're here." }, he: { title: 'היום יום ההחזרה', body: 'היום העובר חוזר הביתה 💙 נוחי, הישארי חמה והיי סלחנית עם עצמך. שבועיים הקרובים ירגישו ארוכים — אנחנו כאן.' } }
     },
     beta: {
-      [today]: { icon: '🎗️', en: { title: 'Today is beta day', body: "Today is the day you find out. Whatever the result, know that you've been incredibly brave throughout this journey." }, he: { title: 'היום הוא יום הבטא', body: 'היום היא היום שבו תדעי. מה שתהיה התוצאה, דעי שהיית אמיצה להפליא לאורך כל הדרך הזו.' } }
+      [today]: { icon: '🎗️', en: { title: 'Today is beta day', body: "Today is the day you find out. Whatever the result, know that you've been incredibly brave throughout this journey." }, he: { title: 'היום יום הבטא', body: 'היום תדעי. מה שתהיה התוצאה — היית אמיצה להפליא לאורך כל הדרך הזו.' } }
     }
   };
 
@@ -1455,28 +1456,48 @@ function checkProactiveMessage(dates) {
     if (!date) continue;
     const msg = dayMessages[date];
     if (msg) {
-      const content = isHe ? msg.he : msg.en;
+      const c = isHe ? msg.he : msg.en;
       document.getElementById('proactiveIcon').textContent = msg.icon;
-      document.getElementById('proactiveTitle').textContent = content.title;
-      document.getElementById('proactiveBody').textContent = content.body;
+      document.getElementById('proactiveTitle').textContent = c.title;
+      document.getElementById('proactiveBody').textContent = c.body;
       document.getElementById('proactiveBanner').style.display = 'flex';
       return;
     }
   }
 
+  // Post-OPU messages (days after retrieval)
+  if (dates.retrieval) {
+    const dpo = Math.round((new Date(today) - new Date(dates.retrieval)) / 86400000);
+    const postOPU = {
+      1: { icon: '🔬', en: { title: 'Fertilization report today', body: "The lab will call today with your fertilization report — how many eggs fertilized overnight. Try to stay busy and wait for their call." }, he: { title: 'היום מגיע דוח ההפריה', body: 'המעבדה תתקשר היום עם דוח ההפריה — כמה ביציות הופרו. נסי להיות עסוקה ולהמתין לשיחה.' } },
+      3: { icon: '🧫', en: { title: 'Day 3 embryo update', body: "Today is Day 3 — the lab is watching your embryos develop. You may get a Day 3 update call. Good quality embryos at this stage have 6-8 cells." }, he: { title: 'עדכון עוברים — יום 3', body: 'היום יום 3 — המעבדה עוקבת אחרי התפתחות העוברים. ייתכן שתקבלי עדכון. עוברים באיכות טובה בשלב זה מכילים 6-8 תאים.' } },
+      5: { icon: '🌟', en: { title: 'Blastocyst report — Day 5', body: "Today is the big day in the lab. Embryos that make it to blastocyst stage by Day 5 have the highest implantation potential. The lab will call with your final count." }, he: { title: 'דוח בלסטוציסט — יום 5', body: 'היום זה היום הגדול במעבדה. עוברים שמגיעים לשלב הבלסטוציסט ביום 5 הם בעלי הפוטנציאל הגבוה ביותר להשרשה. המעבדה תתקשר עם הדוח הסופי.' } }
+    };
+    if (postOPU[dpo]) {
+      const msg = postOPU[dpo];
+      const c = isHe ? msg.he : msg.en;
+      document.getElementById('proactiveIcon').textContent = msg.icon;
+      document.getElementById('proactiveTitle').textContent = c.title;
+      document.getElementById('proactiveBody').textContent = c.body;
+      document.getElementById('proactiveBanner').style.display = 'flex';
+      return;
+    }
+  }
+
+  // Post-transfer messages
   if (dates.transfer) {
     const dpt = Math.round((new Date(today) - new Date(dates.transfer)) / 86400000);
-    const postMessages = {
-      3: { icon: '💙', en: { title: 'Day 3 after transfer', body: "Three days since transfer. The embryo is settling in. Rest, stay hydrated, and avoid googling symptoms — it's too early for any signs." }, he: { title: 'יום 3 אחרי ההחזרה', body: 'שלושה ימים מאז ההחזרה. העובר מתיישב. נוחי, שתי הרבה, והימנעי מגוגל של סימפטומים — עוד מוקדם מדי.' } },
-      5: { icon: '🔬', en: { title: 'Day 5 after transfer', body: "If implantation is happening, it's happening now. You may feel nothing — that's completely normal." }, he: { title: 'יום 5 אחרי ההחזרה', body: 'אם השרשה מתרחשת, היא קורה עכשיו. ייתכן שלא תרגישי כלום — זה נורמלי לחלוטין.' } },
-      7: { icon: '✨', en: { title: 'One week after transfer', body: "One week in. The wait is hard — you're allowed to feel anxious. Some symptoms now can be a good sign, but their absence means nothing." }, he: { title: 'שבוע אחרי ההחזרה', body: 'שבוע חלף. ההמתנה קשה — מותר לך להרגיש חרדה. סימפטומים מסוימים יכולים להיות סימן טוב, אבל היעדרם אינו אומר דבר.' } }
+    const postTransfer = {
+      2: { icon: '💙', en: { title: 'Day 2 after transfer', body: "Two days since your transfer. Rest as much as you can. It's too early for any symptoms — don't read into how you feel. Your only job right now is to rest." }, he: { title: 'יום 2 אחרי ההחזרה', body: 'יומיים מאז ההחזרה. נוחי כמה שאפשר. עוד מוקדם מדי לכל סימפטום — אל תנסי לפרש את מה שאת מרגישה. המשימה שלך עכשיו היא לנוח.' } },
+      5: { icon: '✨', en: { title: 'Implantation window — Day 5', body: "Around Day 5 is when implantation typically occurs. Some women notice light spotting or mild cramps — this can actually be a good sign. Others feel nothing at all, which is equally normal." }, he: { title: 'חלון ההשרשה — יום 5', body: 'סביב יום 5 מתרחשת ההשרשה. חלק מהנשים מבחינות בדימום קל או התכווצויות עדינות — זה יכול להיות סימן טוב. אחרות לא מרגישות כלום, וזה נורמלי בדיוק באותה מידה.' } },
+      12: { icon: '🎗️', en: { title: 'Beta test is coming up', body: "You're approaching beta day. Most clinics in Israel test at 12 days post transfer. Try not to test at home before — a too-early negative can be misleading." }, he: { title: 'בדיקת הבטא מתקרבת', body: 'את מתקרבת ליום הבטא. רוב המרפאות בישראל בודקות ב-12 ימים אחרי ההחזרה. נסי לא לבדוק בבית לפני — תוצאה שלילית מוקדמת מדי עלולה להטעות.' } }
     };
-    if (postMessages[dpt]) {
-      const msg = postMessages[dpt];
-      const content = isHe ? msg.he : msg.en;
+    if (postTransfer[dpt]) {
+      const msg = postTransfer[dpt];
+      const c = isHe ? msg.he : msg.en;
       document.getElementById('proactiveIcon').textContent = msg.icon;
-      document.getElementById('proactiveTitle').textContent = content.title;
-      document.getElementById('proactiveBody').textContent = content.body;
+      document.getElementById('proactiveTitle').textContent = c.title;
+      document.getElementById('proactiveBody').textContent = c.body;
       document.getElementById('proactiveBanner').style.display = 'flex';
     }
   }
