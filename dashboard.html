@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seidman-AI — Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --accent: #0e6b6b;
+    --accent-soft: #d0e8e8;
+    --gold: #c9a84c;
+    --gold-soft: #f7edd8;
+    --bg: #f0f4f4;
+    --surface: #fff;
+    --border: #cddede;
+    --text: #0d1f1f;
+    --text-mid: #3d5c5c;
+    --text-light: #7a9e9e;
+    --radius: 14px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  header {
+    background: var(--accent);
+    padding: 16px 32px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .avatar {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'DM Serif Display', serif;
+    font-size: 13px;
+    color: white;
+    flex-shrink: 0;
+  }
+
+  .header-name { font-family: 'DM Serif Display', serif; font-size: 18px; color: white; }
+  .header-sub { font-size: 11px; color: rgba(255,255,255,0.55); text-transform: uppercase; letter-spacing: 0.5px; }
+
+  main {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 32px 24px 80px;
+  }
+
+  /* Login */
+  .login-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - 70px);
+  }
+
+  .login-card {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 40px;
+    width: 100%;
+    max-width: 420px;
+  }
+
+  .login-card h1 { font-family: 'DM Serif Display', serif; font-size: 22px; font-weight: 400; margin-bottom: 8px; }
+  .login-card p { font-size: 14px; color: var(--text-mid); margin-bottom: 24px; }
+
+  label { display: block; font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-light); margin-bottom: 7px; }
+
+  input {
+    width: 100%;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.15s;
+    margin-bottom: 16px;
+  }
+
+  input:focus { border-color: var(--accent); }
+
+  .btn {
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 100px;
+    padding: 12px 28px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    width: 100%;
+    transition: opacity 0.15s;
+  }
+
+  .btn:hover { opacity: 0.85; }
+
+  .error { color: #b94b2b; font-size: 13px; margin-top: 10px; display: none; }
+  .error.visible { display: block; }
+
+  /* Dashboard */
+  .dashboard { display: none; }
+  .dashboard.visible { display: block; }
+
+  .dash-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 26px;
+    font-weight: 400;
+    margin-bottom: 6px;
+  }
+
+  .dash-sub { font-size: 14px; color: var(--text-light); margin-bottom: 28px; }
+
+  /* Stats row */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .stat-card {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px 24px;
+  }
+
+  .stat-value {
+    font-family: 'DM Serif Display', serif;
+    font-size: 38px;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .stat-label { font-size: 13px; color: var(--text-light); }
+
+  /* Phase breakdown */
+  .section-title {
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--text-light);
+    margin-bottom: 12px;
+  }
+
+  .phase-bars {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    margin-bottom: 24px;
+  }
+
+  .phase-bar-item {
+    margin-bottom: 14px;
+  }
+
+  .phase-bar-item:last-child { margin-bottom: 0; }
+
+  .phase-bar-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    color: var(--text-mid);
+    margin-bottom: 5px;
+  }
+
+  .phase-bar-track {
+    height: 6px;
+    background: var(--accent-soft);
+    border-radius: 100px;
+    overflow: hidden;
+  }
+
+  .phase-bar-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 100px;
+    transition: width 0.6s ease;
+  }
+
+  /* Questions log */
+  .log-card {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .log-header {
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    background: #e4eeee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .log-header-title { font-size: 13px; font-weight: 500; color: var(--text-mid); text-transform: uppercase; letter-spacing: 0.6px; }
+
+  .filter-pills { display: flex; gap: 6px; flex-wrap: wrap; }
+
+  .filter-pill {
+    padding: 4px 12px;
+    border-radius: 100px;
+    border: 1.5px solid var(--border);
+    background: white;
+    font-size: 12px;
+    color: var(--text-mid);
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.15s;
+  }
+
+  .filter-pill.active { background: var(--accent); border-color: var(--accent); color: white; }
+
+  .log-item {
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 1fr 120px;
+    gap: 16px;
+    align-items: start;
+  }
+
+  .log-item:last-child { border-bottom: none; }
+
+  .log-patient { font-size: 13px; font-weight: 500; color: var(--text); }
+  .log-phase { font-size: 11px; color: var(--text-light); margin-top: 2px; }
+  .log-question { font-size: 14px; color: var(--text); line-height: 1.5; }
+  .log-time { font-size: 12px; color: var(--text-light); text-align: right; }
+
+  .empty-state {
+    padding: 48px 24px;
+    text-align: center;
+    color: var(--text-light);
+    font-size: 14px;
+  }
+
+  @media (max-width: 600px) {
+    .stats-row { grid-template-columns: 1fr; }
+    .log-item { grid-template-columns: 1fr; gap: 6px; }
+    .log-time { text-align: left; }
+    header { padding: 14px 16px; }
+    main { padding: 20px 14px 60px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="avatar">DS</div>
+  <div>
+    <div class="header-name">Prof. Daniel Seidman</div>
+    <div class="header-sub">Patient Insights Dashboard</div>
+  </div>
+</header>
+
+<main>
+
+  <!-- Login -->
+  <div class="login-wrap" id="loginWrap">
+    <div class="login-card">
+      <h1>Dashboard access</h1>
+      <p>Enter your admin key to view patient insights.</p>
+      <label>Admin key</label>
+      <input type="password" id="adminKey" placeholder="Enter admin key" />
+      <button class="btn" onclick="login()">View dashboard</button>
+      <div class="error" id="loginError">Incorrect key. Please try again.</div>
+    </div>
+  </div>
+
+  <!-- Dashboard -->
+  <div class="dashboard" id="dashboard">
+    <div class="dash-title">Patient Insights</div>
+    <div class="dash-sub" id="dashSub">Loading…</div>
+
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-value" id="statQuestions">—</div>
+        <div class="stat-label">Questions asked</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="statPatients">—</div>
+        <div class="stat-label">Unique users</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="statTotal">—</div>
+        <div class="stat-label">Total patients registered</div>
+      </div>
+    </div>
+
+    <div class="section-title">Questions by phase</div>
+    <div class="phase-bars" id="phaseBars"></div>
+
+    <div class="section-title">All questions</div>
+    <div class="log-card">
+      <div class="log-header">
+        <span class="log-header-title">Question log</span>
+        <div class="filter-pills" id="filterPills"></div>
+      </div>
+      <div id="logItems"></div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+  let adminKey = '';
+  let allLogs = [];
+  let activeFilter = 'all';
+
+  function login() {
+    const key = document.getElementById('adminKey').value.trim();
+    if (!key) return;
+    adminKey = key;
+    loadDashboard();
+  }
+
+  document.getElementById('adminKey').addEventListener('keydown', e => {
+    if (e.key === 'Enter') login();
+  });
+
+  async function loadDashboard() {
+    try {
+      const res = await fetch('/api/dashboard-data', {
+        headers: { 'x-admin-key': adminKey }
+      });
+
+      if (res.status === 403) {
+        document.getElementById('loginError').classList.add('visible');
+        return;
+      }
+
+      const data = await res.json();
+
+      document.getElementById('loginWrap').style.display = 'none';
+      document.getElementById('dashboard').classList.add('visible');
+
+      document.getElementById('statQuestions').textContent = data.totalQuestions;
+      document.getElementById('statPatients').textContent = data.uniqueUsers;
+      document.getElementById('statTotal').textContent = data.totalPatients;
+      document.getElementById('dashSub').textContent = `Last updated just now · ${data.totalQuestions} questions from ${data.uniquePatients} patients`;
+
+      allLogs = data.logs;
+      renderPhaseBars(data.phaseCounts, data.totalQuestions);
+      renderFilters(data.phaseCounts);
+      renderLogs(allLogs);
+
+    } catch (err) {
+      document.getElementById('loginError').textContent = 'Failed to load. Please try again.';
+      document.getElementById('loginError').classList.add('visible');
+    }
+  }
+
+  function renderPhaseBars(phaseCounts, total) {
+    const container = document.getElementById('phaseBars');
+    if (!total) { container.innerHTML = '<div style="color:var(--text-light);font-size:14px;">No data yet.</div>'; return; }
+    const sorted = Object.entries(phaseCounts).sort((a, b) => b[1] - a[1]);
+    container.innerHTML = sorted.map(([phase, count]) => `
+      <div class="phase-bar-item">
+        <div class="phase-bar-header">
+          <span>${phase}</span>
+          <span>${count} question${count !== 1 ? 's' : ''}</span>
+        </div>
+        <div class="phase-bar-track">
+          <div class="phase-bar-fill" style="width:${Math.round(count/total*100)}%"></div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function renderFilters(phaseCounts) {
+    const container = document.getElementById('filterPills');
+    const phases = Object.keys(phaseCounts);
+    container.innerHTML = `<button class="filter-pill active" onclick="filterLogs('all', this)">All</button>` +
+      phases.map(p => `<button class="filter-pill" onclick="filterLogs('${p.replace(/'/g, "\\'")}', this)">${p.split('(')[0].trim()}</button>`).join('');
+  }
+
+  function filterLogs(phase, btn) {
+    activeFilter = phase;
+    document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    const filtered = phase === 'all' ? allLogs : allLogs.filter(l => l.phase === phase);
+    renderLogs(filtered);
+  }
+
+  function renderLogs(logs) {
+    const container = document.getElementById('logItems');
+    if (!logs.length) {
+      container.innerHTML = '<div class="empty-state">No questions yet. Share patient links to get started.</div>';
+      return;
+    }
+    container.innerHTML = logs.map(l => `
+      <div class="log-item">
+        <div>
+          <div class="log-question">${l.question}</div>
+          <div class="log-phase" style="margin-top:4px">${l.phase || '—'}</div>
+        </div>
+        <div class="log-time">${formatTime(l.timestamp)}</div>
+      </div>
+    `).join('');
+  }
+
+  function formatTime(ts) {
+    if (!ts) return '—';
+    const d = new Date(ts);
+    return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) + ' · ' +
+           d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+  }
+</script>
+</body>
+</html>
