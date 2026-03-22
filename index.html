@@ -317,6 +317,89 @@
 
   .quick-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
 
+  /* ── Proactive banner ── */
+  .proactive-banner {
+    background: var(--accent);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    color: white;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    animation: fadeIn 0.4s ease;
+  }
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
+
+  .proactive-icon { font-size: 28px; flex-shrink: 0; line-height: 1; }
+
+  .proactive-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 17px;
+    font-weight: 400;
+    margin-bottom: 6px;
+    line-height: 1.3;
+  }
+
+  .proactive-body { font-size: 14px; opacity: 0.85; line-height: 1.6; }
+
+  /* ── Dates card ── */
+  .dates-card {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .dates-header {
+    padding: 14px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .dates-header:hover { background: var(--surface2); }
+  .dates-toggle { font-size: 18px; color: var(--text-light); line-height: 1; }
+
+  .dates-body { padding: 4px 20px 20px; }
+
+  .dates-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 12px;
+  }
+
+  .date-field label {
+    display: block;
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--text-light);
+    margin-bottom: 6px;
+  }
+
+  .date-field input[type="date"] {
+    width: 100%;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 9px 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--text);
+    outline: none;
+    background: var(--bg);
+    transition: border-color 0.15s;
+    margin-bottom: 0;
+  }
+
+  .date-field input[type="date"]:focus { border-color: var(--accent); }
+
+  @media (max-width: 500px) { .dates-grid { grid-template-columns: 1fr; } }
+
   /* ── Memory card ── */
   .memory-card {
     background: var(--gold-soft);
@@ -547,6 +630,15 @@
 
   <div class="disclaimer-banner" id="disclaimerBanner"></div>
 
+  <!-- Proactive message banner -->
+  <div class="proactive-banner" id="proactiveBanner" style="display:none">
+    <div class="proactive-icon" id="proactiveIcon">🌟</div>
+    <div class="proactive-content">
+      <div class="proactive-title" id="proactiveTitle"></div>
+      <div class="proactive-body" id="proactiveBody"></div>
+    </div>
+  </div>
+
   <!-- Memory card — shows past facts if available -->
   <div class="memory-card" id="memoryCard" style="display:none">
     <div class="memory-header">
@@ -559,6 +651,34 @@
   <div>
     <span class="section-label" id="phaseLabel">Your current phase</span>
     <div class="phase-pills" id="phasePills"></div>
+  </div>
+
+  <!-- Key dates card -->
+  <div class="dates-card" id="datesCard">
+    <div class="dates-header" onclick="toggleDates()">
+      <span class="section-label" style="margin:0" id="datesLabel">My key dates</span>
+      <span class="dates-toggle" id="datesToggle">＋</span>
+    </div>
+    <div class="dates-body" id="datesBody" style="display:none">
+      <div class="dates-grid">
+        <div class="date-field">
+          <label id="labelStimStart">Stimulation start</label>
+          <input type="date" id="dateStimStart" onchange="saveDates()" />
+        </div>
+        <div class="date-field">
+          <label id="labelRetrieval">Egg retrieval</label>
+          <input type="date" id="dateRetrieval" onchange="saveDates()" />
+        </div>
+        <div class="date-field">
+          <label id="labelTransfer">Embryo transfer</label>
+          <input type="date" id="dateTransfer" onchange="saveDates()" />
+        </div>
+        <div class="date-field">
+          <label id="labelBeta">Beta test</label>
+          <input type="date" id="dateBeta" onchange="saveDates()" />
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="input-card">
@@ -626,6 +746,8 @@ const content = {
     inputHint: 'Private & confidential — nothing is stored.',
     sendBtn: 'Explain this',
     quickLabel: 'Frequently asked questions',
+    datesLabel: 'My key dates',
+    dateLabels: { stimStart: 'Stimulation start', retrieval: 'Egg retrieval', transfer: 'Embryo transfer', beta: 'Beta test' },
     responseTitle: 'Clinical explanation',
     loadingText: 'Preparing your explanation…',
     errorText: 'Something went wrong. Please try again.',
@@ -679,6 +801,8 @@ Patient's current treatment phase: ${phase}`
     inputHint: 'פרטי וחסוי — שום דבר לא נשמר.',
     sendBtn: 'הסבירי לי',
     quickLabel: 'שאלות נפוצות',
+    datesLabel: 'התאריכים שלי',
+    dateLabels: { stimStart: 'תחילת גירוי', retrieval: 'שאיבת ביציות', transfer: 'החזרת עובר', beta: 'בדיקת בטא' },
     responseTitle: 'הסבר קליני',
     loadingText: 'מכינה את ההסבר שלך…',
     errorText: 'משהו השתבש. אנא נסי שוב.',
@@ -745,6 +869,11 @@ function renderUI() {
   document.getElementById('inputHint').textContent = c.inputHint;
   document.getElementById('sendBtnText').textContent = c.sendBtn;
   document.getElementById('quickLabel').textContent = c.quickLabel;
+  document.getElementById('datesLabel').textContent = c.datesLabel;
+  document.getElementById('labelStimStart').textContent = c.dateLabels.stimStart;
+  document.getElementById('labelRetrieval').textContent = c.dateLabels.retrieval;
+  document.getElementById('labelTransfer').textContent = c.dateLabels.transfer;
+  document.getElementById('labelBeta').textContent = c.dateLabels.beta;
   document.getElementById('responseTitle').textContent = c.responseTitle;
   document.getElementById('loadingText').textContent = c.loadingText;
   document.getElementById('footerNote').textContent = c.footerNote;
@@ -963,8 +1092,106 @@ document.getElementById('userInput').addEventListener('input', () => {
   document.getElementById('userInput').classList.remove('is-sample');
 });
 
+function toggleDates() {
+  const body = document.getElementById('datesBody');
+  const toggle = document.getElementById('datesToggle');
+  const isOpen = body.style.display !== 'none';
+  body.style.display = isOpen ? 'none' : 'block';
+  toggle.textContent = isOpen ? '＋' : '－';
+}
+
+async function saveDates() {
+  if (!patientToken) return;
+  const dates = {
+    stimStart: document.getElementById('dateStimStart').value,
+    retrieval: document.getElementById('dateRetrieval').value,
+    transfer: document.getElementById('dateTransfer').value,
+    beta: document.getElementById('dateBeta').value
+  };
+  try {
+    await fetch('/api/save-memory', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token: patientToken, dates })
+    });
+    checkProactiveMessage(dates);
+  } catch (err) {}
+}
+
+async function loadDates() {
+  if (!patientToken) return;
+  try {
+    const res = await fetch('/api/get-memory', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token: patientToken })
+    });
+    if (!res.ok) return;
+    const data = await res.json();
+    if (data.dates) {
+      if (data.dates.stimStart) document.getElementById('dateStimStart').value = data.dates.stimStart;
+      if (data.dates.retrieval) document.getElementById('dateRetrieval').value = data.dates.retrieval;
+      if (data.dates.transfer) document.getElementById('dateTransfer').value = data.dates.transfer;
+      if (data.dates.beta) document.getElementById('dateBeta').value = data.dates.beta;
+      checkProactiveMessage(data.dates);
+    }
+  } catch (err) {}
+}
+
+function checkProactiveMessage(dates) {
+  const today = new Date().toISOString().split('T')[0];
+  const tomorrow = new Date(Date.now() + 86400000).toISOString().split('T')[0];
+  const isHe = currentLang === 'he';
+
+  const messages = {
+    retrieval: {
+      [tomorrow]: { icon: '🥚', en: { title: 'Retrieval is tomorrow', body: "Your egg retrieval is tomorrow. Don't eat or drink after midnight. Arrive relaxed — your body has done the hard work." }, he: { title: 'מחר היא שאיבת הביציות', body: 'מחר מתבצעת שאיבת הביציות שלך. אל תאכלי ואל תשתי מחצות. הגיעי רגועה — הגוף שלך עשה את העבודה הקשה.' } },
+      [today]: { icon: '🥚', en: { title: 'Today is retrieval day', body: "Today is the day! Your follicles are ready. Rest well afterwards — some bloating is completely normal." }, he: { title: 'היום הוא יום השאיבה', body: 'היום זה קורה! הזקיקים שלך מוכנים. נוחי היטב אחר כך — נפיחות מסוימת היא תופעה נורמלית לחלוטין.' } }
+    },
+    transfer: {
+      [tomorrow]: { icon: '🌱', en: { title: 'Transfer is tomorrow', body: "Your embryo transfer is tomorrow. Come with a full bladder, bring someone you love, and remember — you've made it this far." }, he: { title: 'מחר היא ההחזרה', body: 'מחר היא החזרת העובר. הגיעי עם שלפוחית שתן מלאה, הביאי מישהו שאת אוהבת, וזכרי — הגעת עד לכאן.' } },
+      [today]: { icon: '🌱', en: { title: 'Today is transfer day', body: "Today your embryo comes home 💙 Rest, stay warm, and be kind to yourself. The next two weeks will feel long — we're here." }, he: { title: 'היום הוא יום ההחזרה', body: 'היום העובר חוזר הביתה 💙 נוחי, הישארי חמה והיי סלחנית עם עצמך. שבועיים הקרובים ירגישו ארוכים — אנחנו כאן.' } }
+    },
+    beta: {
+      [today]: { icon: '🎗️', en: { title: 'Today is beta day', body: "Today is the day you find out. Whatever the result, know that you've been incredibly brave throughout this journey." }, he: { title: 'היום הוא יום הבטא', body: 'היום היא היום שבו תדעי. מה שתהיה התוצאה, דעי שהיית אמיצה להפליא לאורך כל הדרך הזו.' } }
+    }
+  };
+
+  for (const [key, dayMessages] of Object.entries(messages)) {
+    const date = dates[key];
+    if (!date) continue;
+    const msg = dayMessages[date];
+    if (msg) {
+      const content = isHe ? msg.he : msg.en;
+      document.getElementById('proactiveIcon').textContent = msg.icon;
+      document.getElementById('proactiveTitle').textContent = content.title;
+      document.getElementById('proactiveBody').textContent = content.body;
+      document.getElementById('proactiveBanner').style.display = 'flex';
+      return;
+    }
+  }
+
+  if (dates.transfer) {
+    const dpt = Math.round((new Date(today) - new Date(dates.transfer)) / 86400000);
+    const postMessages = {
+      3: { icon: '💙', en: { title: 'Day 3 after transfer', body: "Three days since transfer. The embryo is settling in. Rest, stay hydrated, and avoid googling symptoms — it's too early for any signs." }, he: { title: 'יום 3 אחרי ההחזרה', body: 'שלושה ימים מאז ההחזרה. העובר מתיישב. נוחי, שתי הרבה, והימנעי מגוגל של סימפטומים — עוד מוקדם מדי.' } },
+      5: { icon: '🔬', en: { title: 'Day 5 after transfer', body: "If implantation is happening, it's happening now. You may feel nothing — that's completely normal." }, he: { title: 'יום 5 אחרי ההחזרה', body: 'אם השרשה מתרחשת, היא קורה עכשיו. ייתכן שלא תרגישי כלום — זה נורמלי לחלוטין.' } },
+      7: { icon: '✨', en: { title: 'One week after transfer', body: "One week in. The wait is hard — you're allowed to feel anxious. Some symptoms now can be a good sign, but their absence means nothing." }, he: { title: 'שבוע אחרי ההחזרה', body: 'שבוע חלף. ההמתנה קשה — מותר לך להרגיש חרדה. סימפטומים מסוימים יכולים להיות סימן טוב, אבל היעדרם אינו אומר דבר.' } }
+    };
+    if (postMessages[dpt]) {
+      const msg = postMessages[dpt];
+      const content = isHe ? msg.he : msg.en;
+      document.getElementById('proactiveIcon').textContent = msg.icon;
+      document.getElementById('proactiveTitle').textContent = content.title;
+      document.getElementById('proactiveBody').textContent = content.body;
+      document.getElementById('proactiveBanner').style.display = 'flex';
+    }
+  }
+}
+
 renderUI();
 loadMemory();
+loadDates();
 </script>
 </body>
 </html>
