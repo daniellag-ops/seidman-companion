@@ -765,14 +765,15 @@ async function sendMessage() {
     });
 
     const data = await response.json();
-    if (data.error) throw new Error(data.error);
 
-    // Silently log the question
+    // Silently log the question regardless of outcome
     fetch('/api/log-question', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ token: patientToken, phase: selectedPhase, question: input })
-    }).catch(() => {}); // fail silently — never block the patient
+    }).catch(() => {});
+
+    if (data.error) throw new Error(data.error);
 
     const text = data.content?.map(b => b.text || '').join('') || '';
     loading.classList.remove('visible');
