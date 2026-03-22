@@ -1287,7 +1287,12 @@ async function saveNote() {
     });
     noteInput.value = '';
     btnText.textContent = currentLang === 'he' ? 'נשמר ✓' : 'Saved ✓';
-    setTimeout(() => { btnText.textContent = content[currentLang].saveNoteBtn; btn.disabled = false; }, 2000);
+    noteInput.placeholder = currentLang === 'he' ? 'ההערה נשמרה — תראי אותה בפעם הבאה שתפתחי את הקישור שלך 💛' : 'Note saved — you\'ll see it next time you open your link 💛';
+    setTimeout(() => {
+      btnText.textContent = content[currentLang].saveNoteBtn;
+      noteInput.placeholder = content[currentLang].saveNotePlaceholder;
+      btn.disabled = false;
+    }, 3000);
     loadMemory();
   } catch (err) {
     btnText.textContent = currentLang === 'he' ? 'שגיאה' : 'Error';
