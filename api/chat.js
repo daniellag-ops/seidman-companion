@@ -19,6 +19,37 @@ function isRateLimited(token) {
   return false;
 }
 
+async function logQuestion(token, phase, question) {
+  try {
+    const edgeConfig = createClient(process.env.EDGE_CONFIG);
+    const entry = {
+      id: Date.now().toString(),
+      tokenHash: token ? token.split('-')[0] : 'unknown',
+      phase,
+      question,
+      timestamp: new Date().toISOString()
+    };
+    const logs = await edgeConfig.get('logs') || [];
+    logs.unshift(entry);
+    const trimmed = logs.slice(0, 500);
+    await fetch(
+      `https://api.vercel.com/v1/edge-config/${process.env.EDGE_CONFIG_ID}/items`,
+      {
+        method: 'PATCH',
+        headers: {
+          Authorization: `Bearer ${process.env.VERCEL_API_TOKEN}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          items: [{ operation: 'upsert', key: 'logs', value: trimmed }]
+        })
+      }
+    );
+  } catch (err) {
+    console.error('Logging failed:', err.message);
+  }
+}
+
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -26,14 +57,13 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  const { token, ...body } = req.body;
+  const { token, phase, question: userQuestion, ...body } = req.body;
 
   if (!token) {
     return res.status(403).json({ error: "Invalid access link. Please contact Prof. Seidman's clinic for your personal link." });
   }
 
   try {
-    // Validate token against Edge Config
     const edgeConfig = createClient(process.env.EDGE_CONFIG);
     const tokens = await edgeConfig.get('tokens') || {};
 
@@ -43,6 +73,11 @@ export default async function handler(req, res) {
 
     if (isRateLimited(token)) {
       return res.status(429).json({ error: 'Daily limit reached. Please try again tomorrow.' });
+    }
+
+    // Log the question server-side
+    if (userQuestion) {
+      await logQuestion(token, phase, userQuestion);
     }
 
     const response = await fetch('https://api.anthropic.com/v1/messages', {
