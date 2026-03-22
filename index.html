@@ -572,6 +572,145 @@
   .error-msg { padding: 20px 28px; color: #b94b2b; font-size: 14px; display: none; }
   .error-msg.visible { display: block; }
 
+  /* ── Medication tracker ── */
+  .meds-card {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .meds-header {
+    padding: 14px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .meds-header:hover { background: var(--surface2); }
+  .meds-body { padding: 4px 20px 20px; }
+
+  .meds-today { margin-bottom: 16px; }
+
+  .med-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .med-item:last-child { border-bottom: none; }
+
+  .med-check {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    background: white;
+    cursor: pointer;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px;
+    transition: all 0.15s;
+  }
+
+  .med-check.checked { background: var(--accent); border-color: var(--accent); color: white; }
+
+  .med-info { flex: 1; }
+  .med-name { font-size: 14px; font-weight: 500; color: var(--text); }
+  .med-meta { font-size: 12px; color: var(--text-light); margin-top: 2px; }
+
+  .med-time-log {
+    font-size: 12px;
+    color: var(--text-light);
+    cursor: pointer;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 3px 8px;
+    background: var(--bg);
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.15s;
+  }
+
+  .med-time-log:hover { border-color: var(--accent); color: var(--accent); }
+  .med-time-log.logged { color: var(--accent); border-color: var(--accent-soft); background: var(--accent-soft); }
+
+  .med-delete {
+    color: var(--text-light);
+    cursor: pointer;
+    font-size: 16px;
+    padding: 0 4px;
+    line-height: 1;
+    opacity: 0.5;
+    transition: opacity 0.15s;
+  }
+
+  .med-delete:hover { opacity: 1; color: #b94b2b; }
+
+  .meds-add { margin-top: 12px; }
+
+  .meds-add-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .med-input {
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 9px 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    color: var(--text);
+    outline: none;
+    background: var(--bg);
+    transition: border-color 0.15s;
+    flex: 1;
+    min-width: 100px;
+    margin-bottom: 0;
+  }
+
+  .med-input:focus { border-color: var(--accent); }
+  .med-dose { max-width: 80px; flex: none; }
+
+  .med-select {
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 9px 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    color: var(--text);
+    outline: none;
+    background: var(--bg);
+    cursor: pointer;
+  }
+
+  .add-med-btn {
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 34px; height: 34px;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    transition: opacity 0.15s;
+    line-height: 1;
+  }
+
+  .add-med-btn:hover { opacity: 0.85; }
+
+  .meds-empty {
+    font-size: 13px;
+    color: var(--text-light);
+    padding: 8px 0 12px;
+    font-style: italic;
+  }
+
   /* ── Footer note ── */
   .disclaimer-banner {
     background: var(--gold-soft);
@@ -721,6 +860,35 @@
     </div>
   </div>
 
+  <!-- Medication tracker -->
+  <div class="meds-card" id="medsCard">
+    <div class="meds-header" onclick="toggleMeds()">
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="font-size:16px">💊</span>
+        <span class="section-label" style="margin:0" id="medsLabel">My medications</span>
+      </div>
+      <span class="dates-toggle" id="medsToggle">＋</span>
+    </div>
+    <div class="meds-body" id="medsBody" style="display:none">
+      <!-- Today's checklist -->
+      <div class="meds-today" id="medsToday"></div>
+      <!-- Add medication -->
+      <div class="meds-add">
+        <div class="meds-add-row">
+          <input type="text" id="medName" class="med-input" />
+          <select id="medTime" class="med-select">
+            <option value="morning">🌅 Morning</option>
+            <option value="midday">☀️ Midday</option>
+            <option value="evening">🌙 Evening</option>
+            <option value="bedtime">😴 Bedtime</option>
+          </select>
+          <input type="text" id="medDose" class="med-input med-dose" placeholder="Dose" />
+          <button class="add-med-btn" onclick="addMedication()" id="addMedBtn">+</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="footer-note" id="footerNote">
     This resource was created by Prof. Daniel Seidman to help his patients better understand their fertility journey.
   </div>
@@ -748,6 +916,10 @@ const content = {
     quickLabel: 'Frequently asked questions',
     datesLabel: 'My key dates',
     dateLabels: { stimStart: 'Stimulation start', retrieval: 'Egg retrieval', transfer: 'Embryo transfer', beta: 'Beta test' },
+    medsLabel: 'My medications',
+    medNamePlaceholder: 'Medication name (e.g. Gonal-F)',
+    medsEmpty: 'No medications added yet. Add your first one below.',
+    medTimes: { morning: '🌅 Morning', midday: '☀️ Midday', evening: '🌙 Evening', bedtime: '😴 Bedtime' },
     responseTitle: 'Clinical explanation',
     loadingText: 'Preparing your explanation…',
     errorText: 'Something went wrong. Please try again.',
@@ -803,6 +975,10 @@ Patient's current treatment phase: ${phase}`
     quickLabel: 'שאלות נפוצות',
     datesLabel: 'התאריכים שלי',
     dateLabels: { stimStart: 'תחילת גירוי', retrieval: 'שאיבת ביציות', transfer: 'החזרת עובר', beta: 'בדיקת בטא' },
+    medsLabel: 'התרופות שלי',
+    medNamePlaceholder: 'שם התרופה (למשל גונל-F)',
+    medsEmpty: 'עדיין לא נוספו תרופות. הוסיפי את הראשונה למטה.',
+    medTimes: { morning: '🌅 בוקר', midday: '☀️ צהריים', evening: '🌙 ערב', bedtime: '😴 לפני שינה' },
     responseTitle: 'הסבר קליני',
     loadingText: 'מכינה את ההסבר שלך…',
     errorText: 'משהו השתבש. אנא נסי שוב.',
@@ -870,6 +1046,8 @@ function renderUI() {
   document.getElementById('sendBtnText').textContent = c.sendBtn;
   document.getElementById('quickLabel').textContent = c.quickLabel;
   document.getElementById('datesLabel').textContent = c.datesLabel;
+  document.getElementById('medsLabel').textContent = c.medsLabel;
+  document.getElementById('medName').placeholder = c.medNamePlaceholder;
   document.getElementById('labelStimStart').textContent = c.dateLabels.stimStart;
   document.getElementById('labelRetrieval').textContent = c.dateLabels.retrieval;
   document.getElementById('labelTransfer').textContent = c.dateLabels.transfer;
@@ -1189,9 +1367,141 @@ function checkProactiveMessage(dates) {
   }
 }
 
+// ── Medication tracker ──
+let medications = []; // { id, name, time, dose }
+let todayLogs = {}; // { medId: { checked: bool, timeTaken: string } }
+const TODAY = new Date().toISOString().split('T')[0];
+
+function toggleMeds() {
+  const body = document.getElementById('medsBody');
+  const toggle = document.getElementById('medsToggle');
+  const isOpen = body.style.display !== 'none';
+  body.style.display = isOpen ? 'none' : 'block';
+  toggle.textContent = isOpen ? '＋' : '－';
+}
+
+async function loadMedications() {
+  if (!patientToken) return;
+  try {
+    const res = await fetch('/api/get-memory', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token: patientToken })
+    });
+    if (!res.ok) return;
+    const data = await res.json();
+    if (data.medications) medications = data.medications;
+    if (data.medLogs?.[TODAY]) todayLogs = data.medLogs[TODAY];
+    renderMedications();
+  } catch (err) {}
+}
+
+async function saveMedications() {
+  if (!patientToken) return;
+  try {
+    await fetch('/api/save-memory', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token: patientToken, medications, medLog: { date: TODAY, logs: todayLogs } })
+    });
+  } catch (err) {}
+}
+
+function addMedication() {
+  const name = document.getElementById('medName').value.trim();
+  const time = document.getElementById('medTime').value;
+  const dose = document.getElementById('medDose').value.trim();
+  if (!name) return;
+
+  medications.push({ id: Date.now().toString(), name, time, dose });
+  document.getElementById('medName').value = '';
+  document.getElementById('medDose').value = '';
+  renderMedications();
+  saveMedications();
+}
+
+function toggleMedCheck(id) {
+  if (!todayLogs[id]) todayLogs[id] = { checked: false, timeTaken: '' };
+  todayLogs[id].checked = !todayLogs[id].checked;
+  if (todayLogs[id].checked && !todayLogs[id].timeTaken) {
+    const now = new Date();
+    todayLogs[id].timeTaken = now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
+  }
+  renderMedications();
+  saveMedications();
+}
+
+function logTime(id) {
+  const time = prompt(currentLang === 'he' ? 'באיזו שעה לקחת? (HH:MM)' : 'What time did you take it? (HH:MM)', todayLogs[id]?.timeTaken || '');
+  if (time !== null) {
+    if (!todayLogs[id]) todayLogs[id] = { checked: true };
+    todayLogs[id].timeTaken = time;
+    todayLogs[id].checked = true;
+    renderMedications();
+    saveMedications();
+  }
+}
+
+function deleteMedication(id) {
+  medications = medications.filter(m => m.id !== id);
+  delete todayLogs[id];
+  renderMedications();
+  saveMedications();
+}
+
+function renderMedications() {
+  const container = document.getElementById('medsToday');
+  const c = content[currentLang];
+
+  if (!medications.length) {
+    container.innerHTML = `<div class="meds-empty">${c.medsEmpty}</div>`;
+    return;
+  }
+
+  // Sort by time order
+  const timeOrder = { morning: 0, midday: 1, evening: 2, bedtime: 3 };
+  const sorted = [...medications].sort((a, b) => (timeOrder[a.time] || 0) - (timeOrder[b.time] || 0));
+
+  container.innerHTML = sorted.map(med => {
+    const log = todayLogs[med.id] || {};
+    const checked = log.checked || false;
+    const timeTaken = log.timeTaken || '';
+    const timeLabel = c.medTimes[med.time] || med.time;
+
+    return `<div class="med-item">
+      <div class="med-check ${checked ? 'checked' : ''}" onclick="toggleMedCheck('${med.id}')">
+        ${checked ? '✓' : ''}
+      </div>
+      <div class="med-info">
+        <div class="med-name" style="${checked ? 'text-decoration:line-through;opacity:0.5' : ''}">${med.name}${med.dose ? ' · ' + med.dose : ''}</div>
+        <div class="med-meta">${timeLabel}</div>
+      </div>
+      <button class="med-time-log ${timeTaken ? 'logged' : ''}" onclick="logTime('${med.id}')">
+        ${timeTaken ? '⏰ ' + timeTaken : (currentLang === 'he' ? 'רשום שעה' : 'Log time')}
+      </button>
+      <span class="med-delete" onclick="deleteMedication('${med.id}')">×</span>
+    </div>`;
+  }).join('');
+
+  // Show reminder banner if unchecked meds exist this evening/bedtime
+  const unchecked = medications.filter(m => !todayLogs[m.id]?.checked);
+  const hour = new Date().getHours();
+  if (unchecked.length && hour >= 18) {
+    const banner = document.getElementById('proactiveBanner');
+    if (banner.style.display === 'none') {
+      const names = unchecked.map(m => m.name).join(', ');
+      document.getElementById('proactiveIcon').textContent = '💊';
+      document.getElementById('proactiveTitle').textContent = currentLang === 'he' ? 'תרופות שעדיין לא נלקחו' : 'Medications not yet taken';
+      document.getElementById('proactiveBody').textContent = currentLang === 'he' ? `${names} — עוד לא סומנו להיום` : `${names} — not yet marked for today`;
+      banner.style.display = 'flex';
+    }
+  }
+}
+
 renderUI();
 loadMemory();
 loadDates();
+loadMedications();
 </script>
 </body>
 </html>
