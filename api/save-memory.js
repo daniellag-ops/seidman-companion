@@ -20,8 +20,8 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  const { token, note } = req.body;
-  if (!token || !note) return res.status(400).json({ error: 'Missing fields' });
+  const { token, note, dates } = req.body;
+  if (!token || (!note && !dates)) return res.status(400).json({ error: 'Missing fields' });
 
   try {
     // Validate token
@@ -33,10 +33,16 @@ export default async function handler(req, res) {
     const allMemory = await getEdgeConfigItem('patient_memory') || {};
     const patientMemory = allMemory[token] || { facts: [], notes: [] };
 
-    patientMemory.notes = [
-      { text: note, date: new Date().toISOString().split('T')[0] },
-      ...(patientMemory.notes || [])
-    ].slice(0, 20);
+    if (note) {
+      patientMemory.notes = [
+        { text: note, date: new Date().toISOString().split('T')[0] },
+        ...(patientMemory.notes || [])
+      ].slice(0, 20);
+    }
+
+    if (dates) {
+      patientMemory.dates = { ...patientMemory.dates, ...dates };
+    }
 
     allMemory[token] = patientMemory;
     await updateEdgeConfig([{ operation: 'upsert', key: 'patient_memory', value: allMemory }]);
