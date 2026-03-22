@@ -38,6 +38,12 @@ async function logQuestion(token, phase, question) {
 
 async function extractMemoryFact(phase, question) {
   try {
+    // Detect language from content
+    const isHebrew = /[\u0590-\u05FF]/.test(phase + question);
+    const langInstruction = isHebrew
+      ? 'כתבי משפט אחד חמה ואנושי בעברית המסכם מה עברה המטופלת כשסיפרה על כך. כתבי בגוף שני ("את..."). היי ספציפית לגבי מספרים או שלב הטיפול. עד 25 מילים. החזירי רק את המשפט.'
+      : 'Write a single warm, human sentence in English summarizing what this IVF patient was going through. Write in second person ("You were..."). Be specific about any numbers or phase mentioned. Under 25 words. Return only the sentence.';
+
     const res = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'x-api-key': process.env.ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01' },
@@ -46,12 +52,10 @@ async function extractMemoryFact(phase, question) {
         max_tokens: 80,
         messages: [{
           role: 'user',
-          content: `Write a single warm, human sentence summarizing what this IVF patient was going through when they asked this question. Capture both the clinical moment and the emotional context. Write in second person ("You were..."). Be specific about any numbers or phase mentioned. Under 25 words.
+          content: `${langInstruction}
 
 Phase: ${phase}
-Question: ${question}
-
-Return only the sentence, nothing else.`
+Question: ${question}`
         }]
       })
     });
