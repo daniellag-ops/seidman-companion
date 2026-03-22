@@ -20,8 +20,8 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  const { token, note, dates } = req.body;
-  if (!token || (!note && !dates)) return res.status(400).json({ error: 'Missing fields' });
+  const { token, note, dates, medications, medLog } = req.body;
+  if (!token || (!note && !dates && !medications && !medLog)) return res.status(400).json({ error: 'Missing fields' });
 
   try {
     // Validate token
@@ -42,6 +42,18 @@ export default async function handler(req, res) {
 
     if (dates) {
       patientMemory.dates = { ...patientMemory.dates, ...dates };
+    }
+
+    if (medications !== undefined) {
+      patientMemory.medications = medications;
+    }
+
+    if (medLog) {
+      if (!patientMemory.medLogs) patientMemory.medLogs = {};
+      patientMemory.medLogs[medLog.date] = medLog.logs;
+      // Keep last 30 days of logs
+      const keys = Object.keys(patientMemory.medLogs).sort().reverse().slice(0, 30);
+      patientMemory.medLogs = Object.fromEntries(keys.map(k => [k, patientMemory.medLogs[k]]));
     }
 
     allMemory[token] = patientMemory;
