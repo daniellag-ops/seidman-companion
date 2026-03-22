@@ -688,6 +688,9 @@
     cursor: pointer;
   }
 
+  .med-select-name { flex: 1; min-width: 180px; }
+  .med-dose-select { min-width: 160px; }
+
   .add-med-btn {
     background: var(--accent);
     color: white;
@@ -875,15 +878,72 @@
       <!-- Add medication -->
       <div class="meds-add">
         <div class="meds-add-row">
-          <input type="text" id="medName" class="med-input" />
+          <select id="medName" class="med-select med-select-name" onchange="onMedNameChange()">
+            <option value="">— Select medication —</option>
+            <optgroup label="💉 Stimulation (FSH/LH)">
+              <option value="Gonal-F">Gonal-F</option>
+              <option value="Menopur">Menopur</option>
+              <option value="Puregon">Puregon</option>
+              <option value="Bemfola">Bemfola</option>
+              <option value="Elonva">Elonva</option>
+              <option value="Rekovelle">Rekovelle</option>
+              <option value="Pergoveris">Pergoveris</option>
+              <option value="Luveris">Luveris</option>
+            </optgroup>
+            <optgroup label="🛑 Suppression">
+              <option value="Decapeptyl">Decapeptyl</option>
+              <option value="Cetrotide">Cetrotide</option>
+              <option value="Orgalutran">Orgalutran</option>
+              <option value="Synarel">Synarel (Nasal spray)</option>
+              <option value="Suprefact">Suprefact</option>
+            </optgroup>
+            <optgroup label="💊 Trigger">
+              <option value="Ovitrelle">Ovitrelle</option>
+              <option value="Pregnyl">Pregnyl</option>
+              <option value="Decapeptyl trigger">Decapeptyl (Trigger)</option>
+            </optgroup>
+            <optgroup label="🌸 Luteal Support">
+              <option value="Utrogestan">Utrogestan</option>
+              <option value="Crinone">Crinone</option>
+              <option value="Endometrin">Endometrin</option>
+              <option value="Prontogest">Prontogest</option>
+              <option value="Gestone">Gestone</option>
+              <option value="Cyclogest">Cyclogest</option>
+            </optgroup>
+            <optgroup label="💛 Estrogen">
+              <option value="Estrofem">Estrofem</option>
+              <option value="Progynova">Progynova</option>
+              <option value="Divigel">Divigel</option>
+              <option value="Evorel patch">Evorel (Patch)</option>
+              <option value="Estraderm patch">Estraderm (Patch)</option>
+            </optgroup>
+            <optgroup label="➕ Adjuncts">
+              <option value="Aspirin">Aspirin</option>
+              <option value="Clexane">Clexane / Enoxaparin</option>
+              <option value="Prednisone">Prednisone</option>
+              <option value="Dostinex">Dostinex (Cabergoline)</option>
+              <option value="Letrozole">Letrozole (Femara)</option>
+              <option value="Folic acid">Folic acid</option>
+              <option value="DHEA">DHEA</option>
+            </optgroup>
+            <optgroup label="✏️ Other">
+              <option value="__custom__">Other — type my own</option>
+            </optgroup>
+          </select>
+          <input type="text" id="medNameCustom" class="med-input" placeholder="Type medication name" style="display:none" />
+        </div>
+        <div class="meds-add-row" style="margin-top:8px">
+          <select id="medDose" class="med-select med-dose-select">
+            <option value="">— Dose —</option>
+          </select>
+          <input type="text" id="medDoseCustom" class="med-input med-dose" placeholder="or type dose" />
           <select id="medTime" class="med-select">
             <option value="morning">🌅 Morning</option>
             <option value="midday">☀️ Midday</option>
             <option value="evening">🌙 Evening</option>
             <option value="bedtime">😴 Bedtime</option>
           </select>
-          <input type="text" id="medDose" class="med-input med-dose" placeholder="Dose" />
-          <button class="add-med-btn" onclick="addMedication()" id="addMedBtn">+</button>
+          <button class="add-med-btn" onclick="addMedication()">+</button>
         </div>
       </div>
     </div>
@@ -1368,9 +1428,64 @@ function checkProactiveMessage(dates) {
 }
 
 // ── Medication tracker ──
-let medications = []; // { id, name, time, dose }
-let todayLogs = {}; // { medId: { checked: bool, timeTaken: string } }
+let medications = [];
+let todayLogs = {};
 const TODAY = new Date().toISOString().split('T')[0];
+
+const MED_DOSES = {
+  'Gonal-F': ['75 IU', '112.5 IU', '150 IU', '225 IU', '300 IU', '375 IU', '450 IU'],
+  'Menopur': ['75 IU', '150 IU', '225 IU', '300 IU'],
+  'Puregon': ['50 IU', '75 IU', '100 IU', '150 IU', '200 IU', '250 IU'],
+  'Bemfola': ['75 IU', '150 IU', '225 IU', '300 IU', '375 IU'],
+  'Elonva': ['100 mcg', '150 mcg'],
+  'Rekovelle': ['Dose per AMH/weight — as prescribed'],
+  'Pergoveris': ['75/37.5 IU', '150/75 IU'],
+  'Luveris': ['75 IU', '150 IU'],
+  'Decapeptyl': ['0.1 mg', '0.2 mg'],
+  'Cetrotide': ['0.25 mg'],
+  'Orgalutran': ['0.25 mg'],
+  'Synarel': ['200 mcg × 2/day', '400 mcg × 2/day'],
+  'Suprefact': ['200 mcg × 3/day'],
+  'Ovitrelle': ['250 mcg'],
+  'Pregnyl': ['5000 IU', '10000 IU'],
+  'Decapeptyl trigger': ['0.2 mg', '0.4 mg'],
+  'Utrogestan': ['100 mg × 2/day', '200 mg × 2/day', '200 mg × 3/day'],
+  'Crinone': ['8% gel × 1/day', '8% gel × 2/day'],
+  'Endometrin': ['100 mg × 2/day', '100 mg × 3/day'],
+  'Prontogest': ['50 mg/day', '100 mg/day'],
+  'Gestone': ['50 mg/day', '100 mg/day'],
+  'Cyclogest': ['200 mg × 2/day', '400 mg × 2/day'],
+  'Estrofem': ['1 mg × 2/day', '2 mg × 2/day', '2 mg × 3/day'],
+  'Progynova': ['1 mg × 2/day', '2 mg × 2/day', '2 mg × 3/day'],
+  'Divigel': ['0.5 mg', '1 mg', '1.5 mg'],
+  'Evorel patch': ['25 mcg', '50 mcg', '75 mcg', '100 mcg'],
+  'Estraderm patch': ['25 mcg', '50 mcg', '100 mcg'],
+  'Aspirin': ['100 mg'],
+  'Clexane': ['20 mg', '40 mg', '60 mg'],
+  'Prednisone': ['5 mg', '10 mg', '20 mg'],
+  'Dostinex': ['0.25 mg × 2/week', '0.5 mg × 2/week'],
+  'Letrozole': ['2.5 mg', '5 mg'],
+  'Folic acid': ['400 mcg', '5 mg'],
+  'DHEA': ['25 mg', '50 mg', '75 mg'],
+};
+
+function onMedNameChange() {
+  const select = document.getElementById('medName');
+  const custom = document.getElementById('medNameCustom');
+  const doseSelect = document.getElementById('medDose');
+
+  if (select.value === '__custom__') {
+    custom.style.display = 'block';
+    custom.focus();
+  } else {
+    custom.style.display = 'none';
+  }
+
+  // Populate dose dropdown
+  const doses = MED_DOSES[select.value] || [];
+  doseSelect.innerHTML = `<option value="">— Dose —</option>` +
+    doses.map(d => `<option value="${d}">${d}</option>`).join('');
+}
 
 function toggleMeds() {
   const body = document.getElementById('medsBody');
@@ -1408,14 +1523,26 @@ async function saveMedications() {
 }
 
 function addMedication() {
-  const name = document.getElementById('medName').value.trim();
+  const nameSelect = document.getElementById('medName');
+  const nameCustom = document.getElementById('medNameCustom');
+  const doseSelect = document.getElementById('medDose');
+  const doseCustom = document.getElementById('medDoseCustom');
   const time = document.getElementById('medTime').value;
-  const dose = document.getElementById('medDose').value.trim();
-  if (!name) return;
+
+  let name = nameSelect.value === '__custom__' ? nameCustom.value.trim() : nameSelect.value;
+  let dose = doseSelect.value || doseCustom.value.trim();
+
+  if (!name || name === '') return;
 
   medications.push({ id: Date.now().toString(), name, time, dose });
-  document.getElementById('medName').value = '';
-  document.getElementById('medDose').value = '';
+
+  // Reset
+  nameSelect.value = '';
+  nameCustom.value = '';
+  nameCustom.style.display = 'none';
+  doseSelect.innerHTML = '<option value="">— Dose —</option>';
+  doseCustom.value = '';
+
   renderMedications();
   saveMedications();
 }
