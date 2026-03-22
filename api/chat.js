@@ -36,15 +36,42 @@ async function logQuestion(token, phase, question) {
   }
 }
 
+async function extractMemoryFact(phase, question) {
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-api-key': process.env.ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01' },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 80,
+        messages: [{
+          role: 'user',
+          content: `Write a single warm, human sentence summarizing what this IVF patient was going through when they asked this question. Capture both the clinical moment and the emotional context. Write in second person ("You were..."). Be specific about any numbers or phase mentioned. Under 25 words.
+
+Phase: ${phase}
+Question: ${question}
+
+Return only the sentence, nothing else.`
+        }]
+      })
+    });
+    const data = await res.json();
+    return data.content?.[0]?.text?.trim() || null;
+  } catch (err) {
+    return null;
+  }
+}
+
 async function saveMemoryFact(token, phase, question) {
   try {
+    const fact = await extractMemoryFact(phase, question);
+    if (!fact) return;
+
     const allMemory = await getEdgeConfigItem('patient_memory') || {};
     const patientMemory = allMemory[token] || { facts: [], notes: [] };
 
-    // Save the question itself as a memory fact — simple and reliable
-    const shortQ = question.length > 120 ? question.substring(0, 120) + '...' : question;
     patientMemory.facts = [
-      { text: shortQ, phase, date: new Date().toISOString().split('T')[0] },
+      { text: fact, phase, date: new Date().toISOString().split('T')[0] },
       ...(patientMemory.facts || [])
     ].slice(0, 20);
 
