@@ -934,7 +934,6 @@
         </div>
         <div class="meds-add-row" style="margin-top:8px">
           <select id="medDose" class="med-select med-dose-select">
-            <option value="">— Dose —</option>
           </select>
           <input type="text" id="medDoseCustom" class="med-input med-dose" placeholder="or type dose" />
           <select id="medTime" class="med-select">
@@ -1104,6 +1103,7 @@ function setLang(lang) {
   document.documentElement.lang = lang;
   document.getElementById('responseCard').classList.remove('visible');
   renderUI();
+  renderMedications(); // re-render with correct language
 }
 
 function renderUI() {
@@ -1131,7 +1131,11 @@ function renderUI() {
   const medNameSelect = document.getElementById('medName');
   if (medNameSelect.options[0]) medNameSelect.options[0].text = c.medSelectPlaceholder;
   const medDoseSelect = document.getElementById('medDose');
-  if (medDoseSelect.options[0]) medDoseSelect.options[0].text = c.medDosePlaceholder;
+  if (!medDoseSelect.options.length || medDoseSelect.options[0].value === '') {
+    medDoseSelect.innerHTML = `<option value="">${c.medDosePlaceholder}</option>`;
+  } else {
+    medDoseSelect.options[0].text = c.medDosePlaceholder;
+  }
   document.getElementById('medDoseCustom').placeholder = c.medDoseCustomPlaceholder;
   document.getElementById('medNameCustom').placeholder = c.medCustomPlaceholder;
 
