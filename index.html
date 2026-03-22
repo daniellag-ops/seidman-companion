@@ -1095,6 +1095,8 @@ Patient's current treatment phase: ${phase}`
   }
 };
 
+let currentDates = {};
+
 function setLang(lang) {
   currentLang = lang;
   document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
@@ -1102,8 +1104,11 @@ function setLang(lang) {
   document.body.classList.toggle('rtl', lang === 'he');
   document.documentElement.lang = lang;
   document.getElementById('responseCard').classList.remove('visible');
+  // Reset proactive banner so it re-renders in new language
+  document.getElementById('proactiveBanner').style.display = 'none';
   renderUI();
-  renderMedications(); // re-render with correct language
+  renderMedications();
+  if (Object.keys(currentDates).length) checkProactiveMessage(currentDates);
 }
 
 function renderUI() {
@@ -1394,6 +1399,7 @@ async function saveDates() {
     transfer: document.getElementById('dateTransfer').value,
     beta: document.getElementById('dateBeta').value
   };
+  currentDates = dates;
   try {
     await fetch('/api/save-memory', {
       method: 'POST',
@@ -1415,6 +1421,7 @@ async function loadDates() {
     if (!res.ok) return;
     const data = await res.json();
     if (data.dates) {
+      currentDates = data.dates;
       if (data.dates.stimStart) document.getElementById('dateStimStart').value = data.dates.stimStart;
       if (data.dates.retrieval) document.getElementById('dateRetrieval').value = data.dates.retrieval;
       if (data.dates.transfer) document.getElementById('dateTransfer').value = data.dates.transfer;
