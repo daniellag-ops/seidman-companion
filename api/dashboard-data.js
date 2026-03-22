@@ -1,4 +1,9 @@
-import { createClient } from '@vercel/edge-config';
+async function getEdgeConfigItem(key) {
+  const url = `https://edge-config.vercel.com/${process.env.EDGE_CONFIG_ID}/item/${key}`;
+  const res = await fetch(url, { headers: { Authorization: `Bearer ${process.env.EDGE_CONFIG_TOKEN}` } });
+  if (!res.ok) return null;
+  return res.json();
+}
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -9,38 +14,20 @@ export default async function handler(req, res) {
   }
 
   try {
-    const edgeConfig = createClient(process.env.EDGE_CONFIG);
-    const logs = await edgeConfig.get('logs') || [];
-    const tokens = await edgeConfig.get('tokens') || {};
+    const logs = await getEdgeConfigItem('logs') || [];
+    const tokens = await getEdgeConfigItem('tokens') || {};
 
-    // Phase counts
     const phaseCounts = {};
-    logs.forEach(l => {
-      if (l.phase) phaseCounts[l.phase] = (phaseCounts[l.phase] || 0) + 1;
-    });
+    logs.forEach(l => { if (l.phase) phaseCounts[l.phase] = (phaseCounts[l.phase] || 0) + 1; });
 
-    // Unique users by tokenHash
     const uniqueUsers = new Set(logs.map(l => l.tokenHash)).size;
-
-    // Questions per day (last 14 days)
-    const dailyCounts = {};
-    logs.forEach(l => {
-      const day = l.timestamp?.split('T')[0];
-      if (day) dailyCounts[day] = (dailyCounts[day] || 0) + 1;
-    });
 
     return res.status(200).json({
       totalQuestions: logs.length,
       uniqueUsers,
       totalPatients: Object.keys(tokens).length,
       phaseCounts,
-      dailyCounts,
-      logs: logs.map(l => ({
-        phase: l.phase,
-        question: l.question,
-        timestamp: l.timestamp
-        // no name, no token
-      }))
+      logs: logs.map(l => ({ phase: l.phase, question: l.question, timestamp: l.timestamp }))
     });
   } catch (err) {
     return res.status(500).json({ error: err.message });
