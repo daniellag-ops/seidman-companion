@@ -880,7 +880,7 @@
         <div class="meds-add-row">
           <select id="medName" class="med-select med-select-name" onchange="onMedNameChange()">
             <option value="">— Select medication —</option>
-            <optgroup label="💉 Stimulation (FSH/LH)">
+            <optgroup id="grpStim" label="💉 Stimulation (FSH/LH)">
               <option value="Gonal-F">Gonal-F</option>
               <option value="Menopur">Menopur</option>
               <option value="Puregon">Puregon</option>
@@ -890,19 +890,19 @@
               <option value="Pergoveris">Pergoveris</option>
               <option value="Luveris">Luveris</option>
             </optgroup>
-            <optgroup label="🛑 Suppression">
+            <optgroup id="grpSuppress" label="🛑 Suppression">
               <option value="Decapeptyl">Decapeptyl</option>
               <option value="Cetrotide">Cetrotide</option>
               <option value="Orgalutran">Orgalutran</option>
               <option value="Synarel">Synarel (Nasal spray)</option>
               <option value="Suprefact">Suprefact</option>
             </optgroup>
-            <optgroup label="💊 Trigger">
+            <optgroup id="grpTrigger" label="💊 Trigger">
               <option value="Ovitrelle">Ovitrelle</option>
               <option value="Pregnyl">Pregnyl</option>
               <option value="Decapeptyl trigger">Decapeptyl (Trigger)</option>
             </optgroup>
-            <optgroup label="🌸 Luteal Support">
+            <optgroup id="grpLuteal" label="🌸 Luteal Support">
               <option value="Utrogestan">Utrogestan</option>
               <option value="Crinone">Crinone</option>
               <option value="Endometrin">Endometrin</option>
@@ -910,14 +910,14 @@
               <option value="Gestone">Gestone</option>
               <option value="Cyclogest">Cyclogest</option>
             </optgroup>
-            <optgroup label="💛 Estrogen">
+            <optgroup id="grpEstrogen" label="💛 Estrogen">
               <option value="Estrofem">Estrofem</option>
               <option value="Progynova">Progynova</option>
               <option value="Divigel">Divigel</option>
               <option value="Evorel patch">Evorel (Patch)</option>
               <option value="Estraderm patch">Estraderm (Patch)</option>
             </optgroup>
-            <optgroup label="➕ Adjuncts">
+            <optgroup id="grpAdjuncts" label="➕ Adjuncts">
               <option value="Aspirin">Aspirin</option>
               <option value="Clexane">Clexane / Enoxaparin</option>
               <option value="Prednisone">Prednisone</option>
@@ -926,7 +926,7 @@
               <option value="Folic acid">Folic acid</option>
               <option value="DHEA">DHEA</option>
             </optgroup>
-            <optgroup label="✏️ Other">
+            <optgroup id="grpOther" label="✏️ Other">
               <option value="__custom__">Other — type my own</option>
             </optgroup>
           </select>
@@ -980,6 +980,14 @@ const content = {
     medNamePlaceholder: 'Medication name (e.g. Gonal-F)',
     medsEmpty: 'No medications added yet. Add your first one below.',
     medTimes: { morning: '🌅 Morning', midday: '☀️ Midday', evening: '🌙 Evening', bedtime: '😴 Bedtime' },
+    medGroups: { stim: '💉 Stimulation (FSH/LH)', suppress: '🛑 Suppression', trigger: '💊 Trigger', luteal: '🌸 Luteal Support', estrogen: '💛 Estrogen', adjuncts: '➕ Adjuncts', other: '✏️ Other' },
+    medSelectPlaceholder: '— Select medication —',
+    medDosePlaceholder: '— Dose —',
+    medDoseCustomPlaceholder: 'or type dose',
+    medCustomPlaceholder: 'Type medication name',
+    memoryTitle: 'Your journey so far',
+    saveNoteBtn: 'Save',
+    saveNotePlaceholder: 'Add a personal note to your journey...',
     responseTitle: 'Clinical explanation',
     loadingText: 'Preparing your explanation…',
     errorText: 'Something went wrong. Please try again.',
@@ -1039,6 +1047,14 @@ Patient's current treatment phase: ${phase}`
     medNamePlaceholder: 'שם התרופה (למשל גונל-F)',
     medsEmpty: 'עדיין לא נוספו תרופות. הוסיפי את הראשונה למטה.',
     medTimes: { morning: '🌅 בוקר', midday: '☀️ צהריים', evening: '🌙 ערב', bedtime: '😴 לפני שינה' },
+    medGroups: { stim: '💉 גירוי (FSH/LH)', suppress: '🛑 דיכוי', trigger: '💊 טריגר', luteal: '🌸 תמיכה לוטאלית', estrogen: '💛 אסטרוגן', adjuncts: '➕ תוספות', other: '✏️ אחר' },
+    medSelectPlaceholder: '— בחרי תרופה —',
+    medDosePlaceholder: '— מינון —',
+    medDoseCustomPlaceholder: 'או הקלידי מינון',
+    medCustomPlaceholder: 'הקלידי שם תרופה',
+    memoryTitle: 'המסע שלך עד כה',
+    saveNoteBtn: 'שמור',
+    saveNotePlaceholder: 'הוסיפי הערה אישית למסע שלך...',
     responseTitle: 'הסבר קליני',
     loadingText: 'מכינה את ההסבר שלך…',
     errorText: 'משהו השתבש. אנא נסי שוב.',
@@ -1108,6 +1124,34 @@ function renderUI() {
   document.getElementById('datesLabel').textContent = c.datesLabel;
   document.getElementById('medsLabel').textContent = c.medsLabel;
   document.getElementById('medName').placeholder = c.medNamePlaceholder;
+  document.getElementById('memoryTitle').textContent = c.memoryTitle;
+  document.getElementById('saveNoteBtnText').textContent = c.saveNoteBtn;
+
+  // Update med select placeholders
+  const medNameSelect = document.getElementById('medName');
+  if (medNameSelect.options[0]) medNameSelect.options[0].text = c.medSelectPlaceholder;
+  const medDoseSelect = document.getElementById('medDose');
+  if (medDoseSelect.options[0]) medDoseSelect.options[0].text = c.medDosePlaceholder;
+  document.getElementById('medDoseCustom').placeholder = c.medDoseCustomPlaceholder;
+  document.getElementById('medNameCustom').placeholder = c.medCustomPlaceholder;
+
+  // Update optgroup labels
+  const groups = { grpStim: 'stim', grpSuppress: 'suppress', grpTrigger: 'trigger', grpLuteal: 'luteal', grpEstrogen: 'estrogen', grpAdjuncts: 'adjuncts', grpOther: 'other' };
+  Object.entries(groups).forEach(([id, key]) => {
+    const el = document.getElementById(id);
+    if (el) el.label = c.medGroups[key];
+  });
+
+  // Update "Other" option text
+  const otherOpt = Array.from(medNameSelect.options).find(o => o.value === '__custom__');
+  if (otherOpt) otherOpt.text = currentLang === 'he' ? 'אחר — הקלידי בעצמך' : 'Other — type my own';
+
+  // Update med time options
+  const medTimeSelect = document.getElementById('medTime');
+  const timeKeys = ['morning', 'midday', 'evening', 'bedtime'];
+  Array.from(medTimeSelect.options).forEach((opt, i) => {
+    if (timeKeys[i]) opt.text = c.medTimes[timeKeys[i]];
+  });
   document.getElementById('labelStimStart').textContent = c.dateLabels.stimStart;
   document.getElementById('labelRetrieval').textContent = c.dateLabels.retrieval;
   document.getElementById('labelTransfer').textContent = c.dateLabels.transfer;
@@ -1233,7 +1277,7 @@ async function saveNote() {
     });
     noteInput.value = '';
     btnText.textContent = currentLang === 'he' ? 'נשמר ✓' : 'Saved ✓';
-    setTimeout(() => { btnText.textContent = currentLang === 'he' ? 'שמור' : 'Save'; btn.disabled = false; }, 2000);
+    setTimeout(() => { btnText.textContent = content[currentLang].saveNoteBtn; btn.disabled = false; }, 2000);
     loadMemory();
   } catch (err) {
     btnText.textContent = currentLang === 'he' ? 'שגיאה' : 'Error';
@@ -1309,8 +1353,8 @@ async function sendMessage() {
     const saveSection = document.getElementById('saveNoteSection');
     const noteInput = document.getElementById('noteInput');
     const c2 = content[currentLang];
-    noteInput.placeholder = currentLang === 'he' ? 'הוסיפי הערה אישית לזיכרון שלך...' : 'Add a personal note to your journey...';
-    document.getElementById('saveNoteBtnText').textContent = currentLang === 'he' ? 'שמור' : 'Save';
+    noteInput.placeholder = content[currentLang].saveNotePlaceholder;
+    document.getElementById('saveNoteBtnText').textContent = content[currentLang].saveNoteBtn;
     saveSection.style.display = 'block';
 
   } catch (err) {
@@ -1483,7 +1527,7 @@ function onMedNameChange() {
 
   // Populate dose dropdown
   const doses = MED_DOSES[select.value] || [];
-  doseSelect.innerHTML = `<option value="">— Dose —</option>` +
+  doseSelect.innerHTML = `<option value="">${content[currentLang].medDosePlaceholder}</option>` +
     doses.map(d => `<option value="${d}">${d}</option>`).join('');
 }
 
@@ -1540,7 +1584,7 @@ function addMedication() {
   nameSelect.value = '';
   nameCustom.value = '';
   nameCustom.style.display = 'none';
-  doseSelect.innerHTML = '<option value="">— Dose —</option>';
+  doseSelect.innerHTML = `<option value="">${content[currentLang].medDosePlaceholder}</option>`;
   doseCustom.value = '';
 
   renderMedications();
@@ -1617,9 +1661,9 @@ function renderMedications() {
     const banner = document.getElementById('proactiveBanner');
     if (banner.style.display === 'none') {
       const names = unchecked.map(m => m.name).join(', ');
-      document.getElementById('proactiveIcon').textContent = '💊';
-      document.getElementById('proactiveTitle').textContent = currentLang === 'he' ? 'תרופות שעדיין לא נלקחו' : 'Medications not yet taken';
-      document.getElementById('proactiveBody').textContent = currentLang === 'he' ? `${names} — עוד לא סומנו להיום` : `${names} — not yet marked for today`;
+    document.getElementById('proactiveIcon').textContent = '💊';
+    document.getElementById('proactiveTitle').textContent = currentLang === 'he' ? 'תרופות שעדיין לא נלקחו' : 'Medications not yet taken';
+    document.getElementById('proactiveBody').textContent = currentLang === 'he' ? `${names} — עוד לא סומנו להיום` : `${names} — not yet marked for today`;
       banner.style.display = 'flex';
     }
   }
