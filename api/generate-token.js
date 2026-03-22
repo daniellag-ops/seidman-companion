@@ -23,7 +23,7 @@ export default async function handler(req, res) {
   try {
     const readRes = await fetch(
       `https://api.vercel.com/v1/edge-config/${process.env.EDGE_CONFIG_ID}/items`,
-      { headers: { Authorization: `Bearer ${process.env.VERCEL_API_TOKEN}` } }
+      { headers: { Authorization: `Bearer ${process.env.VERCEL_MANAGEMENT_TOKEN}` } }
     );
     const existing = await readRes.json();
     const tokensItem = (existing.items || []).find(i => i.key === 'tokens');
@@ -44,7 +44,7 @@ export default async function handler(req, res) {
       {
         method: 'PATCH',
         headers: {
-          Authorization: `Bearer ${process.env.VERCEL_API_TOKEN}`,
+          Authorization: `Bearer ${process.env.VERCEL_MANAGEMENT_TOKEN}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
