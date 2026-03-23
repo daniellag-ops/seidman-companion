@@ -1306,6 +1306,21 @@ const pathSlug = window.location.pathname.startsWith('/p/')
   : null;
 const patientToken = pathSlug || new URLSearchParams(window.location.search).get('token');
 
+function showMemoryCard(notes) {
+  const card = document.getElementById('memoryCard');
+  const factsEl = document.getElementById('memoryFacts');
+  factsEl.innerHTML = notes
+    .sort((a, b) => b.date.localeCompare(a.date))
+    .slice(0, 5)
+    .map(n => `
+      <div class="memory-fact">
+        <div class="memory-fact-date">${n.date}</div>
+        <div class="memory-fact-text">📝 ${n.text}</div>
+      </div>
+    `).join('');
+  card.style.display = 'block';
+}
+
 // Load and display patient memory on page load
 async function loadMemory() {
   if (!patientToken) return;
@@ -1315,27 +1330,20 @@ async function loadMemory() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ token: patientToken })
     });
-    if (!res.ok) return;
-    const data = await res.json();
-
-    // Only show card if patient has manual notes — AI facts work silently
-    if (!data.notes?.length) return;
-
-    const card = document.getElementById('memoryCard');
-    const factsEl = document.getElementById('memoryFacts');
-
-    factsEl.innerHTML = data.notes
-      .sort((a, b) => b.date.localeCompare(a.date))
-      .slice(0, 5)
-      .map(n => `
-        <div class="memory-fact">
-          <div class="memory-fact-date">${n.date}</div>
-          <div class="memory-fact-text">📝 ${n.text}</div>
-        </div>
-      `).join('');
-
-    card.style.display = 'block';
+    if (res.ok) {
+      const data = await res.json();
+      // Only show card if patient has manual notes — AI facts work silently
+      if (data.notes?.length) {
+        localStorage.setItem('notes_' + patientToken, JSON.stringify(data.notes));
+        showMemoryCard(data.notes);
+        return;
+      }
+    }
   } catch (err) {}
+
+  // Fallback to localStorage if API returned nothing
+  const localNotes = JSON.parse(localStorage.getItem('notes_' + patientToken) || '[]');
+  if (localNotes.length) showMemoryCard(localNotes);
 }
 
 async function saveNote() {
@@ -1357,6 +1365,9 @@ async function saveNote() {
     noteInput.value = '';
     btnText.textContent = currentLang === 'he' ? 'נשמר ✓' : 'Saved ✓';
     noteInput.placeholder = currentLang === 'he' ? 'ההערה נשמרה — תראי אותה בפעם הבאה שתפתחי את הקישור שלך 💛' : 'Note saved — you\'ll see it next time you open your link 💛';
+    const storedNotes = JSON.parse(localStorage.getItem('notes_' + patientToken) || '[]');
+    storedNotes.unshift({ text: note, date: new Date().toISOString().split('T')[0] });
+    localStorage.setItem('notes_' + patientToken, JSON.stringify(storedNotes.slice(0, 20)));
     setTimeout(() => {
       btnText.textContent = content[currentLang].saveNoteBtn;
       noteInput.placeholder = content[currentLang].saveNotePlaceholder;
@@ -1530,18 +1541,33 @@ async function saveDates() {
     beta: document.getElementById('dateBeta').value
   };
   currentDates = dates;
+  localStorage.setItem('dates_' + patientToken, JSON.stringify(dates));
+  checkProactiveMessage(dates);
   try {
     await fetch('/api/save-memory', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ token: patientToken, dates })
     });
-    checkProactiveMessage(dates);
   } catch (err) {}
+}
+
+function applyDates(dates) {
+  currentDates = dates;
+  if (dates.stimStart) document.getElementById('dateStimStart').value = dates.stimStart;
+  if (dates.retrieval) document.getElementById('dateRetrieval').value = dates.retrieval;
+  if (dates.transfer) document.getElementById('dateTransfer').value = dates.transfer;
+  if (dates.beta) document.getElementById('dateBeta').value = dates.beta;
+  checkProactiveMessage(dates);
 }
 
 async function loadDates() {
   if (!patientToken) return;
+
+  // Show instantly from localStorage while API loads
+  const localDates = JSON.parse(localStorage.getItem('dates_' + patientToken) || 'null');
+  if (localDates && Object.values(localDates).some(v => v)) applyDates(localDates);
+
   try {
     const res = await fetch('/api/get-memory', {
       method: 'POST',
@@ -1550,13 +1576,9 @@ async function loadDates() {
     });
     if (!res.ok) return;
     const data = await res.json();
-    if (data.dates) {
-      currentDates = data.dates;
-      if (data.dates.stimStart) document.getElementById('dateStimStart').value = data.dates.stimStart;
-      if (data.dates.retrieval) document.getElementById('dateRetrieval').value = data.dates.retrieval;
-      if (data.dates.transfer) document.getElementById('dateTransfer').value = data.dates.transfer;
-      if (data.dates.beta) document.getElementById('dateBeta').value = data.dates.beta;
-      checkProactiveMessage(data.dates);
+    if (data.dates && Object.values(data.dates).some(v => v)) {
+      localStorage.setItem('dates_' + patientToken, JSON.stringify(data.dates));
+      applyDates(data.dates);
     }
   } catch (err) {}
 }
