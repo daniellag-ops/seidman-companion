@@ -298,6 +298,59 @@
   .send-btn:active { transform: scale(0.97); }
   .send-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
+  /* ── Upload button ── */
+  .upload-btn {
+    background: transparent;
+    border: 1.5px solid var(--border);
+    border-radius: 100px;
+    width: 38px; height: 38px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    color: var(--text-light);
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+
+  .upload-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .upload-btn.has-file { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+
+  /* ── File preview strip ── */
+  .file-preview {
+    display: none;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-top: 1px solid var(--border);
+    background: var(--accent-soft);
+    font-size: 13px;
+    color: var(--accent);
+  }
+
+  .file-preview-icon { font-size: 15px; flex-shrink: 0; }
+
+  .file-preview-name {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: 500;
+  }
+
+  .file-remove {
+    cursor: pointer;
+    color: var(--text-light);
+    font-size: 18px;
+    line-height: 1;
+    padding: 0 2px;
+    transition: color 0.15s;
+    flex-shrink: 0;
+    background: none;
+    border: none;
+    font-family: inherit;
+  }
+
+  .file-remove:hover { color: #b94b2b; }
+
   /* ── Quick prompts ── */
   .quick-prompts { display: flex; flex-wrap: wrap; gap: 8px; }
 
@@ -823,10 +876,20 @@
     </div>
   </div>
 
+  <input type="file" id="fileInput" accept=".pdf,image/*" style="display:none" onchange="handleFileSelect(event)">
+
   <div class="input-card">
     <div class="input-label" id="inputLabel">Your results or question</div>
     <textarea id="userInput" rows="4"></textarea>
+    <div class="file-preview" id="filePreview">
+      <span class="file-preview-icon">📎</span>
+      <span class="file-preview-name" id="filePreviewName"></span>
+      <button class="file-remove" onclick="removeAttachment()">×</button>
+    </div>
     <div class="input-footer">
+      <button class="upload-btn" id="uploadBtn" onclick="document.getElementById('fileInput').click()" title="Attach a result">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+      </button>
       <span class="input-hint" id="inputHint">Private & confidential — nothing is stored.</span>
       <button class="send-btn" id="sendBtn" onclick="sendMessage()">
         <span id="sendBtnText">Explain this</span>
@@ -957,6 +1020,7 @@
 <script>
 let currentLang = 'en';
 let selectedPhase = '';
+let attachedFile = null; // { name, mediaType, data (base64) }
 
 const content = {
   en: {
@@ -987,6 +1051,8 @@ const content = {
     memoryTitle: 'Your journey so far',
     saveNoteBtn: 'Save',
     saveNotePlaceholder: 'Add a personal note to your journey...',
+    uploadTitle: 'Attach a result (PDF or image)',
+    fileTooBig: 'File too large. Maximum size is 5MB.',
     responseTitle: 'Clinical explanation',
     loadingText: 'Preparing your explanation…',
     errorText: 'Something went wrong. Please try again.',
@@ -1054,6 +1120,8 @@ Patient's current treatment phase: ${phase}`
     memoryTitle: 'המסע שלך עד כה',
     saveNoteBtn: 'שמור',
     saveNotePlaceholder: 'הוסיפי הערה אישית למסע שלך...',
+    uploadTitle: 'צרפי תוצאה (PDF או תמונה)',
+    fileTooBig: 'הקובץ גדול מדי. הגודל המרבי הוא 5MB.',
     responseTitle: 'הסבר קליני',
     loadingText: 'מכינה את ההסבר שלך…',
     errorText: 'משהו השתבש. אנא נסי שוב.',
@@ -1131,6 +1199,7 @@ function renderUI() {
   document.getElementById('medName').placeholder = c.medNamePlaceholder;
   document.getElementById('memoryTitle').textContent = c.memoryTitle;
   document.getElementById('saveNoteBtnText').textContent = c.saveNoteBtn;
+  document.getElementById('uploadBtn').title = c.uploadTitle;
 
   // Update med select placeholders
   const medNameSelect = document.getElementById('medName');
@@ -1300,6 +1369,45 @@ async function saveNote() {
   }
 }
 
+function handleFileSelect(e) {
+  const file = e.target.files?.[0];
+  if (!file) return;
+
+  if (file.size > 5 * 1024 * 1024) {
+    alert(content[currentLang].fileTooBig);
+    e.target.value = '';
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    const base64 = ev.target.result.split(',')[1];
+    const mediaType = file.type || (file.name.toLowerCase().endsWith('.pdf') ? 'application/pdf' : 'image/jpeg');
+    attachedFile = { name: file.name, mediaType, data: base64 };
+    renderFilePreview();
+  };
+  reader.readAsDataURL(file);
+  e.target.value = '';
+}
+
+function removeAttachment() {
+  attachedFile = null;
+  renderFilePreview();
+}
+
+function renderFilePreview() {
+  const preview = document.getElementById('filePreview');
+  const uploadBtn = document.getElementById('uploadBtn');
+  if (attachedFile) {
+    document.getElementById('filePreviewName').textContent = attachedFile.name;
+    preview.style.display = 'flex';
+    uploadBtn.classList.add('has-file');
+  } else {
+    preview.style.display = 'none';
+    uploadBtn.classList.remove('has-file');
+  }
+}
+
 async function sendMessage() {
   const input = document.getElementById('userInput').value.trim();
   if (!input) return;
@@ -1328,6 +1436,18 @@ async function sendMessage() {
   document.getElementById('userInput').classList.remove('is-sample');
 
   try {
+    // Build message content — multi-part if a file is attached
+    let messageContent;
+    if (attachedFile) {
+      const isPdf = attachedFile.mediaType === 'application/pdf';
+      const fileBlock = isPdf
+        ? { type: 'document', source: { type: 'base64', media_type: attachedFile.mediaType, data: attachedFile.data } }
+        : { type: 'image', source: { type: 'base64', media_type: attachedFile.mediaType, data: attachedFile.data } };
+      messageContent = [fileBlock, { type: 'text', text: input }];
+    } else {
+      messageContent = input;
+    }
+
     const response = await fetch("/api/chat", {
       method: "POST",
       headers: {
@@ -1340,7 +1460,7 @@ async function sendMessage() {
         model: "claude-sonnet-4-20250514",
         max_tokens: 1000,
         system: c.systemPrompt(selectedPhase),
-        messages: [{ role: "user", content: input }]
+        messages: [{ role: "user", content: messageContent }]
       })
     });
 
@@ -1363,6 +1483,10 @@ async function sendMessage() {
 
     body.innerHTML = formatResponse(mainText);
     if (disclaimer) body.innerHTML += `<div class="disclaimer">${disclaimer}</div>`;
+
+    // Clear attachment after successful send
+    attachedFile = null;
+    renderFilePreview();
 
     // Show save note section
     const saveSection = document.getElementById('saveNoteSection');
