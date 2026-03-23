@@ -298,6 +298,158 @@
   .send-btn:active { transform: scale(0.97); }
   .send-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
+  /* ── Share section ── */
+  .share-section {
+    display: none;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    border-top: 1px solid var(--border);
+    background: var(--surface2);
+    flex-wrap: wrap;
+  }
+
+  .share-label {
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.9px;
+    color: var(--text-light);
+    flex-shrink: 0;
+  }
+
+  .share-platform-btns { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+
+  .share-platform-btn {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    border: 1.5px solid var(--border);
+    background: var(--surface);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+
+  .share-platform-btn:hover { transform: scale(1.1); }
+  .share-platform-btn.wa { border-color: #25D366; color: #25D366; }
+  .share-platform-btn.wa:hover { background: #25D366; color: white; }
+  .share-platform-btn.fb { border-color: #1877F2; color: #1877F2; }
+  .share-platform-btn.fb:hover { background: #1877F2; color: white; }
+  .share-platform-btn.ig { border-color: #E1306C; color: #E1306C; }
+  .share-platform-btn.ig:hover { background: #E1306C; color: white; }
+  .share-platform-btn.tt { border-color: #69C9D0; color: #010101; border-color: #010101; }
+  .share-platform-btn.tt:hover { background: #010101; color: white; }
+
+  .milestone-card-btn {
+    margin-left: auto;
+    background: transparent;
+    border: 1.5px solid var(--gold);
+    color: var(--gold);
+    border-radius: 100px;
+    padding: 7px 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+
+  .milestone-card-btn:hover { background: var(--gold); color: var(--text); }
+  body.rtl .milestone-card-btn { margin-left: 0; margin-right: auto; }
+
+  /* ── Milestone modal ── */
+  .milestone-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.65);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  .milestone-modal {
+    background: white;
+    border-radius: var(--radius);
+    max-width: 420px;
+    width: 100%;
+    overflow: hidden;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .milestone-modal-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .milestone-modal-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 18px;
+    font-weight: 400;
+    color: var(--text);
+  }
+
+  .milestone-modal-close {
+    background: none;
+    border: none;
+    font-size: 22px;
+    color: var(--text-light);
+    cursor: pointer;
+    line-height: 1;
+    padding: 0 4px;
+  }
+
+  .milestone-canvas-wrap {
+    padding: 16px;
+    background: var(--bg);
+    display: flex;
+    justify-content: center;
+  }
+
+  .milestone-canvas-wrap canvas {
+    width: 100%;
+    max-width: 340px;
+    height: auto;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    display: block;
+  }
+
+  .milestone-modal-body { padding: 16px 20px 20px; }
+
+  .milestone-modal-platforms {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 14px;
+  }
+
+  .milestone-actions { display: flex; gap: 10px; }
+
+  .milestone-action-btn {
+    flex: 1;
+    padding: 11px;
+    border-radius: 100px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: opacity 0.15s;
+    border: none;
+    text-align: center;
+  }
+
+  .milestone-action-btn.dl { background: var(--accent); color: white; }
+  .milestone-action-btn.sn { background: var(--gold); color: var(--text); }
+  .milestone-action-btn:hover { opacity: 0.85; }
+
   /* ── Upload button ── */
   .upload-btn {
     background: transparent;
@@ -916,6 +1068,24 @@
     </div>
     <div class="error-msg" id="errorMsg"></div>
     <div class="response-body" id="responseBody"></div>
+    <div class="share-section" id="shareSection">
+      <span class="share-label" id="shareLabel">Share</span>
+      <div class="share-platform-btns">
+        <button class="share-platform-btn wa" onclick="shareResponseWhatsApp()" title="WhatsApp">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        </button>
+        <button class="share-platform-btn fb" onclick="shareResponseFacebook()" title="Facebook">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+        </button>
+        <button class="share-platform-btn ig" onclick="shareResponseNative()" title="Instagram">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        </button>
+        <button class="share-platform-btn tt" onclick="shareResponseNative()" title="TikTok">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.27 8.27 0 004.83 1.55V6.79a4.85 4.85 0 01-1.06-.1z"/></svg>
+        </button>
+      </div>
+      <button class="milestone-card-btn" id="milestoneCardBtn" onclick="openMilestoneModal()">🎴 Milestone card</button>
+    </div>
     <div class="save-note-section" id="saveNoteSection" style="display:none">
       <div class="save-note-inner">
         <input type="text" id="noteInput" class="note-input" />
@@ -1017,6 +1187,39 @@
 
 </main>
 
+<!-- Milestone card modal -->
+<div class="milestone-overlay" id="milestoneOverlay" style="display:none" onclick="closeMilestoneModal(event)">
+  <div class="milestone-modal">
+    <div class="milestone-modal-header">
+      <span class="milestone-modal-title" id="milestoneModalTitle">Milestone card</span>
+      <button class="milestone-modal-close" onclick="document.getElementById('milestoneOverlay').style.display='none';document.body.style.overflow=''">×</button>
+    </div>
+    <div class="milestone-canvas-wrap">
+      <canvas id="milestoneCanvas" width="1080" height="1080"></canvas>
+    </div>
+    <div class="milestone-modal-body">
+      <div class="milestone-modal-platforms">
+        <button class="share-platform-btn wa" onclick="shareMilestoneWhatsApp()" title="WhatsApp">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        </button>
+        <button class="share-platform-btn fb" onclick="shareMilestoneFacebook()" title="Facebook">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+        </button>
+        <button class="share-platform-btn ig" onclick="shareMilestoneNative()" title="Instagram">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        </button>
+        <button class="share-platform-btn tt" onclick="shareMilestoneNative()" title="TikTok">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.27 8.27 0 004.83 1.55V6.79a4.85 4.85 0 01-1.06-.1z"/></svg>
+        </button>
+      </div>
+      <div class="milestone-actions">
+        <button class="milestone-action-btn dl" id="milestoneDownloadBtn" onclick="downloadMilestoneCard()">↓ Download</button>
+        <button class="milestone-action-btn sn" id="milestoneShareNativeBtn" onclick="shareMilestoneNative()">Share ↗</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
 let currentLang = 'en';
 let selectedPhase = '';
@@ -1053,6 +1256,12 @@ const content = {
     saveNotePlaceholder: 'Add a personal note to your journey...',
     uploadTitle: 'Attach a result (PDF or image)',
     fileTooBig: 'File too large. Maximum size is 5MB.',
+    shareLabel: 'Share',
+    milestoneCardBtn: '🎴 Milestone card',
+    milestoneModalTitle: 'Your milestone card',
+    milestoneDownload: '↓ Download',
+    milestoneShareNative: 'Share ↗',
+    shareCopied: 'Copied! Paste it into your post.',
     responseTitle: 'Clinical explanation',
     loadingText: 'Preparing your explanation…',
     errorText: 'Something went wrong. Please try again.',
@@ -1122,6 +1331,12 @@ Patient's current treatment phase: ${phase}`
     saveNotePlaceholder: 'הוסיפי הערה אישית למסע שלך...',
     uploadTitle: 'צרפי תוצאה (PDF או תמונה)',
     fileTooBig: 'הקובץ גדול מדי. הגודל המרבי הוא 5MB.',
+    shareLabel: 'שיתוף',
+    milestoneCardBtn: '🎴 כרטיס אבן דרך',
+    milestoneModalTitle: 'כרטיס אבן הדרך שלך',
+    milestoneDownload: '↓ הורדה',
+    milestoneShareNative: 'שתפי ↗',
+    shareCopied: 'הועתק! הדביקי בפוסט שלך.',
     responseTitle: 'הסבר קליני',
     loadingText: 'מכינה את ההסבר שלך…',
     errorText: 'משהו השתבש. אנא נסי שוב.',
@@ -1200,6 +1415,11 @@ function renderUI() {
   document.getElementById('memoryTitle').textContent = c.memoryTitle;
   document.getElementById('saveNoteBtnText').textContent = c.saveNoteBtn;
   document.getElementById('uploadBtn').title = c.uploadTitle;
+  document.getElementById('shareLabel').textContent = c.shareLabel;
+  document.getElementById('milestoneCardBtn').textContent = c.milestoneCardBtn;
+  document.getElementById('milestoneModalTitle').textContent = c.milestoneModalTitle;
+  document.getElementById('milestoneDownloadBtn').textContent = c.milestoneDownload;
+  document.getElementById('milestoneShareNativeBtn').textContent = c.milestoneShareNative;
 
   // Update med select placeholders
   const medNameSelect = document.getElementById('medName');
@@ -1498,6 +1718,9 @@ async function sendMessage() {
     // Clear attachment after successful send
     attachedFile = null;
     renderFilePreview();
+
+    // Show share section
+    document.getElementById('shareSection').style.display = 'flex';
 
     // Show save note section
     const saveSection = document.getElementById('saveNoteSection');
@@ -1850,6 +2073,185 @@ function renderMedications() {
       banner.style.display = 'flex';
     }
   }
+}
+
+// ── Sharing ──
+const SHARE_URL = 'https://seidman-ai.com';
+
+const milestoneMessages = {
+  en: {
+    'IVF stimulation':                              { icon: '💉', title: 'In the middle of stimulation',  sub: 'Taking it one injection at a time 💙' },
+    'egg retrieval and recovery':                   { icon: '🥚', title: 'Today was retrieval day',        sub: 'The next chapter begins 💙' },
+    'embryo development in the lab':               { icon: '🔬', title: 'Our embryos are growing',        sub: 'Every cell dividing is a small miracle 💙' },
+    'frozen embryo transfer preparation':           { icon: '🌱', title: 'Preparing for transfer',         sub: 'Getting ready for the most hopeful day 💙' },
+    'fertility preservation (egg or embryo freezing)': { icon: '❄️', title: 'Preserving our future',     sub: 'Taking control of our fertility story 💙' },
+    'positive beta HCG test after IVF transfer':   { icon: '🎉', title: 'Our beta is positive!',          sub: 'After everything — it worked 💙' },
+    'early pregnancy after IVF (6 weeks and beyond)': { icon: '🤰', title: "We're pregnant!",             sub: 'The journey led us here 💙' },
+    'processing a failed or difficult cycle':       { icon: '💙', title: 'Still here. Still brave.',       sub: 'This journey is hard. You are harder.' },
+  },
+  he: {
+    'גירוי הורמונלי לטיפול IVF':                    { icon: '💉', title: 'באמצע גירוי הורמונלי',           sub: 'צעד אחד בכל פעם 💙' },
+    'שאיבת ביציות והתאוששות':                       { icon: '🥚', title: 'היום היה יום השאיבה',             sub: 'הפרק הבא מתחיל 💙' },
+    'התפתחות עוברים במעבדה':                        { icon: '🔬', title: 'העוברים שלנו גדלים',              sub: 'כל חלוקת תא היא נס קטן 💙' },
+    'הכנה להחזרת עובר קפוא (FET)':                  { icon: '🌱', title: 'מתכוננים להחזרה',                sub: 'מתכוננים ליום המלא תקווה 💙' },
+    'שימור פוריות (הקפאת ביציות או עוברים)':        { icon: '❄️', title: 'שומרים על העתיד שלנו',           sub: 'לוקחים שליטה על הסיפור שלנו 💙' },
+    'תוצאת בטא HCG חיובית לאחר החזרת עובר':        { icon: '🎉', title: '!הבטא חיובי',                    sub: 'אחרי הכל — זה עבד 💙' },
+    'הריון מוקדם לאחר IVF (6 שבועות ומעלה)':       { icon: '🤰', title: '!אנחנו בהריון',                  sub: 'המסע הוביל אותנו לכאן 💙' },
+    'עיבוד מחזור שנכשל או היה קשה':                { icon: '💙', title: '.עדיין כאן. עדיין אמיצה',         sub: 'המסע הזה קשה. את קשה יותר.' },
+  }
+};
+
+function getResponseText() {
+  return (document.getElementById('responseBody')?.innerText || '').trim();
+}
+
+function shareResponseWhatsApp() {
+  const text = getResponseText().slice(0, 500);
+  const caption = currentLang === 'he'
+    ? `💙 הסבר ממרפאת פרופ׳ זיידמן:\n\n${text}…\n\n${SHARE_URL}`
+    : `💙 From Prof. Seidman's clinic:\n\n${text}…\n\n${SHARE_URL}`;
+  window.open(`https://wa.me/?text=${encodeURIComponent(caption)}`, '_blank');
+}
+
+function shareResponseFacebook() {
+  window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(SHARE_URL)}`, '_blank');
+}
+
+async function shareResponseNative() {
+  const text = getResponseText().slice(0, 400);
+  const caption = currentLang === 'he'
+    ? `💙 הסבר ממרפאת פרופ׳ זיידמן:\n\n${text}…\n\n${SHARE_URL}`
+    : `💙 From Prof. Seidman's patient companion:\n\n${text}…\n\n${SHARE_URL}`;
+  try {
+    if (navigator.share) { await navigator.share({ text: caption, url: SHARE_URL }); return; }
+  } catch(e) {}
+  try { await navigator.clipboard.writeText(caption); } catch(e) {}
+  alert(content[currentLang].shareCopied);
+}
+
+// ── Milestone card ──
+async function openMilestoneModal() {
+  document.getElementById('milestoneOverlay').style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+  await drawMilestoneCard();
+}
+
+function closeMilestoneModal(e) {
+  if (e && e.target !== document.getElementById('milestoneOverlay')) return;
+  document.getElementById('milestoneOverlay').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+async function drawMilestoneCard() {
+  await document.fonts.ready;
+  const canvas = document.getElementById('milestoneCanvas');
+  const ctx = canvas.getContext('2d');
+  const W = 1080, H = 1080;
+  const isHe = currentLang === 'he';
+
+  const msgs = milestoneMessages[currentLang];
+  const msg = msgs[selectedPhase] || (isHe
+    ? { icon: '💙', title: 'במסע ה-IVF שלי', sub: 'עם הדרכת פרופ׳ זיידמן' }
+    : { icon: '💙', title: 'On my IVF journey', sub: "With Prof. Seidman's guidance" });
+
+  // Background
+  ctx.fillStyle = '#0e6b6b';
+  ctx.fillRect(0, 0, W, H);
+
+  // Gold glow top-right
+  const g1 = ctx.createRadialGradient(W, 0, 0, W, 0, 560);
+  g1.addColorStop(0, 'rgba(201,168,76,0.28)'); g1.addColorStop(1, 'rgba(201,168,76,0)');
+  ctx.fillStyle = g1; ctx.fillRect(0, 0, W, H);
+
+  // Gold glow bottom-left
+  const g2 = ctx.createRadialGradient(0, H, 0, 0, H, 380);
+  g2.addColorStop(0, 'rgba(201,168,76,0.18)'); g2.addColorStop(1, 'rgba(201,168,76,0)');
+  ctx.fillStyle = g2; ctx.fillRect(0, 0, W, H);
+
+  // DS monogram ring
+  ctx.beginPath(); ctx.arc(W/2, 248, 72, 0, Math.PI*2);
+  ctx.fillStyle = 'rgba(201,168,76,0.18)'; ctx.fill();
+  ctx.beginPath(); ctx.arc(W/2, 248, 64, 0, Math.PI*2);
+  ctx.strokeStyle = '#c9a84c'; ctx.lineWidth = 3; ctx.stroke();
+  ctx.fillStyle = '#c9a84c';
+  ctx.font = `bold 46px 'DM Serif Display', Georgia, serif`;
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillText('DS', W/2, 248);
+
+  // Emoji
+  ctx.font = '110px serif';
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillText(msg.icon, W/2, 440);
+
+  // Title
+  ctx.fillStyle = 'white';
+  ctx.font = `bold 70px 'DM Serif Display', Georgia, serif`;
+  ctx.direction = isHe ? 'rtl' : 'ltr';
+  wrapCanvasText(ctx, msg.title, W/2, 590, W - 130, 82);
+
+  // Subtitle
+  ctx.fillStyle = 'rgba(255,255,255,0.72)';
+  ctx.font = `38px 'DM Sans', Arial, sans-serif`;
+  wrapCanvasText(ctx, msg.sub, W/2, 720, W - 160, 50);
+
+  // Gold divider
+  ctx.strokeStyle = 'rgba(201,168,76,0.45)'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(160, 830); ctx.lineTo(W-160, 830); ctx.stroke();
+
+  // Attribution
+  ctx.fillStyle = 'rgba(255,255,255,0.55)';
+  ctx.font = `32px 'DM Sans', Arial, sans-serif`;
+  ctx.direction = 'ltr';
+  const attr = isHe ? `פרופ׳ דניאל זיידמן · seidman-ai.com` : `Prof. Daniel Seidman · seidman-ai.com`;
+  ctx.fillText(attr, W/2, 882);
+}
+
+function wrapCanvasText(ctx, text, x, y, maxWidth, lineHeight) {
+  const words = text.split(' ');
+  let line = '', lines = [];
+  for (let i = 0; i < words.length; i++) {
+    const test = line + words[i] + ' ';
+    if (ctx.measureText(test).width > maxWidth && i > 0) { lines.push(line.trim()); line = words[i] + ' '; }
+    else line = test;
+  }
+  lines.push(line.trim());
+  let startY = y - ((lines.length - 1) * lineHeight) / 2;
+  lines.forEach(l => { ctx.fillText(l, x, startY); startY += lineHeight; });
+}
+
+function downloadMilestoneCard() {
+  const canvas = document.getElementById('milestoneCanvas');
+  const a = document.createElement('a');
+  a.download = 'milestone-card.png';
+  a.href = canvas.toDataURL('image/png');
+  a.click();
+}
+
+async function shareMilestoneNative() {
+  const canvas = document.getElementById('milestoneCanvas');
+  canvas.toBlob(async (blob) => {
+    const file = new File([blob], 'milestone.png', { type: 'image/png' });
+    try {
+      if (navigator.canShare?.({ files: [file] })) {
+        await navigator.share({ files: [file], url: SHARE_URL }); return;
+      } else if (navigator.share) {
+        await navigator.share({ url: SHARE_URL }); return;
+      }
+    } catch(e) {}
+    downloadMilestoneCard();
+  });
+}
+
+function shareMilestoneWhatsApp() {
+  const msg = milestoneMessages[currentLang]?.[selectedPhase];
+  const text = currentLang === 'he'
+    ? `${msg?.icon || '💙'} ${msg?.title || ''}\n${msg?.sub || ''}\n\nעם הדרכת פרופ׳ זיידמן · ${SHARE_URL}`
+    : `${msg?.icon || '💙'} ${msg?.title || ''}\n${msg?.sub || ''}\n\nWith Prof. Seidman's guidance · ${SHARE_URL}`;
+  window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+}
+
+function shareMilestoneFacebook() {
+  window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(SHARE_URL)}`, '_blank');
 }
 
 renderUI();
