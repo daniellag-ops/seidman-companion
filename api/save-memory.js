@@ -30,8 +30,7 @@ export default async function handler(req, res) {
       return res.status(403).json({ error: 'Invalid token' });
     }
 
-    const allMemory = await getEdgeConfigItem('patient_memory') || {};
-    const patientMemory = allMemory[token] || { facts: [], notes: [] };
+    const patientMemory = await getEdgeConfigItem('pm_' + token) || { facts: [], notes: [] };
 
     if (note) {
       patientMemory.notes = [
@@ -64,8 +63,7 @@ export default async function handler(req, res) {
       patientMemory.medLogs = Object.fromEntries(keys.map(k => [k, patientMemory.medLogs[k]]));
     }
 
-    allMemory[token] = patientMemory;
-    await updateEdgeConfig([{ operation: 'upsert', key: 'patient_memory', value: allMemory }]);
+    await updateEdgeConfig([{ operation: 'upsert', key: 'pm_' + token, value: patientMemory }]);
 
     return res.status(200).json({ ok: true });
   } catch (err) {

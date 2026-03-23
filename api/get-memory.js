@@ -21,8 +21,7 @@ export default async function handler(req, res) {
       return res.status(403).json({ error: 'Invalid token' });
     }
 
-    const allMemory = await getEdgeConfigItem('patient_memory') || {};
-    const patientMemory = allMemory[token] || { facts: [], notes: [] };
+    const patientMemory = await getEdgeConfigItem('pm_' + token) || { facts: [], notes: [] };
 
     return res.status(200).json(patientMemory);
   } catch (err) {

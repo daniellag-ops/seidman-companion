@@ -29,8 +29,7 @@ export default async function handler(req, res) {
     const tokens = await getEdgeConfigItem('tokens') || {};
     if (!tokens[token]) return res.status(404).json({ error: 'Patient not found' });
 
-    const allMemory = await getEdgeConfigItem('patient_memory') || {};
-    const patientMemory = allMemory[token] || { facts: [], notes: [] };
+    const patientMemory = await getEdgeConfigItem('pm_' + token) || { facts: [], notes: [] };
 
     if (!patientMemory.reminders) patientMemory.reminders = [];
 
@@ -45,8 +44,7 @@ export default async function handler(req, res) {
     // Keep last 20 reminders per patient
     patientMemory.reminders = patientMemory.reminders.slice(0, 20);
 
-    allMemory[token] = patientMemory;
-    const writeRes = await updateEdgeConfig([{ operation: 'upsert', key: 'patient_memory', value: allMemory }]);
+    const writeRes = await updateEdgeConfig([{ operation: 'upsert', key: 'pm_' + token, value: patientMemory }]);
     if (!writeRes.ok) {
       const errBody = await writeRes.text();
       throw new Error(`Edge Config write failed (${writeRes.status}): ${errBody}`);

@@ -71,16 +71,14 @@ async function saveMemoryFact(token, phase, question) {
     const fact = await extractMemoryFact(phase, question);
     if (!fact) return;
 
-    const allMemory = await getEdgeConfigItem('patient_memory') || {};
-    const patientMemory = allMemory[token] || { facts: [], notes: [] };
+    const patientMemory = await getEdgeConfigItem('pm_' + token) || { facts: [], notes: [] };
 
     patientMemory.facts = [
       { text: fact, phase, date: new Date().toISOString().split('T')[0] },
       ...(patientMemory.facts || [])
     ].slice(0, 20);
 
-    allMemory[token] = patientMemory;
-    await updateEdgeConfig([{ operation: 'upsert', key: 'patient_memory', value: allMemory }]);
+    await updateEdgeConfig([{ operation: 'upsert', key: 'pm_' + token, value: patientMemory }]);
   } catch (err) {
     console.error('Memory save failed:', err.message);
   }
@@ -107,8 +105,7 @@ export default async function handler(req, res) {
     if (isRateLimited(token)) return res.status(429).json({ error: 'Daily limit reached. Please try again tomorrow.' });
 
     // Load patient memory and inject into system prompt
-    const allMemory = await getEdgeConfigItem('patient_memory') || {};
-    const patientMemory = allMemory[token];
+    const patientMemory = await getEdgeConfigItem('pm_' + token);
 
     let memoryContext = '';
     if (patientMemory?.facts?.length || patientMemory?.notes?.length) {
