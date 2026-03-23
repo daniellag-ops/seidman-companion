@@ -20,8 +20,8 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  const { token, note, dates, medications, medLog } = req.body;
-  if (!token || (!note && !dates && !medications && !medLog)) return res.status(400).json({ error: 'Missing fields' });
+  const { token, note, dates, medications, medLog, acknowledgeReminder } = req.body;
+  if (!token || (!note && !dates && !medications && !medLog && !acknowledgeReminder)) return res.status(400).json({ error: 'Missing fields' });
 
   try {
     // Validate token
@@ -46,6 +46,14 @@ export default async function handler(req, res) {
 
     if (medications !== undefined) {
       patientMemory.medications = medications;
+    }
+
+    if (acknowledgeReminder && patientMemory.reminders) {
+      const reminder = patientMemory.reminders.find(r => r.id === acknowledgeReminder);
+      if (reminder) {
+        reminder.acknowledged = true;
+        reminder.acknowledgedAt = new Date().toISOString();
+      }
     }
 
     if (medLog) {

@@ -522,6 +522,57 @@
 
   .quick-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
 
+  /* ── Clinic reminder banner ── */
+  .clinic-reminder {
+    background: white;
+    border: 1.5px solid var(--border);
+    border-left: 4px solid var(--accent);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    display: none;
+    gap: 14px;
+    align-items: flex-start;
+    animation: fadeIn 0.3s ease;
+  }
+
+  .clinic-reminder.appt { border-left-color: var(--accent); }
+  .clinic-reminder.med  { border-left-color: var(--gold); }
+  .clinic-reminder-icon { font-size: 24px; flex-shrink: 0; line-height: 1; padding-top: 2px; }
+  .clinic-reminder-content { flex: 1; }
+
+  .clinic-reminder-label {
+    font-size: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.9px;
+    color: var(--text-light);
+    margin-bottom: 4px;
+  }
+
+  .clinic-reminder-msg {
+    font-size: 15px;
+    color: var(--text);
+    line-height: 1.55;
+    margin-bottom: 12px;
+    font-weight: 500;
+  }
+
+  .clinic-reminder-confirm {
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 100px;
+    padding: 8px 20px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+
+  .clinic-reminder-confirm:hover { opacity: 0.85; }
+  .clinic-reminder-confirm:disabled { opacity: 0.4; cursor: not-allowed; }
+
   /* ── Proactive banner ── */
   .proactive-banner {
     background: var(--accent);
@@ -976,6 +1027,16 @@
   </div>
 
   <div class="disclaimer-banner" id="disclaimerBanner"></div>
+
+  <!-- Clinic reminder banner -->
+  <div class="clinic-reminder" id="clinicReminder">
+    <div class="clinic-reminder-icon" id="clinicReminderIcon">📅</div>
+    <div class="clinic-reminder-content">
+      <div class="clinic-reminder-label" id="clinicReminderLabel">Message from the clinic</div>
+      <div class="clinic-reminder-msg" id="clinicReminderMsg"></div>
+      <button class="clinic-reminder-confirm" id="clinicReminderBtn" onclick="acknowledgeReminder()">Got it ✓</button>
+    </div>
+  </div>
 
   <!-- Proactive message banner -->
   <div class="proactive-banner" id="proactiveBanner" style="display:none">
@@ -1526,6 +1587,39 @@ const pathSlug = window.location.pathname.startsWith('/p/')
   : null;
 const patientToken = pathSlug || new URLSearchParams(window.location.search).get('token');
 
+// ── Clinic reminders ──
+let activeReminderId = null;
+
+function showClinicReminder(reminder) {
+  activeReminderId = reminder.id;
+  const isHe = currentLang === 'he';
+  const isAppt = reminder.type === 'appointment';
+  const el = document.getElementById('clinicReminder');
+  document.getElementById('clinicReminderIcon').textContent = isAppt ? '📅' : '💊';
+  document.getElementById('clinicReminderLabel').textContent = isHe
+    ? (isAppt ? 'הודעה מהמרפאה' : 'תזכורת תרופות')
+    : (isAppt ? 'Message from the clinic' : 'Medication reminder');
+  document.getElementById('clinicReminderMsg').textContent = reminder.message;
+  document.getElementById('clinicReminderBtn').textContent = isHe ? 'קיבלתי ✓' : 'Got it ✓';
+  el.className = `clinic-reminder ${isAppt ? 'appt' : 'med'}`;
+  el.style.display = 'flex';
+}
+
+async function acknowledgeReminder() {
+  if (!activeReminderId || !patientToken) return;
+  const btn = document.getElementById('clinicReminderBtn');
+  btn.disabled = true;
+  try {
+    await fetch('/api/save-memory', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token: patientToken, acknowledgeReminder: activeReminderId })
+    });
+  } catch(e) {}
+  document.getElementById('clinicReminder').style.display = 'none';
+  activeReminderId = null;
+}
+
 function showMemoryCard(notes) {
   const card = document.getElementById('memoryCard');
   const factsEl = document.getElementById('memoryFacts');
@@ -1552,6 +1646,11 @@ async function loadMemory() {
     });
     if (res.ok) {
       const data = await res.json();
+
+      // Show first unacknowledged clinic reminder
+      const pending = (data.reminders || []).find(r => !r.acknowledged);
+      if (pending) showClinicReminder(pending);
+
       // Only show card if patient has manual notes — AI facts work silently
       if (data.notes?.length) {
         localStorage.setItem('notes_' + patientToken, JSON.stringify(data.notes));
