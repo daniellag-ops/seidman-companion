@@ -47,7 +47,10 @@ export default async function handler(req, res) {
 
     allMemory[token] = patientMemory;
     const writeRes = await updateEdgeConfig([{ operation: 'upsert', key: 'patient_memory', value: allMemory }]);
-    if (!writeRes.ok) throw new Error('Failed to save reminder');
+    if (!writeRes.ok) {
+      const errBody = await writeRes.text();
+      throw new Error(`Edge Config write failed (${writeRes.status}): ${errBody}`);
+    }
 
     return res.status(200).json({ ok: true });
   } catch (err) {
