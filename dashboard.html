@@ -568,8 +568,7 @@ async function deactivatePatient(slug, name, btn) {
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Failed');
-    btn.closest('.patient-row').style.opacity = '0.4';
-    btn.textContent = 'Deactivated';
+    loadDashboard();
   } catch (err) {
     alert('Error: ' + err.message);
     btn.disabled = false;
