@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Seidman-AI — Dashboard</title>
+<title>Seidman-AI · Admin Dashboard</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
     --accent: #0e6b6b;
-    --accent-soft: #d0e8e8;
+    --accent-soft: #e4eeee;
     --gold: #c9a84c;
     --gold-soft: #f7edd8;
     --bg: #f0f4f4;
@@ -18,6 +18,7 @@
     --text-mid: #3d5c5c;
     --text-light: #7a9e9e;
     --radius: 14px;
+    --danger: #b94b2b;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -29,403 +30,645 @@
     min-height: 100vh;
   }
 
-  header {
-    background: var(--accent);
-    padding: 16px 32px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-
-  .avatar {
-    width: 36px; height: 36px;
-    border-radius: 50%;
-    background: var(--gold);
+  /* ── Login overlay ── */
+  .login-overlay {
+    position: fixed; inset: 0;
+    background: var(--bg);
     display: flex; align-items: center; justify-content: center;
-    font-family: 'DM Serif Display', serif;
-    font-size: 13px;
-    color: white;
-    flex-shrink: 0;
+    z-index: 100;
+    padding: 24px;
   }
-
-  .header-name { font-family: 'DM Serif Display', serif; font-size: 18px; color: white; }
-  .header-sub { font-size: 11px; color: rgba(255,255,255,0.55); text-transform: uppercase; letter-spacing: 0.5px; }
-
-  main {
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 32px 24px 80px;
-  }
-
-  /* Login */
-  .login-wrap {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: calc(100vh - 70px);
-  }
+  .login-overlay.hidden { display: none; }
 
   .login-card {
     background: var(--surface);
-    border: 1.5px solid var(--border);
     border-radius: var(--radius);
-    padding: 40px;
-    width: 100%;
-    max-width: 420px;
-  }
-
-  .login-card h1 { font-family: 'DM Serif Display', serif; font-size: 22px; font-weight: 400; margin-bottom: 8px; }
-  .login-card p { font-size: 14px; color: var(--text-mid); margin-bottom: 24px; }
-
-  label { display: block; font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-light); margin-bottom: 7px; }
-
-  input {
-    width: 100%;
     border: 1.5px solid var(--border);
-    border-radius: 10px;
-    padding: 12px 16px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 15px;
-    color: var(--text);
-    outline: none;
-    transition: border-color 0.15s;
-    margin-bottom: 16px;
-  }
-
-  input:focus { border-color: var(--accent); }
-
-  .btn {
-    background: var(--accent);
-    color: white;
-    border: none;
-    border-radius: 100px;
-    padding: 12px 28px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
+    padding: 40px;
+    max-width: 400px;
     width: 100%;
-    transition: opacity 0.15s;
   }
 
-  .btn:hover { opacity: 0.85; }
+  .login-logo { display: flex; align-items: center; gap: 10px; margin-bottom: 28px; }
+  .avatar {
+    width: 38px; height: 38px; border-radius: 50%;
+    background: var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'DM Serif Display', serif; font-size: 14px; color: white;
+  }
+  .logo-name { font-family: 'DM Serif Display', serif; font-size: 17px; }
+  .logo-sub { font-size: 11px; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.6px; }
 
-  .error { color: #b94b2b; font-size: 13px; margin-top: 10px; display: none; }
-  .error.visible { display: block; }
-
-  /* Dashboard */
-  .dashboard { display: none; }
-  .dashboard.visible { display: block; }
-
-  .dash-title {
-    font-family: 'DM Serif Display', serif;
-    font-size: 26px;
-    font-weight: 400;
-    margin-bottom: 6px;
+  /* ── Header ── */
+  header {
+    background: var(--accent);
+    padding: 14px 28px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
   }
 
-  .dash-sub { font-size: 14px; color: var(--text-light); margin-bottom: 28px; }
+  .header-avatar {
+    width: 34px; height: 34px; border-radius: 50%;
+    background: var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'DM Serif Display', serif; font-size: 13px; color: white;
+    flex-shrink: 0;
+  }
 
-  /* Stats row */
-  .stats-row {
+  .header-title { font-family: 'DM Serif Display', serif; font-size: 17px; color: white; }
+  .header-sub { font-size: 11px; color: rgba(255,255,255,0.55); margin-top: 1px; }
+  .header-refresh {
+    margin-left: auto;
+    background: rgba(255,255,255,0.12);
+    border: none; border-radius: 100px;
+    padding: 7px 16px;
+    color: white; font-size: 12px; font-family: 'DM Sans', sans-serif;
+    cursor: pointer; transition: background 0.15s;
+  }
+  .header-refresh:hover { background: rgba(255,255,255,0.22); }
+
+  /* ── Layout ── */
+  .dashboard {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 28px 24px 60px;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-    margin-bottom: 24px;
+    grid-template-columns: 1fr 360px;
+    gap: 24px;
+  }
+
+  @media (max-width: 860px) {
+    .dashboard { grid-template-columns: 1fr; }
+  }
+
+  /* ── Stats row ── */
+  .stats-row {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+  }
+
+  @media (max-width: 700px) {
+    .stats-row { grid-template-columns: 1fr 1fr; }
   }
 
   .stat-card {
     background: var(--surface);
     border: 1.5px solid var(--border);
     border-radius: var(--radius);
-    padding: 22px 24px;
+    padding: 18px 20px;
   }
 
-  .stat-value {
-    font-family: 'DM Serif Display', serif;
-    font-size: 38px;
-    color: var(--accent);
-    line-height: 1;
-    margin-bottom: 6px;
-  }
+  .stat-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.7px; color: var(--text-light); margin-bottom: 6px; }
+  .stat-value { font-family: 'DM Serif Display', serif; font-size: 28px; color: var(--text); line-height: 1; }
+  .stat-sub { font-size: 12px; color: var(--text-light); margin-top: 4px; }
 
-  .stat-label { font-size: 13px; color: var(--text-light); }
-
-  /* Phase breakdown */
-  .section-title {
-    font-size: 12px;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-    color: var(--text-light);
-    margin-bottom: 12px;
-  }
-
-  .phase-bars {
-    background: var(--surface);
-    border: 1.5px solid var(--border);
-    border-radius: var(--radius);
-    padding: 20px 24px;
-    margin-bottom: 24px;
-  }
-
-  .phase-bar-item {
-    margin-bottom: 14px;
-  }
-
-  .phase-bar-item:last-child { margin-bottom: 0; }
-
-  .phase-bar-header {
-    display: flex;
-    justify-content: space-between;
-    font-size: 13px;
-    color: var(--text-mid);
-    margin-bottom: 5px;
-  }
-
-  .phase-bar-track {
-    height: 6px;
-    background: var(--accent-soft);
-    border-radius: 100px;
-    overflow: hidden;
-  }
-
-  .phase-bar-fill {
-    height: 100%;
-    background: var(--accent);
-    border-radius: 100px;
-    transition: width 0.6s ease;
-  }
-
-  /* Questions log */
-  .log-card {
+  /* ── Panels ── */
+  .panel {
     background: var(--surface);
     border: 1.5px solid var(--border);
     border-radius: var(--radius);
     overflow: hidden;
   }
 
-  .log-header {
-    padding: 16px 24px;
+  .panel-header {
+    padding: 14px 20px;
     border-bottom: 1px solid var(--border);
-    background: #e4eeee;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    display: flex; align-items: center; justify-content: space-between;
   }
 
-  .log-header-title { font-size: 13px; font-weight: 500; color: var(--text-mid); text-transform: uppercase; letter-spacing: 0.6px; }
+  .panel-title {
+    font-size: 11px; font-weight: 500;
+    text-transform: uppercase; letter-spacing: 0.8px;
+    color: var(--text-light);
+  }
 
-  .filter-pills { display: flex; gap: 6px; flex-wrap: wrap; }
-
-  .filter-pill {
-    padding: 4px 12px;
+  .panel-count {
+    font-size: 11px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    padding: 2px 8px;
     border-radius: 100px;
-    border: 1.5px solid var(--border);
-    background: white;
-    font-size: 12px;
-    color: var(--text-mid);
-    cursor: pointer;
-    font-family: 'DM Sans', sans-serif;
-    transition: all 0.15s;
+    font-weight: 500;
   }
 
-  .filter-pill.active { background: var(--accent); border-color: var(--accent); color: white; }
+  /* ── Phase tags ── */
+  .phase-tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 500;
+    background: var(--accent-soft);
+    color: var(--accent);
+    white-space: nowrap;
+  }
 
-  .log-item {
-    padding: 16px 24px;
+  /* ── Questions feed ── */
+  .questions-feed { max-height: 520px; overflow-y: auto; }
+
+  .question-item {
+    padding: 14px 20px;
     border-bottom: 1px solid var(--border);
     display: grid;
-    grid-template-columns: 1fr 120px;
-    gap: 16px;
+    grid-template-columns: 1fr auto;
+    gap: 8px;
     align-items: start;
   }
 
-  .log-item:last-child { border-bottom: none; }
+  .question-item:last-child { border-bottom: none; }
 
-  .log-patient { font-size: 13px; font-weight: 500; color: var(--text); }
-  .log-phase { font-size: 11px; color: var(--text-light); margin-top: 2px; }
-  .log-question { font-size: 14px; color: var(--text); line-height: 1.5; }
-  .log-time { font-size: 12px; color: var(--text-light); text-align: right; }
+  .question-text {
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.5;
+    margin-bottom: 6px;
+  }
+
+  .question-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .question-time { font-size: 11px; color: var(--text-light); }
 
   .empty-state {
-    padding: 48px 24px;
+    padding: 40px 20px;
     text-align: center;
     color: var(--text-light);
     font-size: 14px;
   }
 
-  @media (max-width: 600px) {
-    .stats-row { grid-template-columns: 1fr; }
-    .log-item { grid-template-columns: 1fr; gap: 6px; }
-    .log-time { text-align: left; }
-    header { padding: 14px 16px; }
-    main { padding: 20px 14px 60px; }
+  /* ── Phase breakdown ── */
+  .phase-row {
+    padding: 10px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 10px;
   }
+  .phase-row:last-child { border-bottom: none; }
+  .phase-bar-wrap { flex: 1; background: var(--bg); border-radius: 100px; height: 6px; overflow: hidden; }
+  .phase-bar { height: 100%; background: var(--accent); border-radius: 100px; transition: width 0.4s; }
+  .phase-count { font-size: 12px; color: var(--text-light); white-space: nowrap; }
+
+  /* ── Patients list ── */
+  .patients-list { max-height: 340px; overflow-y: auto; }
+
+  .patient-row {
+    padding: 11px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .patient-row:last-child { border-bottom: none; }
+  .patient-name { flex: 1; font-size: 14px; font-weight: 500; }
+  .patient-date { font-size: 11px; color: var(--text-light); }
+
+  .copy-small {
+    background: none;
+    border: 1.5px solid var(--border);
+    border-radius: 100px;
+    padding: 4px 11px;
+    font-size: 12px;
+    color: var(--text-mid);
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: all 0.15s;
+  }
+  .copy-small:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ── Action sections ── */
+  .action-section { padding: 20px; border-top: 1px solid var(--border); }
+  .action-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 18px; font-weight: 400;
+    margin-bottom: 6px;
+  }
+  .action-desc { font-size: 13px; color: var(--text-mid); line-height: 1.5; margin-bottom: 16px; }
+
+  label { display: block; font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-light); margin-bottom: 7px; }
+
+  input, select, textarea {
+    width: 100%;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 11px 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.15s;
+    margin-bottom: 14px;
+    background: white;
+  }
+  input:focus, select:focus, textarea:focus { border-color: var(--accent); }
+
+  textarea { resize: vertical; min-height: 80px; }
+
+  .btn {
+    background: var(--accent);
+    color: white; border: none;
+    border-radius: 100px;
+    padding: 11px 24px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px; font-weight: 500;
+    cursor: pointer; transition: opacity 0.15s;
+    width: 100%;
+  }
+  .btn:hover { opacity: 0.85; }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .btn.gold { background: var(--gold); color: var(--text); }
+
+  .type-row { display: flex; gap: 8px; margin-bottom: 14px; }
+  .type-btn {
+    flex: 1; padding: 9px;
+    border-radius: 10px; border: 1.5px solid var(--border);
+    background: white; font-family: 'DM Sans', sans-serif;
+    font-size: 13px; cursor: pointer; transition: all 0.15s; color: var(--text-mid);
+  }
+  .type-btn.active { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); font-weight: 500; }
+  .type-btn:hover:not(.active) { border-color: var(--accent); }
+
+  .feedback { display: none; margin-top: 12px; padding: 10px 14px; border-radius: 10px; font-size: 13px; }
+  .feedback.visible { display: block; }
+  .feedback.success { background: var(--accent-soft); color: var(--accent); border-left: 3px solid var(--accent); }
+  .feedback.error { background: #fde8e8; color: var(--danger); border-left: 3px solid var(--danger); }
+
+  .result-box {
+    display: none; margin-top: 12px; padding: 14px;
+    background: var(--accent-soft); border-radius: 10px;
+    border: 1.5px solid var(--accent);
+  }
+  .result-box.visible { display: block; }
+  .result-link-text { font-size: 13px; color: var(--text); word-break: break-all; margin-bottom: 10px; font-weight: 500; }
+
+  /* ── Scrollbar ── */
+  .questions-feed::-webkit-scrollbar,
+  .patients-list::-webkit-scrollbar { width: 4px; }
+  .questions-feed::-webkit-scrollbar-thumb,
+  .patients-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
 </style>
 </head>
 <body>
 
-<header>
-  <div class="avatar">DS</div>
-  <div>
-    <div class="header-name">Prof. Daniel Seidman</div>
-    <div class="header-sub">Patient Insights Dashboard</div>
-  </div>
-</header>
-
-<main>
-
-  <!-- Login -->
-  <div class="login-wrap" id="loginWrap">
-    <div class="login-card">
-      <h1>Dashboard access</h1>
-      <p>Enter your admin key to view patient insights.</p>
-      <label>Admin key</label>
-      <input type="password" id="adminKey" placeholder="Enter admin key" />
-      <button class="btn" onclick="login()">View dashboard</button>
-      <div class="error" id="loginError">Incorrect key. Please try again.</div>
+<!-- Login overlay -->
+<div class="login-overlay" id="loginOverlay">
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="avatar">DS</div>
+      <div>
+        <div class="logo-name">Seidman-AI</div>
+        <div class="logo-sub">Admin Dashboard</div>
+      </div>
     </div>
+    <label>Admin key</label>
+    <input type="password" id="adminKeyInput" placeholder="Enter admin key" />
+    <button class="btn" onclick="login()">Sign in</button>
+    <div class="feedback error" id="loginError">Incorrect key. Please try again.</div>
   </div>
+</div>
 
-  <!-- Dashboard -->
-  <div class="dashboard" id="dashboard">
-    <div class="dash-title">Patient Insights</div>
-    <div class="dash-sub" id="dashSub">Loading…</div>
+<!-- Dashboard -->
+<div id="dashboard" style="display:none">
 
+  <header>
+    <div class="header-avatar">DS</div>
+    <div>
+      <div class="header-title">Seidman-AI Dashboard</div>
+      <div class="header-sub">Prof. Daniel Seidman · ALMA Clinic</div>
+    </div>
+    <button class="header-refresh" onclick="loadDashboard()">↻ Refresh</button>
+  </header>
+
+  <div class="dashboard">
+
+    <!-- Stats row -->
     <div class="stats-row">
       <div class="stat-card">
-        <div class="stat-value" id="statQuestions">—</div>
-        <div class="stat-label">Questions asked</div>
-      </div>
-      <div class="stat-card">
+        <div class="stat-label">Patients</div>
         <div class="stat-value" id="statPatients">—</div>
-        <div class="stat-label">Unique users</div>
+        <div class="stat-sub">active links</div>
       </div>
       <div class="stat-card">
-        <div class="stat-value" id="statTotal">—</div>
-        <div class="stat-label">Total patients registered</div>
+        <div class="stat-label">Questions asked</div>
+        <div class="stat-value" id="statQuestions">—</div>
+        <div class="stat-sub">total logged</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Top phase</div>
+        <div class="stat-value" id="statTopPhase" style="font-size:18px;padding-top:4px">—</div>
+        <div class="stat-sub" id="statTopPhaseCount"></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Unique users</div>
+        <div class="stat-value" id="statUsers">—</div>
+        <div class="stat-sub">who asked questions</div>
       </div>
     </div>
 
-    <div class="section-title">Questions by phase</div>
-    <div class="phase-bars" id="phaseBars"></div>
+    <!-- Left column: questions + phase breakdown -->
+    <div style="display:flex;flex-direction:column;gap:24px">
 
-    <div class="section-title">All questions</div>
-    <div class="log-card">
-      <div class="log-header">
-        <span class="log-header-title">Question log</span>
-        <div class="filter-pills" id="filterPills"></div>
+      <!-- Recent questions -->
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title">Recent questions</span>
+          <span class="panel-count" id="questionsCount">0</span>
+        </div>
+        <div class="questions-feed" id="questionsFeed">
+          <div class="empty-state">Loading…</div>
+        </div>
       </div>
-      <div id="logItems"></div>
+
+      <!-- Phase breakdown -->
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title">Questions by phase</span>
+        </div>
+        <div id="phaseBreakdown">
+          <div class="empty-state">Loading…</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Right column: patients + actions -->
+    <div style="display:flex;flex-direction:column;gap:24px">
+
+      <!-- All patients -->
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title">All patients</span>
+          <span class="panel-count" id="patientsCount">0</span>
+        </div>
+        <div class="patients-list" id="patientsList">
+          <div class="empty-state">Loading…</div>
+        </div>
+      </div>
+
+      <!-- Generate link -->
+      <div class="panel">
+        <div class="action-section" style="border-top:none">
+          <div class="action-title">New patient link</div>
+          <div class="action-desc">Generate a unique private link — copy and send via WhatsApp.</div>
+          <label>Patient name</label>
+          <input type="text" id="patientName" placeholder="e.g. Sarah Cohen" />
+          <button class="btn gold" id="generateBtn" onclick="generateLink()">Generate link</button>
+          <div class="result-box" id="result">
+            <div class="result-link-text" id="resultLink"></div>
+            <button class="btn" onclick="copyLink()" id="copyLinkBtn">Copy link</button>
+          </div>
+          <div class="feedback error" id="generateError"></div>
+        </div>
+      </div>
+
+      <!-- Send reminder -->
+      <div class="panel">
+        <div class="action-section" style="border-top:none">
+          <div class="action-title">Send a reminder</div>
+          <div class="action-desc">Patients see it as a banner on their next visit and must confirm they've read it.</div>
+          <label>Patient</label>
+          <select id="reminderPatient">
+            <option value="">— Select patient —</option>
+          </select>
+          <label>Type</label>
+          <div class="type-row">
+            <button class="type-btn active" id="typeBtnAppt" onclick="setReminderType('appointment')">📅 Appointment</button>
+            <button class="type-btn" id="typeBtnMed" onclick="setReminderType('medication')">💊 Medication</button>
+          </div>
+          <label>Message</label>
+          <textarea id="reminderMessage" placeholder="e.g. Blood test tomorrow at 9am at ALMA. Please arrive fasting."></textarea>
+          <button class="btn" id="sendReminderBtn" onclick="sendReminder()">Send reminder</button>
+          <div class="feedback success" id="reminderSuccess">✓ Sent — patient will see it next time they open their link.</div>
+          <div class="feedback error" id="reminderError"></div>
+        </div>
+      </div>
+
     </div>
   </div>
-
-</main>
+</div>
 
 <script>
-  let adminKey = '';
-  let allLogs = [];
-  let activeFilter = 'all';
+let adminKey = '';
 
-  function login() {
-    const key = document.getElementById('adminKey').value.trim();
-    if (!key) return;
-    adminKey = key;
-    loadDashboard();
-  }
+function login() {
+  const input = document.getElementById('adminKeyInput').value.trim();
+  if (!input) return;
+  adminKey = input;
+  document.getElementById('loginError').classList.remove('visible');
+  loadDashboard();
+}
 
-  document.getElementById('adminKey').addEventListener('keydown', e => {
-    if (e.key === 'Enter') login();
-  });
+document.getElementById('adminKeyInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') login();
+});
 
-  async function loadDashboard() {
-    try {
-      const res = await fetch('/api/dashboard-data', {
-        headers: { 'x-admin-key': adminKey }
-      });
-
-      if (res.status === 403) {
-        document.getElementById('loginError').classList.add('visible');
-        return;
-      }
-
-      const data = await res.json();
-
-      document.getElementById('loginWrap').style.display = 'none';
-      document.getElementById('dashboard').classList.add('visible');
-
-      document.getElementById('statQuestions').textContent = data.totalQuestions;
-      document.getElementById('statPatients').textContent = data.uniqueUsers;
-      document.getElementById('statTotal').textContent = data.totalPatients;
-      document.getElementById('dashSub').textContent = `Last updated just now · ${data.totalQuestions} questions from ${data.uniquePatients} patients`;
-
-      allLogs = data.logs;
-      renderPhaseBars(data.phaseCounts, data.totalQuestions);
-      renderFilters(data.phaseCounts);
-      renderLogs(allLogs);
-
-    } catch (err) {
-      document.getElementById('loginError').textContent = 'Failed to load. Please try again.';
+async function loadDashboard() {
+  try {
+    const res = await fetch('/api/dashboard-data', { headers: { 'x-admin-key': adminKey } });
+    if (res.status === 403) {
       document.getElementById('loginError').classList.add('visible');
-    }
-  }
-
-  function renderPhaseBars(phaseCounts, total) {
-    const container = document.getElementById('phaseBars');
-    if (!total) { container.innerHTML = '<div style="color:var(--text-light);font-size:14px;">No data yet.</div>'; return; }
-    const sorted = Object.entries(phaseCounts).sort((a, b) => b[1] - a[1]);
-    container.innerHTML = sorted.map(([phase, count]) => `
-      <div class="phase-bar-item">
-        <div class="phase-bar-header">
-          <span>${phase}</span>
-          <span>${count} question${count !== 1 ? 's' : ''}</span>
-        </div>
-        <div class="phase-bar-track">
-          <div class="phase-bar-fill" style="width:${Math.round(count/total*100)}%"></div>
-        </div>
-      </div>
-    `).join('');
-  }
-
-  function renderFilters(phaseCounts) {
-    const container = document.getElementById('filterPills');
-    const phases = Object.keys(phaseCounts);
-    container.innerHTML = `<button class="filter-pill active" onclick="filterLogs('all', this)">All</button>` +
-      phases.map(p => `<button class="filter-pill" onclick="filterLogs('${p.replace(/'/g, "\\'")}', this)">${p.split('(')[0].trim()}</button>`).join('');
-  }
-
-  function filterLogs(phase, btn) {
-    activeFilter = phase;
-    document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
-    btn.classList.add('active');
-    const filtered = phase === 'all' ? allLogs : allLogs.filter(l => l.phase === phase);
-    renderLogs(filtered);
-  }
-
-  function renderLogs(logs) {
-    const container = document.getElementById('logItems');
-    if (!logs.length) {
-      container.innerHTML = '<div class="empty-state">No questions yet. Share patient links to get started.</div>';
       return;
     }
-    container.innerHTML = logs.map(l => `
-      <div class="log-item">
-        <div>
-          <div class="log-question">${l.question}</div>
-          <div class="log-phase" style="margin-top:4px">${l.phase || '—'}</div>
-        </div>
-        <div class="log-time">${formatTime(l.timestamp)}</div>
-      </div>
-    `).join('');
-  }
+    const data = await res.json();
 
-  function formatTime(ts) {
-    if (!ts) return '—';
-    const d = new Date(ts);
-    return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) + ' · ' +
-           d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+    document.getElementById('loginOverlay').classList.add('hidden');
+    document.getElementById('dashboard').style.display = 'block';
+
+    // Stats
+    document.getElementById('statPatients').textContent = data.totalPatients ?? '—';
+    document.getElementById('statQuestions').textContent = data.totalQuestions ?? '—';
+    document.getElementById('statUsers').textContent = data.uniqueUsers ?? '—';
+
+    const phases = data.phaseCounts || {};
+    const topPhase = Object.entries(phases).sort((a,b) => b[1]-a[1])[0];
+    if (topPhase) {
+      document.getElementById('statTopPhase').textContent = formatPhase(topPhase[0]);
+      document.getElementById('statTopPhaseCount').textContent = `${topPhase[1]} questions`;
+    } else {
+      document.getElementById('statTopPhase').textContent = '—';
+    }
+
+    // Questions feed
+    const logs = (data.logs || []).slice().reverse();
+    document.getElementById('questionsCount').textContent = logs.length;
+    if (logs.length === 0) {
+      document.getElementById('questionsFeed').innerHTML = '<div class="empty-state">No questions logged yet.</div>';
+    } else {
+      document.getElementById('questionsFeed').innerHTML = logs.slice(0, 100).map(l => `
+        <div class="question-item">
+          <div>
+            <div class="question-text">${escHtml(l.question || '(no text)')}</div>
+            <div class="question-meta">
+              ${l.phase ? `<span class="phase-tag">${escHtml(formatPhase(l.phase))}</span>` : ''}
+              <span class="question-time">${formatTime(l.timestamp)}</span>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Phase breakdown
+    const phaseEntries = Object.entries(phases).sort((a,b) => b[1]-a[1]);
+    const maxCount = phaseEntries[0]?.[1] || 1;
+    if (phaseEntries.length === 0) {
+      document.getElementById('phaseBreakdown').innerHTML = '<div class="empty-state">No data yet.</div>';
+    } else {
+      document.getElementById('phaseBreakdown').innerHTML = phaseEntries.map(([phase, count]) => `
+        <div class="phase-row">
+          <span class="phase-tag">${escHtml(formatPhase(phase))}</span>
+          <div class="phase-bar-wrap"><div class="phase-bar" style="width:${Math.round(count/maxCount*100)}%"></div></div>
+          <span class="phase-count">${count}</span>
+        </div>
+      `).join('');
+    }
+
+    // Patients list
+    const patients = data.patients || [];
+    document.getElementById('patientsCount').textContent = patients.length;
+    if (patients.length === 0) {
+      document.getElementById('patientsList').innerHTML = '<div class="empty-state">No patients yet.</div>';
+    } else {
+      document.getElementById('patientsList').innerHTML = patients.map(p => `
+        <div class="patient-row">
+          <div>
+            <div class="patient-name">${escHtml(p.name)}</div>
+            <div class="patient-date">${p.createdAt ? formatDate(p.createdAt) : ''}</div>
+          </div>
+          <button class="copy-small" onclick="copyPatientLink('${p.slug}', this)">Copy link</button>
+        </div>
+      `).join('');
+    }
+
+    // Reminder dropdown
+    const select = document.getElementById('reminderPatient');
+    select.innerHTML = '<option value="">— Select patient —</option>' +
+      patients.map(p => `<option value="${p.slug}">${escHtml(p.name)}</option>`).join('');
+
+  } catch (err) {
+    console.error(err);
   }
+}
+
+function copyPatientLink(slug, btn) {
+  const link = `https://seidman-ai.com/p/${slug}`;
+  navigator.clipboard.writeText(link);
+  const orig = btn.textContent;
+  btn.textContent = 'Copied!';
+  setTimeout(() => btn.textContent = orig, 2000);
+}
+
+// Generate link
+async function generateLink() {
+  const name = document.getElementById('patientName').value.trim();
+  if (!name) return;
+  const btn = document.getElementById('generateBtn');
+  const errEl = document.getElementById('generateError');
+  btn.disabled = true; btn.textContent = 'Generating…';
+  errEl.classList.remove('visible');
+  document.getElementById('result').classList.remove('visible');
+
+  try {
+    const res = await fetch('/api/generate-token', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, adminKey })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Failed');
+    document.getElementById('resultLink').textContent = data.link;
+    document.getElementById('result').classList.add('visible');
+    document.getElementById('patientName').value = '';
+    document.getElementById('copyLinkBtn').textContent = 'Copy link';
+    loadDashboard();
+  } catch (err) {
+    errEl.textContent = err.message; errEl.classList.add('visible');
+  } finally {
+    btn.disabled = false; btn.textContent = 'Generate link';
+  }
+}
+
+document.getElementById('patientName').addEventListener('keydown', e => {
+  if (e.key === 'Enter') generateLink();
+});
+
+function copyLink() {
+  navigator.clipboard.writeText(document.getElementById('resultLink').textContent);
+  document.getElementById('copyLinkBtn').textContent = 'Copied!';
+  setTimeout(() => document.getElementById('copyLinkBtn').textContent = 'Copy link', 2000);
+}
+
+// Send reminder
+let reminderType = 'appointment';
+
+function setReminderType(type) {
+  reminderType = type;
+  document.getElementById('typeBtnAppt').classList.toggle('active', type === 'appointment');
+  document.getElementById('typeBtnMed').classList.toggle('active', type === 'medication');
+}
+
+async function sendReminder() {
+  const token = document.getElementById('reminderPatient').value;
+  const message = document.getElementById('reminderMessage').value.trim();
+  const btn = document.getElementById('sendReminderBtn');
+  const successEl = document.getElementById('reminderSuccess');
+  const errEl = document.getElementById('reminderError');
+
+  successEl.classList.remove('visible'); errEl.classList.remove('visible');
+  if (!token) { errEl.textContent = 'Select a patient.'; errEl.classList.add('visible'); return; }
+  if (!message) { errEl.textContent = 'Enter a message.'; errEl.classList.add('visible'); return; }
+
+  btn.disabled = true; btn.textContent = 'Sending…';
+
+  try {
+    const res = await fetch('/api/add-reminder', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ adminKey, token, message, type: reminderType })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Failed');
+    successEl.classList.add('visible');
+    document.getElementById('reminderMessage').value = '';
+    document.getElementById('reminderPatient').value = '';
+  } catch (err) {
+    errEl.textContent = err.message; errEl.classList.add('visible');
+  } finally {
+    btn.disabled = false; btn.textContent = 'Send reminder';
+  }
+}
+
+// Helpers
+function formatPhase(phase) {
+  const map = {
+    stimulation: 'Stimulation', retrieval: 'Egg retrieval',
+    fertilization: 'Fertilization', transfer: 'Transfer',
+    'post-transfer': 'Post-transfer', 'two-week-wait': 'Two-week wait',
+    beta: 'Beta test', 'before-start': 'Before start',
+    'frozen-transfer': 'Frozen transfer', other: 'Other'
+  };
+  return map[phase] || phase;
+}
+
+function formatTime(ts) {
+  if (!ts) return '';
+  const d = new Date(ts);
+  const now = new Date();
+  const diffMs = now - d;
+  const diffH = Math.floor(diffMs / 3600000);
+  const diffD = Math.floor(diffMs / 86400000);
+  if (diffH < 1) return 'just now';
+  if (diffH < 24) return `${diffH}h ago`;
+  if (diffD < 7) return `${diffD}d ago`;
+  return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+}
+
+function formatDate(ts) {
+  if (!ts) return '';
+  return new Date(ts).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+}
+
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
 </script>
 </body>
 </html>
