@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Welcome to Melody · Prof. Daniel Seidman</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --accent: #0e6b6b;
+    --accent-soft: #e4eeee;
+    --gold: #c9a84c;
+    --gold-soft: #f7edd8;
+    --bg: #f0f4f4;
+    --surface: #fff;
+    --border: #cddede;
+    --text: #0d1f1f;
+    --text-mid: #3d5c5c;
+    --text-light: #7a9e9e;
+    --dark: #0a1a1a;
+    --radius: 14px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* ── Hero ── */
+  .hero {
+    background: var(--dark);
+    padding: 64px 24px 72px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -80px; left: 50%;
+    transform: translateX(-50%);
+    width: 500px; height: 500px;
+    background: radial-gradient(ellipse, rgba(14,107,107,0.35) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(14,107,107,0.25);
+    border: 1px solid rgba(14,107,107,0.5);
+    border-radius: 100px;
+    padding: 5px 14px;
+    font-size: 12px; color: #7ecece;
+    letter-spacing: 0.5px;
+    margin-bottom: 28px;
+  }
+
+  .hero-logo {
+    display: flex; align-items: center; justify-content: center;
+    gap: 14px; margin-bottom: 28px;
+  }
+
+  .hero-avatar {
+    width: 52px; height: 52px; border-radius: 50%;
+    background: var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'DM Serif Display', serif; font-size: 18px; color: white;
+  }
+
+  .hero-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px; color: white;
+  }
+
+  .hero-sub-name {
+    font-size: 12px; color: rgba(255,255,255,0.45);
+    margin-top: 2px; letter-spacing: 0.5px;
+  }
+
+  .hero-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(32px, 5vw, 52px);
+    color: white;
+    line-height: 1.15;
+    margin-bottom: 18px;
+  }
+
+  .hero-title span { color: #5DCAA5; }
+
+  .hero-desc {
+    font-size: 17px;
+    color: rgba(255,255,255,0.55);
+    line-height: 1.7;
+    max-width: 560px;
+    margin: 0 auto;
+  }
+
+  /* ── Content ── */
+  .content {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 56px 24px 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  /* ── Section card ── */
+  .card {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 18px;
+    overflow: hidden;
+  }
+
+  .card-header {
+    padding: 22px 28px 18px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 14px;
+  }
+
+  .step-badge {
+    width: 30px; height: 30px; border-radius: 50%;
+    background: var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 600; color: white;
+    flex-shrink: 0;
+  }
+
+  .step-badge.gold { background: var(--gold); color: var(--dark); }
+
+  .card-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 20px; font-weight: 400;
+  }
+
+  .card-body { padding: 24px 28px; }
+
+  /* ── Link box ── */
+  .link-box {
+    display: flex; align-items: center;
+    background: var(--accent-soft);
+    border: 1.5px solid var(--accent);
+    border-radius: 12px;
+    padding: 14px 18px;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .link-url {
+    flex: 1;
+    font-family: 'DM Serif Display', serif;
+    font-size: 17px;
+    color: var(--accent);
+    word-break: break-all;
+  }
+
+  .copy-btn {
+    background: var(--accent);
+    border: none; border-radius: 100px;
+    padding: 8px 18px;
+    color: white; font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer; white-space: nowrap;
+    transition: opacity 0.15s;
+    flex-shrink: 0;
+  }
+  .copy-btn:hover { opacity: 0.85; }
+
+  /* ── Steps list ── */
+  .steps { display: flex; flex-direction: column; gap: 14px; }
+
+  .step-item {
+    display: flex; align-items: flex-start; gap: 14px;
+  }
+
+  .step-num {
+    width: 24px; height: 24px; border-radius: 50%;
+    background: var(--bg);
+    border: 1.5px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 600; color: var(--text-mid);
+    flex-shrink: 0; margin-top: 1px;
+  }
+
+  .step-text { font-size: 15px; color: var(--text-mid); line-height: 1.6; }
+  .step-text strong { color: var(--text); font-weight: 500; }
+
+  /* ── App store badges ── */
+  .app-badges {
+    display: flex; gap: 10px; flex-wrap: wrap;
+    margin-top: 18px;
+  }
+
+  .app-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--dark);
+    border-radius: 10px;
+    padding: 10px 16px;
+    text-decoration: none;
+    transition: opacity 0.15s;
+  }
+  .app-badge:hover { opacity: 0.8; }
+  .app-badge-icon { font-size: 20px; }
+  .app-badge-text { line-height: 1.3; }
+  .app-badge-sub { font-size: 10px; color: rgba(255,255,255,0.5); display: block; }
+  .app-badge-name { font-size: 14px; color: white; font-weight: 500; display: block; }
+
+  /* ── Divider ── */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 20px 0;
+  }
+
+  /* ── Highlight note ── */
+  .note {
+    background: var(--gold-soft);
+    border: 1.5px solid #e8c87a;
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 13px;
+    color: #7a5a10;
+    line-height: 1.6;
+    margin-top: 18px;
+  }
+
+  .note strong { color: #5a3e08; }
+
+  /* ── Patient flow ── */
+  .flow {
+    display: flex; align-items: center; gap: 0;
+    margin: 20px 0; flex-wrap: wrap;
+  }
+
+  .flow-step {
+    background: var(--bg);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 13px;
+    color: var(--text-mid);
+    text-align: center;
+    min-width: 140px;
+    flex: 1;
+  }
+
+  .flow-step strong { display: block; color: var(--text); font-size: 14px; margin-bottom: 3px; }
+
+  .flow-arrow {
+    font-size: 18px; color: var(--text-light);
+    padding: 0 8px; flex-shrink: 0;
+  }
+
+  /* ── Footer ── */
+  .footer {
+    text-align: center;
+    padding: 32px 24px;
+    font-size: 12px;
+    color: var(--text-light);
+    border-top: 1px solid var(--border);
+  }
+
+  .footer-melody {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 13px; color: var(--text-mid);
+    margin-bottom: 6px;
+  }
+</style>
+</head>
+<body>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="hero-badge">
+    <span>🔒</span> Private · For Prof. Seidman only
+  </div>
+  <div class="hero-logo">
+    <div class="hero-avatar">DS</div>
+    <div>
+      <div class="hero-name">Seidman-AI</div>
+      <div class="hero-sub-name">POWERED BY MELODY</div>
+    </div>
+  </div>
+  <h1 class="hero-title">Welcome to your<br><span>IVF companion</span></h1>
+  <p class="hero-desc">Your patients now have a private AI companion — trained on your clinical expertise, available 24/7. Here's everything you need to get started.</p>
+</div>
+
+<!-- Content -->
+<div class="content">
+
+  <!-- Step 1: Dashboard -->
+  <div class="card">
+    <div class="card-header">
+      <div class="step-badge">1</div>
+      <div class="card-title">Access your dashboard</div>
+    </div>
+    <div class="card-body">
+      <p style="font-size:14px;color:var(--text-mid);margin-bottom:18px;line-height:1.6">Your dashboard is where you manage patients, send reminders, and see what questions they're asking.</p>
+      <div class="link-box">
+        <div class="link-url">seidman-ai.com/dashboard</div>
+        <button class="copy-btn" onclick="copyText('https://seidman-ai.com/dashboard', this)">Copy</button>
+      </div>
+      <div class="steps">
+        <div class="step-item">
+          <div class="step-num">1</div>
+          <div class="step-text">Enter your <strong>admin password</strong> and click Continue</div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">2</div>
+          <div class="step-text">Enter the <strong>6-digit code</strong> from your authenticator app (see Step 2 below)</div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">3</div>
+          <div class="step-text">You're in. Bookmark this page for quick access.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 2: Authenticator setup -->
+  <div class="card">
+    <div class="card-header">
+      <div class="step-badge">2</div>
+      <div class="card-title">Set up two-factor authentication</div>
+    </div>
+    <div class="card-body">
+      <p style="font-size:14px;color:var(--text-mid);margin-bottom:20px;line-height:1.6">Your dashboard is protected by a password <em>and</em> a one-time code from your phone — so only you can access it.</p>
+
+      <p style="font-size:13px;font-weight:500;text-transform:uppercase;letter-spacing:0.7px;color:var(--text-light);margin-bottom:12px">First, download an authenticator app</p>
+      <div class="app-badges">
+        <a class="app-badge" href="https://apps.apple.com/app/google-authenticator/id388497605" target="_blank">
+          <span class="app-badge-icon">📱</span>
+          <div class="app-badge-text">
+            <span class="app-badge-sub">Download on the</span>
+            <span class="app-badge-name">Google Authenticator</span>
+          </div>
+        </a>
+        <a class="app-badge" href="https://authy.com/download/" target="_blank">
+          <span class="app-badge-icon">🔐</span>
+          <div class="app-badge-text">
+            <span class="app-badge-sub">Or use</span>
+            <span class="app-badge-name">Authy</span>
+          </div>
+        </a>
+      </div>
+
+      <hr class="divider">
+
+      <p style="font-size:13px;font-weight:500;text-transform:uppercase;letter-spacing:0.7px;color:var(--text-light);margin-bottom:12px">Then link it to your dashboard</p>
+      <div class="steps">
+        <div class="step-item">
+          <div class="step-num">1</div>
+          <div class="step-text">Go to <strong>seidman-ai.com/dashboard</strong> → enter your password → click Continue</div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">2</div>
+          <div class="step-text">Click <strong>"Set up authenticator app"</strong> (first time only)</div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">3</div>
+          <div class="step-text">Open your authenticator app → tap <strong>+</strong> → <strong>Scan a QR code</strong></div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">4</div>
+          <div class="step-text">Scan the code shown on screen. Done — your app will now show a rotating 6-digit code.</div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">5</div>
+          <div class="step-text">On every future login, enter that 6-digit code. It refreshes every 30 seconds.</div>
+        </div>
+      </div>
+
+      <div class="note">
+        <strong>One-time setup.</strong> You only scan the QR code once. After that, just open the app and read the code.
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 3: Patients -->
+  <div class="card">
+    <div class="card-header">
+      <div class="step-badge gold">3</div>
+      <div class="card-title">Add a patient and send their link</div>
+    </div>
+    <div class="card-body">
+      <p style="font-size:14px;color:var(--text-mid);margin-bottom:18px;line-height:1.6">Each patient gets their own private link — no login required for them. Just open and start asking.</p>
+
+      <div class="flow">
+        <div class="flow-step"><strong>Dashboard</strong>Enter patient name → Generate link</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step"><strong>Copy link</strong>e.g. seidman-ai.com/p/sarah-c</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step"><strong>Send via WhatsApp</strong>Patient opens instantly</div>
+      </div>
+
+      <div class="steps">
+        <div class="step-item">
+          <div class="step-num">1</div>
+          <div class="step-text">In the dashboard, find <strong>New patient link</strong> in the right column</div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">2</div>
+          <div class="step-text">Type the patient's name → click <strong>Generate link</strong></div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">3</div>
+          <div class="step-text">Copy the link and <strong>send it via WhatsApp</strong> — that's it</div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">4</div>
+          <div class="step-text">To <strong>deactivate</strong> a patient's link (e.g. after treatment ends), click Deactivate in the Patients panel</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 4: Reminders -->
+  <div class="card">
+    <div class="card-header">
+      <div class="step-badge gold">4</div>
+      <div class="card-title">Send a clinical reminder</div>
+    </div>
+    <div class="card-body">
+      <p style="font-size:14px;color:var(--text-mid);margin-bottom:18px;line-height:1.6">Reminders appear as a banner the next time a patient opens their link. They must tap "Got it" to dismiss it.</p>
+      <div class="steps">
+        <div class="step-item">
+          <div class="step-num">1</div>
+          <div class="step-text">In the dashboard, find <strong>Send a reminder</strong> in the right column</div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">2</div>
+          <div class="step-text">Select the patient, choose type (<strong>Appointment</strong> or <strong>Medication</strong>)</div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">3</div>
+          <div class="step-text">Write your message — e.g. <em>"Blood test tomorrow at 9am at ALMA. Please arrive fasting."</em></div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">4</div>
+          <div class="step-text">Click <strong>Send reminder</strong>. The patient sees it on their next visit.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- What patients see -->
+  <div class="card">
+    <div class="card-header">
+      <div class="step-badge" style="background:var(--text-light)">?</div>
+      <div class="card-title">What your patients experience</div>
+    </div>
+    <div class="card-body">
+      <div class="steps">
+        <div class="step-item">
+          <div class="step-num">💬</div>
+          <div class="step-text">Ask questions in Hebrew or English — answered in the same language, with your clinical voice</div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">📅</div>
+          <div class="step-text">Track their own treatment dates (stimulation start, retrieval, transfer, beta test)</div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">💊</div>
+          <div class="step-text">Log their medications and see today's schedule</div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">📝</div>
+          <div class="step-text">Save personal notes that persist across sessions</div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">🔔</div>
+          <div class="step-text">Receive your clinical reminders as banners they must acknowledge</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Footer -->
+<div class="footer">
+  <div class="footer-melody">
+    <svg width="16" height="16" viewBox="0 0 20 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="10" cy="25" r="7" fill="#0a1a1a" stroke="#5DCAA5" stroke-width="1.5"/>
+      <circle cx="8" cy="23" r="2.2" fill="#0a1a1a" stroke="#5DCAA5" stroke-width="1"/>
+      <circle cx="12" cy="23" r="2.2" fill="#0a1a1a" stroke="#5DCAA5" stroke-width="1"/>
+      <circle cx="8" cy="27" r="2.2" fill="#0a1a1a" stroke="#5DCAA5" stroke-width="1"/>
+      <circle cx="12" cy="27" r="2.2" fill="#0a1a1a" stroke="#5DCAA5" stroke-width="1"/>
+      <line x1="10" y1="18" x2="16" y2="14" stroke="#5DCAA5" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="16" y1="14" x2="16" y2="8" stroke="#5DCAA5" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="13" y1="9.5" x2="16" y2="8" stroke="#5DCAA5" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+    Powered by Melody
+  </div>
+  <p>This page is private — share only with Prof. Daniel Seidman</p>
+</div>
+
+<script>
+function copyText(text, btn) {
+  navigator.clipboard.writeText(text);
+  const orig = btn.textContent;
+  btn.textContent = 'Copied!';
+  setTimeout(() => btn.textContent = orig, 2000);
+}
+</script>
+</body>
+</html>

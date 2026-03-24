@@ -2,6 +2,7 @@
   "rewrites": [
     { "source": "/p/:slug", "destination": "/index.html?token=:slug" },
     { "source": "/dashboard", "destination": "/dashboard.html" },
-    { "source": "/share/:id", "destination": "/share.html?id=:id" }
+    { "source": "/share/:id", "destination": "/share.html?id=:id" },
+    { "source": "/start", "destination": "/start.html" }
   ]
 }
