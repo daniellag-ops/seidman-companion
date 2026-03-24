@@ -1067,84 +1067,88 @@
 
   /* ── Embryo Melody ── */
   .embryo-card {
-    background: var(--dark);
+    background: #0e6b6b;
     border-radius: 18px;
     overflow: hidden;
-    border: 1px solid rgba(93,202,165,0.2);
+    border: 1px solid rgba(201,168,76,0.25);
     position: relative;
     margin: 0 0 16px;
+    box-shadow: 0 4px 24px rgba(14,107,107,0.25);
   }
   .embryo-card::after {
     content: '';
     position: absolute;
-    bottom: -60px; left: 50%;
-    transform: translateX(-50%);
-    width: 280px; height: 200px;
-    background: radial-gradient(ellipse, rgba(201,168,76,0.08) 0%, transparent 70%);
+    bottom: -40px; right: -40px;
+    width: 180px; height: 180px;
+    background: radial-gradient(ellipse, rgba(201,168,76,0.15) 0%, transparent 70%);
     pointer-events: none;
   }
   .embryo-header {
-    padding: 15px 18px;
+    padding: 18px 20px 14px;
     display: flex; align-items: center; justify-content: space-between;
     cursor: pointer; user-select: none;
   }
   .embryo-label {
-    font-size: 11px; font-weight: 600;
-    text-transform: uppercase; letter-spacing: 0.8px;
-    color: #5DCAA5; margin: 0;
+    font-family: 'DM Serif Display', serif;
+    font-size: 20px; font-weight: 400;
+    color: white; margin: 0; line-height: 1.2;
   }
-  .embryo-sublabel { font-size: 12px; color: rgba(255,255,255,0.4); margin-top: 2px; }
-  .embryo-toggle { font-size: 20px; color: rgba(255,255,255,0.3); line-height: 1; }
-  .embryo-body { padding: 0 18px 22px; }
+  .embryo-sublabel {
+    font-size: 11px; color: rgba(201,168,76,0.8);
+    margin-top: 4px; text-transform: uppercase; letter-spacing: 0.8px;
+  }
+  .embryo-toggle { font-size: 22px; color: rgba(201,168,76,0.6); line-height: 1; }
+  .embryo-body { padding: 0 20px 24px; }
 
   .embryo-upload-zone {
-    border: 1.5px dashed rgba(93,202,165,0.35);
-    border-radius: 14px;
-    padding: 28px 16px;
+    border: 2px dashed rgba(255,255,255,0.3);
+    border-radius: 16px;
+    padding: 36px 20px;
     text-align: center;
     cursor: pointer;
     transition: border-color 0.2s, background 0.2s;
+    background: rgba(0,0,0,0.12);
   }
   .embryo-upload-zone:hover, .embryo-upload-zone.drag-over {
-    border-color: #5DCAA5;
-    background: rgba(93,202,165,0.04);
+    border-color: rgba(201,168,76,0.7);
+    background: rgba(0,0,0,0.18);
   }
   .embryo-bilingual-he {
     font-family: 'DM Serif Display', serif;
-    font-size: 15px; color: rgba(255,255,255,0.9);
-    margin-bottom: 5px; direction: rtl;
+    font-size: 18px; color: white;
+    margin-bottom: 6px; direction: rtl;
   }
   .embryo-bilingual-en {
-    font-size: 12px; color: rgba(255,255,255,0.35);
-    margin-bottom: 20px;
+    font-size: 13px; color: rgba(255,255,255,0.55);
+    margin-bottom: 22px;
   }
   .embryo-upload-btn {
-    display: inline-flex; align-items: center; gap: 7px;
-    background: rgba(93,202,165,0.12);
-    border: 1px solid rgba(93,202,165,0.35);
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(201,168,76,0.18);
+    border: 1.5px solid rgba(201,168,76,0.6);
     border-radius: 100px;
-    padding: 9px 20px;
-    color: #5DCAA5; font-size: 13px;
+    padding: 11px 26px;
+    color: #c9a84c; font-size: 14px; font-weight: 500;
     font-family: 'DM Sans', sans-serif;
     cursor: pointer; transition: all 0.2s;
   }
-  .embryo-upload-btn:hover { background: rgba(93,202,165,0.22); border-color: #5DCAA5; }
+  .embryo-upload-btn:hover { background: rgba(201,168,76,0.3); border-color: #c9a84c; }
 
   .embryo-preview { display: none; flex-direction: column; align-items: center; gap: 14px; }
   .embryo-preview.visible { display: flex; }
-  .embryo-thumb { width: 110px; height: 110px; object-fit: cover; border-radius: 12px; border: 2px solid rgba(93,202,165,0.25); }
+  .embryo-thumb { width: 120px; height: 120px; object-fit: cover; border-radius: 14px; border: 2px solid rgba(201,168,76,0.4); }
   .embryo-create-btn {
-    background: linear-gradient(135deg, #0e6b6b 0%, #5DCAA5 100%);
+    background: linear-gradient(135deg, #c9a84c 0%, #e8c87a 100%);
     border: none; border-radius: 100px;
-    padding: 13px 0; width: 100%;
-    color: white; font-size: 14px; font-weight: 500;
+    padding: 14px 0; width: 100%;
+    color: #0a1a1a; font-size: 15px; font-weight: 600;
     font-family: 'DM Sans', sans-serif;
     cursor: pointer; transition: opacity 0.15s;
   }
   .embryo-create-btn:hover { opacity: 0.88; }
   .embryo-create-btn:disabled { opacity: 0.35; cursor: not-allowed; }
   .embryo-change-link {
-    font-size: 11px; color: rgba(255,255,255,0.3);
+    font-size: 11px; color: rgba(255,255,255,0.4);
     cursor: pointer; text-decoration: underline; text-underline-offset: 2px;
   }
   .embryo-change-link:hover { color: rgba(255,255,255,0.5); }
@@ -1152,30 +1156,30 @@
   .embryo-progress { display: none; flex-direction: column; gap: 8px; padding: 4px 0; }
   .embryo-progress.visible { display: flex; }
   .ep-step { display: flex; align-items: center; gap: 12px; padding: 9px 12px; border-radius: 10px; opacity: 0.35; transition: all 0.3s; }
-  .ep-step.active { opacity: 1; background: rgba(93,202,165,0.07); }
+  .ep-step.active { opacity: 1; background: rgba(0,0,0,0.15); }
   .ep-step.done { opacity: 0.55; }
-  .ep-dot { width: 7px; height: 7px; border-radius: 50%; background: rgba(93,202,165,0.3); flex-shrink: 0; transition: background 0.3s; }
-  .ep-step.active .ep-dot { background: #5DCAA5; box-shadow: 0 0 6px rgba(93,202,165,0.7); }
-  .ep-step.done .ep-dot { background: #c9a84c; }
+  .ep-dot { width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,0.2); flex-shrink: 0; transition: background 0.3s; }
+  .ep-step.active .ep-dot { background: #c9a84c; box-shadow: 0 0 6px rgba(201,168,76,0.7); }
+  .ep-step.done .ep-dot { background: rgba(255,255,255,0.5); }
   .ep-label { font-size: 13px; color: rgba(255,255,255,0.8); flex: 1; }
   .ep-step.done .ep-label { color: rgba(255,255,255,0.4); }
   @keyframes ep-spin { to { transform: rotate(360deg); } }
-  .ep-spinner { width: 13px; height: 13px; border-radius: 50%; border: 2px solid rgba(93,202,165,0.15); border-top-color: #5DCAA5; animation: ep-spin 0.7s linear infinite; flex-shrink: 0; }
+  .ep-spinner { width: 13px; height: 13px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.15); border-top-color: #c9a84c; animation: ep-spin 0.7s linear infinite; flex-shrink: 0; }
 
   .embryo-analysis-box {
     display: none;
-    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1);
     border-radius: 12px; padding: 14px 16px;
-    font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.65;
+    font-size: 13px; color: rgba(255,255,255,0.75); line-height: 1.65;
     margin-bottom: 14px;
   }
   .embryo-analysis-box.visible { display: block; }
-  .embryo-analysis-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.7px; color: rgba(93,202,165,0.6); margin-bottom: 7px; font-weight: 600; }
+  .embryo-analysis-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.7px; color: rgba(201,168,76,0.8); margin-bottom: 7px; font-weight: 600; }
 
   .embryo-player {
     display: none;
-    background: rgba(201,168,76,0.07);
-    border: 1.5px solid rgba(201,168,76,0.2);
+    background: rgba(0,0,0,0.2);
+    border: 1.5px solid rgba(201,168,76,0.3);
     border-radius: 14px; padding: 15px 16px;
   }
   .embryo-player.visible { display: block; }
@@ -1288,6 +1292,120 @@
   </div>
 
   <div class="disclaimer-banner" id="disclaimerBanner"></div>
+
+  <!-- Embryo Melody -->
+  <div class="embryo-card" id="embryoCard">
+    <div class="embryo-header" onclick="toggleEmbryo()">
+      <div>
+        <div class="embryo-label" id="embryoLabel">Your embryo melody · המנגינה של העובר שלך</div>
+        <div class="embryo-sublabel" id="embryoSublabel">Powered by Melody AI</div>
+      </div>
+      <span class="embryo-toggle" id="embryoToggle">－</span>
+    </div>
+    <div class="embryo-body" id="embryoBody">
+
+      <!-- Upload zone (idle) -->
+      <div class="embryo-upload-zone" id="embryoUploadZone"
+           onclick="document.getElementById('embryoFileInput').click()"
+           ondragover="event.preventDefault();this.classList.add('drag-over')"
+           ondragleave="this.classList.remove('drag-over')"
+           ondrop="handleEmbryoDrop(event)">
+        <div style="margin-bottom:16px">
+          <svg width="42" height="52" viewBox="0 0 28 34" fill="none" xmlns="http://www.w3.org/2000/svg" style="opacity:0.85">
+            <circle cx="10" cy="25" r="7" fill="rgba(0,0,0,0.3)" stroke="rgba(255,255,255,0.6)" stroke-width="1.3"/>
+            <circle cx="7.5" cy="21.5" r="2.6" fill="rgba(0,0,0,0.2)" stroke="rgba(255,255,255,0.5)" stroke-width="0.85"/>
+            <circle cx="7.5" cy="21.5" r="1.05" stroke="#c9a84c" stroke-width="0.6" fill="none"/>
+            <circle cx="13" cy="23" r="2.6" fill="rgba(0,0,0,0.2)" stroke="rgba(255,255,255,0.5)" stroke-width="0.85"/>
+            <circle cx="13" cy="23" r="1.05" stroke="#c9a84c" stroke-width="0.6" fill="none"/>
+            <circle cx="7" cy="27.5" r="2.6" fill="rgba(0,0,0,0.2)" stroke="rgba(255,255,255,0.5)" stroke-width="0.85"/>
+            <circle cx="7" cy="27.5" r="1.05" stroke="#c9a84c" stroke-width="0.6" fill="none"/>
+            <circle cx="12.5" cy="28.5" r="2.6" fill="rgba(0,0,0,0.2)" stroke="rgba(255,255,255,0.5)" stroke-width="0.85"/>
+            <circle cx="12.5" cy="28.5" r="1.05" stroke="#c9a84c" stroke-width="0.6" fill="none"/>
+            <line x1="10" y1="18" x2="16" y2="14" stroke="rgba(255,255,255,0.7)" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="16" y1="14" x2="16" y2="8" stroke="rgba(255,255,255,0.7)" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="13" y1="9.5" x2="16" y2="8" stroke="rgba(255,255,255,0.7)" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="embryo-bilingual-he">העלי תמונה או סרטון של העובר שלך ליצירת המנגינה האישית שלך</div>
+        <div class="embryo-bilingual-en">Upload your embryo photo or video to create your personal melody</div>
+        <div class="embryo-upload-btn">
+          ✦ Choose file · JPG · PNG · MP4 · MOV · AVI
+        </div>
+      </div>
+      <input type="file" id="embryoFileInput"
+             accept="image/jpeg,image/png,image/gif,image/webp,image/heic,image/heif,video/mp4,video/quicktime,video/x-msvideo,video/avi,.jpg,.jpeg,.png,.gif,.webp,.heic,.heif,.mp4,.mov,.avi"
+             style="display:none" onchange="handleEmbryoFile(this.files[0])">
+
+      <!-- Preview (after file selected) -->
+      <div class="embryo-preview" id="embryoPreview">
+        <img class="embryo-thumb" id="embryoThumb" src="" alt="embryo preview">
+        <button class="embryo-create-btn" id="embryoCreateBtn" onclick="createEmbryoMelody()">
+          ✨ Create my melody
+        </button>
+        <span class="embryo-change-link" onclick="document.getElementById('embryoFileInput').click()">Change photo</span>
+      </div>
+
+      <!-- Progress -->
+      <div class="embryo-progress" id="embryoProgress">
+        <div class="ep-step" id="epStep1">
+          <div class="ep-dot"></div>
+          <div class="ep-label">🔬 Analyzing your embryo</div>
+          <div class="ep-spinner" style="display:none" id="epSpinner1"></div>
+        </div>
+        <div class="ep-step" id="epStep2">
+          <div class="ep-dot"></div>
+          <div class="ep-label">🎼 Composing your melody</div>
+          <div class="ep-spinner" style="display:none" id="epSpinner2"></div>
+        </div>
+        <div class="ep-step" id="epStep3">
+          <div class="ep-dot"></div>
+          <div class="ep-label">✨ Almost ready</div>
+          <div class="ep-spinner" style="display:none" id="epSpinner3"></div>
+        </div>
+      </div>
+
+      <!-- Analysis result -->
+      <div class="embryo-analysis-box" id="embryoAnalysisBox">
+        <div class="embryo-analysis-label">Embryo analysis</div>
+        <div id="embryoAnalysisText"></div>
+      </div>
+
+      <!-- Audio player -->
+      <div class="embryo-player" id="embryoPlayer">
+        <div class="ep-player-row">
+          <button class="ep-play-btn" id="epPlayBtn" onclick="toggleEmbryoPlay()">
+            <svg id="epPlayIcon" width="14" height="16" viewBox="0 0 14 16" fill="none">
+              <path d="M2 1.5L12.5 8L2 14.5V1.5Z" fill="white"/>
+            </svg>
+            <svg id="epPauseIcon" width="12" height="14" viewBox="0 0 12 14" fill="none" style="display:none">
+              <rect x="1" y="1" width="3.5" height="12" rx="1" fill="white"/>
+              <rect x="7.5" y="1" width="3.5" height="12" rx="1" fill="white"/>
+            </svg>
+          </button>
+          <div class="ep-info">
+            <div class="ep-title" id="epTitle">Your personal embryo melody</div>
+            <div class="ep-duration" id="epDuration">—</div>
+          </div>
+          <button class="ep-download-btn" id="epDownloadBtn" onclick="downloadEmbryoMelody()">↓ Save</button>
+        </div>
+        <div class="ep-waveform" id="epWaveform">
+          <div class="ep-bar" style="height:5px"></div><div class="ep-bar" style="height:9px"></div>
+          <div class="ep-bar" style="height:14px"></div><div class="ep-bar" style="height:7px"></div>
+          <div class="ep-bar" style="height:16px"></div><div class="ep-bar" style="height:10px"></div>
+          <div class="ep-bar" style="height:13px"></div><div class="ep-bar" style="height:6px"></div>
+          <div class="ep-bar" style="height:11px"></div><div class="ep-bar" style="height:15px"></div>
+          <div class="ep-bar" style="height:8px"></div><div class="ep-bar" style="height:12px"></div>
+          <div class="ep-bar" style="height:5px"></div><div class="ep-bar" style="height:10px"></div>
+          <div class="ep-bar" style="height:14px"></div>
+        </div>
+        <audio id="embryoAudio" style="display:none"></audio>
+      </div>
+
+      <!-- Error -->
+      <div class="embryo-error" id="embryoError"></div>
+
+    </div>
+  </div>
 
   <!-- Clinic reminder banner -->
   <div class="clinic-reminder" id="clinicReminder">
@@ -1503,118 +1621,6 @@
           <button class="add-med-btn" onclick="addMedication()">+</button>
         </div>
       </div>
-    </div>
-  </div>
-
-  <!-- Embryo Melody -->
-  <div class="embryo-card" id="embryoCard">
-    <div class="embryo-header" onclick="toggleEmbryo()">
-      <div>
-        <div class="embryo-label" id="embryoLabel">Your embryo melody · המנגינה של העובר שלך</div>
-        <div class="embryo-sublabel" id="embryoSublabel">Powered by Melody AI</div>
-      </div>
-      <span class="embryo-toggle" id="embryoToggle">＋</span>
-    </div>
-    <div class="embryo-body" id="embryoBody" style="display:none">
-
-      <!-- Upload zone (idle) -->
-      <div class="embryo-upload-zone" id="embryoUploadZone"
-           onclick="document.getElementById('embryoFileInput').click()"
-           ondragover="event.preventDefault();this.classList.add('drag-over')"
-           ondragleave="this.classList.remove('drag-over')"
-           ondrop="handleEmbryoDrop(event)">
-        <div style="margin-bottom:14px">
-          <svg width="36" height="44" viewBox="0 0 28 34" fill="none" xmlns="http://www.w3.org/2000/svg" style="opacity:0.7">
-            <circle cx="10" cy="25" r="7" fill="#0a1a1a" stroke="#5DCAA5" stroke-width="1.3"/>
-            <circle cx="7.5" cy="21.5" r="2.6" fill="#0c3d3d" stroke="#5DCAA5" stroke-width="0.85"/>
-            <circle cx="7.5" cy="21.5" r="1.05" stroke="#c9a84c" stroke-width="0.55" fill="none"/>
-            <circle cx="13" cy="23" r="2.6" fill="#0c3d3d" stroke="#5DCAA5" stroke-width="0.85"/>
-            <circle cx="13" cy="23" r="1.05" stroke="#c9a84c" stroke-width="0.55" fill="none"/>
-            <circle cx="7" cy="27.5" r="2.6" fill="#0c3d3d" stroke="#5DCAA5" stroke-width="0.85"/>
-            <circle cx="7" cy="27.5" r="1.05" stroke="#c9a84c" stroke-width="0.55" fill="none"/>
-            <circle cx="12.5" cy="28.5" r="2.6" fill="#0c3d3d" stroke="#5DCAA5" stroke-width="0.85"/>
-            <circle cx="12.5" cy="28.5" r="1.05" stroke="#c9a84c" stroke-width="0.55" fill="none"/>
-            <line x1="10" y1="18" x2="16" y2="14" stroke="#5DCAA5" stroke-width="1.5" stroke-linecap="round"/>
-            <line x1="16" y1="14" x2="16" y2="8" stroke="#5DCAA5" stroke-width="1.5" stroke-linecap="round"/>
-            <line x1="13" y1="9.5" x2="16" y2="8" stroke="#5DCAA5" stroke-width="1.5" stroke-linecap="round"/>
-          </svg>
-        </div>
-        <div class="embryo-bilingual-he">העלי תמונה או סרטון של העובר שלך ליצירת המנגינה האישית שלך</div>
-        <div class="embryo-bilingual-en">Upload your embryo photo or video to create your personal melody</div>
-        <div class="embryo-upload-btn">
-          <span>📎</span> Choose file
-        </div>
-      </div>
-      <input type="file" id="embryoFileInput" accept="image/*,video/*" style="display:none" onchange="handleEmbryoFile(this.files[0])">
-
-      <!-- Preview (after file selected) -->
-      <div class="embryo-preview" id="embryoPreview">
-        <img class="embryo-thumb" id="embryoThumb" src="" alt="embryo preview">
-        <button class="embryo-create-btn" id="embryoCreateBtn" onclick="createEmbryoMelody()">
-          ✨ Create my melody
-        </button>
-        <span class="embryo-change-link" onclick="document.getElementById('embryoFileInput').click()">Change photo</span>
-      </div>
-
-      <!-- Progress -->
-      <div class="embryo-progress" id="embryoProgress">
-        <div class="ep-step" id="epStep1">
-          <div class="ep-dot"></div>
-          <div class="ep-label">🔬 Analyzing your embryo</div>
-          <div class="ep-spinner" style="display:none" id="epSpinner1"></div>
-        </div>
-        <div class="ep-step" id="epStep2">
-          <div class="ep-dot"></div>
-          <div class="ep-label">🎼 Composing your melody</div>
-          <div class="ep-spinner" style="display:none" id="epSpinner2"></div>
-        </div>
-        <div class="ep-step" id="epStep3">
-          <div class="ep-dot"></div>
-          <div class="ep-label">✨ Almost ready</div>
-          <div class="ep-spinner" style="display:none" id="epSpinner3"></div>
-        </div>
-      </div>
-
-      <!-- Analysis result -->
-      <div class="embryo-analysis-box" id="embryoAnalysisBox">
-        <div class="embryo-analysis-label">Embryo analysis</div>
-        <div id="embryoAnalysisText"></div>
-      </div>
-
-      <!-- Audio player -->
-      <div class="embryo-player" id="embryoPlayer">
-        <div class="ep-player-row">
-          <button class="ep-play-btn" id="epPlayBtn" onclick="toggleEmbryoPlay()">
-            <svg id="epPlayIcon" width="14" height="16" viewBox="0 0 14 16" fill="none">
-              <path d="M2 1.5L12.5 8L2 14.5V1.5Z" fill="white"/>
-            </svg>
-            <svg id="epPauseIcon" width="12" height="14" viewBox="0 0 12 14" fill="none" style="display:none">
-              <rect x="1" y="1" width="3.5" height="12" rx="1" fill="white"/>
-              <rect x="7.5" y="1" width="3.5" height="12" rx="1" fill="white"/>
-            </svg>
-          </button>
-          <div class="ep-info">
-            <div class="ep-title" id="epTitle">Your personal embryo melody</div>
-            <div class="ep-duration" id="epDuration">—</div>
-          </div>
-          <button class="ep-download-btn" id="epDownloadBtn" onclick="downloadEmbryoMelody()">↓ Save</button>
-        </div>
-        <div class="ep-waveform" id="epWaveform">
-          <div class="ep-bar" style="height:5px"></div><div class="ep-bar" style="height:9px"></div>
-          <div class="ep-bar" style="height:14px"></div><div class="ep-bar" style="height:7px"></div>
-          <div class="ep-bar" style="height:16px"></div><div class="ep-bar" style="height:10px"></div>
-          <div class="ep-bar" style="height:13px"></div><div class="ep-bar" style="height:6px"></div>
-          <div class="ep-bar" style="height:11px"></div><div class="ep-bar" style="height:15px"></div>
-          <div class="ep-bar" style="height:8px"></div><div class="ep-bar" style="height:12px"></div>
-          <div class="ep-bar" style="height:5px"></div><div class="ep-bar" style="height:10px"></div>
-          <div class="ep-bar" style="height:14px"></div>
-        </div>
-        <audio id="embryoAudio" style="display:none"></audio>
-      </div>
-
-      <!-- Error -->
-      <div class="embryo-error" id="embryoError"></div>
-
     </div>
   </div>
 
