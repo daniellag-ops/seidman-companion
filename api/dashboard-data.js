@@ -14,8 +14,11 @@ export default async function handler(req, res) {
   }
 
   try {
-    const logs = await getEdgeConfigItem('logs') || [];
-    const tokens = await getEdgeConfigItem('tokens') || {};
+    const [logs, tokens, shares] = await Promise.all([
+      getEdgeConfigItem('logs').then(r => r || []),
+      getEdgeConfigItem('tokens').then(r => r || {}),
+      getEdgeConfigItem('shares').then(r => r || [])
+    ]);
 
     const phaseCounts = {};
     logs.forEach(l => { if (l.phase) phaseCounts[l.phase] = (phaseCounts[l.phase] || 0) + 1; });
@@ -30,9 +33,11 @@ export default async function handler(req, res) {
       totalQuestions: logs.length,
       uniqueUsers,
       totalPatients: Object.keys(tokens).length,
+      totalShares: shares.length,
       phaseCounts,
       patients,
-      logs: logs.map(l => ({ phase: l.phase, question: l.question, timestamp: l.timestamp }))
+      logs: logs.map(l => ({ phase: l.phase, question: l.question, timestamp: l.timestamp })),
+      shares: shares.slice(0, 50)
     });
   } catch (err) {
     return res.status(500).json({ error: err.message });

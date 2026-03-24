@@ -106,7 +106,7 @@
   .stats-row {
     grid-column: 1 / -1;
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     gap: 14px;
   }
 
@@ -362,6 +362,11 @@
         <div class="stat-value" id="statUsers">—</div>
         <div class="stat-sub">who asked questions</div>
       </div>
+      <div class="stat-card">
+        <div class="stat-label">Moments shared</div>
+        <div class="stat-value" id="statShares">—</div>
+        <div class="stat-sub">share cards created</div>
+      </div>
     </div>
 
     <!-- Left column: questions + phase breakdown -->
@@ -384,6 +389,17 @@
           <span class="panel-title">Questions by phase</span>
         </div>
         <div id="phaseBreakdown">
+          <div class="empty-state">Loading…</div>
+        </div>
+      </div>
+
+      <!-- Shared moments -->
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title">Shared moments</span>
+          <span class="panel-count" id="sharesCount">0</span>
+        </div>
+        <div class="questions-feed" id="sharesFeed">
           <div class="empty-state">Loading…</div>
         </div>
       </div>
@@ -477,6 +493,7 @@ async function loadDashboard() {
     document.getElementById('statPatients').textContent = data.totalPatients ?? '—';
     document.getElementById('statQuestions').textContent = data.totalQuestions ?? '—';
     document.getElementById('statUsers').textContent = data.uniqueUsers ?? '—';
+    document.getElementById('statShares').textContent = data.totalShares ?? '—';
 
     const phases = data.phaseCounts || {};
     const topPhase = Object.entries(phases).sort((a,b) => b[1]-a[1])[0];
@@ -544,6 +561,26 @@ async function loadDashboard() {
           ${actions}
         </div>`;
       }).join('');
+    }
+
+    // Shared moments
+    const shares = data.shares || [];
+    document.getElementById('sharesCount').textContent = shares.length;
+    if (shares.length === 0) {
+      document.getElementById('sharesFeed').innerHTML = '<div class="empty-state">No shares yet.</div>';
+    } else {
+      document.getElementById('sharesFeed').innerHTML = shares.map(s => `
+        <div class="question-item">
+          <div>
+            <div class="question-text">${escHtml(s.summary || '')}</div>
+            <div class="question-meta">
+              ${s.phase ? `<span class="phase-tag">${escHtml(formatPhase(s.phase))}</span>` : ''}
+              <span class="question-time">${s.date || ''}</span>
+              <a href="https://seidman-ai.com/share/${escHtml(s.id)}" target="_blank" style="font-size:11px;color:var(--accent);text-decoration:none">↗ view</a>
+            </div>
+          </div>
+        </div>
+      `).join('');
     }
 
     // Reminder dropdown — active patients only
