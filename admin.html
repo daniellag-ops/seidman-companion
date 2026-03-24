@@ -630,7 +630,13 @@ async function showSetup() {
   if (qrEl.dataset.loaded) return; // already rendered
   try {
     const res = await fetch('/api/admin?action=totp-setup', { headers: { 'x-admin-key': adminKey } });
-    if (!res.ok) { secretEl.textContent = 'Could not load — check admin key'; return; }
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      secretEl.textContent = err.error === 'TOTP_SECRET not configured'
+        ? 'TOTP_SECRET not set in Vercel — add it in Settings → Environment Variables, then redeploy.'
+        : 'Could not load — check admin key';
+      return;
+    }
     const { uri, secret } = await res.json();
     secretEl.textContent = secret;
     qrEl.innerHTML = '';
