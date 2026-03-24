@@ -20,6 +20,21 @@ export default async function handler(req, res) {
       getEdgeConfigItem('shares').then(r => r || [])
     ]);
 
+    // Fetch each patient's memory in parallel
+    const tokenEntries = Object.entries(tokens);
+    const memories = await Promise.all(
+      tokenEntries.map(([slug]) => getEdgeConfigItem('pm_' + slug).then(r => ({ slug, data: r })))
+    );
+
+    const patientNotes = memories
+      .filter(m => m.data?.notes?.length)
+      .map(m => ({
+        slug: m.slug,
+        name: tokens[m.slug]?.name || m.slug,
+        notes: (m.data.notes || []).slice(0, 10)
+      }))
+      .sort((a, b) => a.name.localeCompare(b.name));
+
     const phaseCounts = {};
     logs.forEach(l => { if (l.phase) phaseCounts[l.phase] = (phaseCounts[l.phase] || 0) + 1; });
 
@@ -36,6 +51,7 @@ export default async function handler(req, res) {
       totalShares: shares.length,
       phaseCounts,
       patients,
+      patientNotes,
       logs: logs.map(l => ({ phase: l.phase, question: l.question, timestamp: l.timestamp })),
       shares: shares.slice(0, 50)
     });
