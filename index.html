@@ -1008,8 +1008,8 @@
       <div class="doctor-title" id="doctorTitle">Reproductive Endocrinology & Infertility · <a href="https://ivf-clinic.co.il/" target="_blank" id="clinicLink" style="color:rgba(255,255,255,0.7);text-decoration:none;border-bottom:1px solid rgba(255,255,255,0.3);">ALMA Clinic</a></div>
     </div>
     <div class="lang-toggle">
-      <button class="lang-btn active" onclick="setLang('en')">EN</button>
-      <button class="lang-btn" onclick="setLang('he')">עב</button>
+      <button class="lang-btn" onclick="setLang('en')">EN</button>
+      <button class="lang-btn active" onclick="setLang('he')">עב</button>
     </div>
   </div>
   <div class="header-tagline" id="headerTagline">A personal guide to understanding your fertility journey</div>
@@ -1032,9 +1032,9 @@
   <div class="clinic-reminder" id="clinicReminder">
     <div class="clinic-reminder-icon" id="clinicReminderIcon">📅</div>
     <div class="clinic-reminder-content">
-      <div class="clinic-reminder-label" id="clinicReminderLabel">Message from the clinic</div>
+      <div class="clinic-reminder-label" id="clinicReminderLabel">הודעה מהמרפאה</div>
       <div class="clinic-reminder-msg" id="clinicReminderMsg"></div>
-      <button class="clinic-reminder-confirm" id="clinicReminderBtn" onclick="acknowledgeReminder()">Got it ✓</button>
+      <button class="clinic-reminder-confirm" id="clinicReminderBtn" onclick="acknowledgeReminder()">קיבלתי ✓</button>
     </div>
   </div>
 
@@ -1282,7 +1282,7 @@
 </div>
 
 <script>
-let currentLang = 'en';
+let currentLang = 'he';
 let selectedPhase = '';
 let attachedFile = null; // { name, mediaType, data (base64) }
 
@@ -2353,6 +2353,8 @@ function shareMilestoneFacebook() {
   window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(SHARE_URL)}`, '_blank');
 }
 
+document.body.classList.add('rtl');
+document.documentElement.lang = 'he';
 renderUI();
 loadMemory();
 loadDates();
