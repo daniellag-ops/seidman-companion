@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Seidman-AI · Admin Dashboard</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
   :root {
     --accent: #0e6b6b;
@@ -48,6 +49,60 @@
     max-width: 400px;
     width: 100%;
   }
+
+  .login-step { display: none; }
+  .login-step.active { display: block; }
+
+  .step-indicator {
+    display: flex; align-items: center; gap: 6px;
+    margin-bottom: 24px;
+  }
+  .step-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--border); transition: background 0.2s;
+  }
+  .step-dot.active { background: var(--accent); }
+  .step-title { font-size: 13px; color: var(--text-mid); margin-bottom: 20px; }
+
+  .back-link {
+    display: inline-block; margin-top: 12px;
+    font-size: 12px; color: var(--text-light);
+    cursor: pointer; text-decoration: underline; text-underline-offset: 2px;
+  }
+  .back-link:hover { color: var(--text-mid); }
+
+  .totp-input {
+    font-size: 24px !important;
+    letter-spacing: 8px !important;
+    text-align: center;
+    font-family: 'DM Serif Display', serif !important;
+  }
+
+  /* Setup modal */
+  .setup-modal {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.4); backdrop-filter: blur(4px);
+    z-index: 200; align-items: center; justify-content: center; padding: 24px;
+  }
+  .setup-modal.open { display: flex; }
+  .setup-card {
+    background: var(--surface);
+    border-radius: var(--radius); border: 1.5px solid var(--border);
+    padding: 36px; max-width: 380px; width: 100%;
+    text-align: center;
+  }
+  .setup-title { font-family: 'DM Serif Display', serif; font-size: 22px; margin-bottom: 8px; }
+  .setup-desc { font-size: 13px; color: var(--text-mid); line-height: 1.6; margin-bottom: 24px; }
+  #qrcode { display: flex; justify-content: center; margin-bottom: 18px; }
+  #qrcode canvas, #qrcode img { border-radius: 10px; border: 6px solid white; box-shadow: 0 2px 16px rgba(0,0,0,0.1); }
+  .setup-secret {
+    font-family: monospace; font-size: 13px;
+    background: var(--bg); border: 1.5px solid var(--border);
+    border-radius: 8px; padding: 10px 14px;
+    letter-spacing: 1px; word-break: break-all;
+    color: var(--text-mid); margin-bottom: 20px;
+  }
+  .setup-close { margin-top: 4px; }
 
   .login-logo { display: flex; align-items: center; gap: 10px; margin-bottom: 28px; }
   .avatar {
@@ -309,6 +364,18 @@
 </head>
 <body>
 
+<!-- Setup modal (QR code) -->
+<div class="setup-modal" id="setupModal">
+  <div class="setup-card">
+    <div class="setup-title">Authenticator Setup</div>
+    <div class="setup-desc">Scan this QR code with Google Authenticator or Authy. You'll need to enter the 6-digit code on every login.</div>
+    <div id="qrcode"></div>
+    <div class="setup-secret" id="setupSecret">Loading…</div>
+    <div style="font-size:12px;color:var(--text-light);margin-bottom:20px">Or enter the secret key manually in your app</div>
+    <button class="btn" onclick="closeSetup()">Done — close</button>
+  </div>
+</div>
+
 <!-- Login overlay -->
 <div class="login-overlay" id="loginOverlay">
   <div class="login-card">
@@ -319,10 +386,40 @@
         <div class="logo-sub">Admin Dashboard</div>
       </div>
     </div>
-    <label>Admin key</label>
-    <input type="password" id="adminKeyInput" placeholder="Enter admin key" />
-    <button class="btn" onclick="login()">Sign in</button>
-    <div class="feedback error" id="loginError">Incorrect key. Please try again.</div>
+
+    <!-- Step 1: admin key -->
+    <div class="login-step active" id="loginStep1">
+      <div class="step-indicator">
+        <div class="step-dot active" id="dot1"></div>
+        <div class="step-dot" id="dot2"></div>
+        <span style="font-size:11px;color:var(--text-light);margin-left:4px">Step 1 of 2</span>
+      </div>
+      <div class="step-title">Enter your admin password</div>
+      <label>Admin key</label>
+      <input type="password" id="adminKeyInput" placeholder="Enter admin key" />
+      <button class="btn" onclick="submitAdminKey()">Continue →</button>
+      <div class="feedback error" id="loginError1">Incorrect key. Please try again.</div>
+    </div>
+
+    <!-- Step 2: TOTP -->
+    <div class="login-step" id="loginStep2">
+      <div class="step-indicator">
+        <div class="step-dot" id="dot1b"></div>
+        <div class="step-dot active" id="dot2b"></div>
+        <span style="font-size:11px;color:var(--text-light);margin-left:4px">Step 2 of 2</span>
+      </div>
+      <div class="step-title">Enter the 6-digit code from Google Authenticator</div>
+      <label>Verification code</label>
+      <input type="text" inputmode="numeric" pattern="[0-9 ]*" maxlength="7"
+             class="totp-input" id="totpInput" placeholder="000 000" autocomplete="one-time-code" />
+      <button class="btn" id="totpBtn" onclick="submitTOTP()">Sign in</button>
+      <div class="feedback error" id="loginError2">Invalid code. Please try again.</div>
+      <span class="back-link" onclick="backToStep1()">← Back</span>
+      <div style="margin-top:18px;padding-top:14px;border-top:1px solid var(--border)">
+        <span style="font-size:12px;color:var(--text-light)">First time? </span>
+        <span class="back-link" style="margin-top:0" onclick="showSetup()">Set up authenticator app</span>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -476,16 +573,90 @@
 <script>
 let adminKey = '';
 
-function login() {
+function submitAdminKey() {
   const input = document.getElementById('adminKeyInput').value.trim();
   if (!input) return;
   adminKey = input;
-  document.getElementById('loginError').classList.remove('visible');
-  loadDashboard();
+  document.getElementById('loginError1').classList.remove('visible');
+  // Move to step 2
+  document.getElementById('loginStep1').classList.remove('active');
+  document.getElementById('loginStep2').classList.add('active');
+  document.getElementById('dot1b').classList.remove('active');
+  document.getElementById('dot2b').classList.add('active');
+  setTimeout(() => document.getElementById('totpInput').focus(), 50);
+}
+
+function backToStep1() {
+  document.getElementById('loginStep2').classList.remove('active');
+  document.getElementById('loginStep1').classList.add('active');
+  document.getElementById('loginError2').classList.remove('visible');
+  document.getElementById('totpInput').value = '';
+}
+
+async function submitTOTP() {
+  const code = document.getElementById('totpInput').value.replace(/\s/g, '');
+  if (code.length < 6) return;
+  const btn = document.getElementById('totpBtn');
+  const errEl = document.getElementById('loginError2');
+  btn.disabled = true; btn.textContent = 'Verifying…';
+  errEl.classList.remove('visible');
+  try {
+    const res = await fetch('/api/verify-login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ adminKey, totpCode: code })
+    });
+    if (res.status === 403) {
+      const data = await res.json();
+      errEl.textContent = data.error === 'Invalid password' ? 'Incorrect admin key.' : 'Invalid code. Please try again.';
+      errEl.classList.add('visible');
+      if (data.error === 'Invalid password') backToStep1();
+      return;
+    }
+    if (!res.ok) throw new Error('Server error');
+    loadDashboard();
+  } catch (err) {
+    errEl.textContent = 'Something went wrong. Please try again.';
+    errEl.classList.add('visible');
+  } finally {
+    btn.disabled = false; btn.textContent = 'Sign in';
+  }
+}
+
+async function showSetup() {
+  document.getElementById('setupModal').classList.add('open');
+  const qrEl = document.getElementById('qrcode');
+  const secretEl = document.getElementById('setupSecret');
+  if (qrEl.dataset.loaded) return; // already rendered
+  try {
+    const res = await fetch('/api/totp-setup', { headers: { 'x-admin-key': adminKey } });
+    if (!res.ok) { secretEl.textContent = 'Could not load — check admin key'; return; }
+    const { uri, secret } = await res.json();
+    secretEl.textContent = secret;
+    qrEl.innerHTML = '';
+    new QRCode(qrEl, { text: uri, width: 200, height: 200, colorDark: '#0a1a1a', colorLight: '#ffffff' });
+    qrEl.dataset.loaded = '1';
+  } catch {
+    secretEl.textContent = 'Failed to load setup data.';
+  }
+}
+
+function closeSetup() {
+  document.getElementById('setupModal').classList.remove('open');
 }
 
 document.getElementById('adminKeyInput').addEventListener('keydown', e => {
-  if (e.key === 'Enter') login();
+  if (e.key === 'Enter') submitAdminKey();
+});
+
+document.getElementById('totpInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') submitTOTP();
+});
+
+// Format TOTP input as "000 000"
+document.getElementById('totpInput').addEventListener('input', e => {
+  let val = e.target.value.replace(/\D/g, '').slice(0, 6);
+  e.target.value = val.length > 3 ? val.slice(0,3) + ' ' + val.slice(3) : val;
 });
 
 async function loadDashboard() {
