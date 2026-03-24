@@ -359,6 +359,82 @@
   .milestone-card-btn:hover { background: var(--gold); color: var(--text); }
   body.rtl .milestone-card-btn { margin-left: 0; margin-right: auto; }
 
+  /* ── Share this moment button ── */
+  .share-moment-btn {
+    display: none;
+    margin: 0 28px 20px;
+    padding: 10px 20px;
+    background: transparent;
+    border: 1.5px solid var(--gold);
+    border-radius: 100px;
+    color: var(--gold);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    align-items: center;
+    gap: 7px;
+    width: fit-content;
+  }
+  .share-moment-btn:hover { background: var(--gold); color: #0a1a1a; }
+  .share-moment-btn.visible { display: flex; }
+
+  /* ── Share moment modal ── */
+  .share-moment-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.75);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 200;
+    padding: 20px;
+  }
+  .share-moment-modal {
+    background: #0a1a1a;
+    border-radius: 20px;
+    overflow: hidden;
+    max-width: 480px;
+    width: 100%;
+    border: 1px solid rgba(93,202,165,0.2);
+  }
+  .share-moment-modal-header {
+    padding: 14px 18px;
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+  }
+  .share-moment-modal-title {
+    font-size: 13px; font-weight: 500;
+    color: rgba(255,255,255,0.6);
+    letter-spacing: 0.5px;
+  }
+  .share-moment-modal-close {
+    background: none; border: none;
+    color: rgba(255,255,255,0.4);
+    font-size: 20px; cursor: pointer; line-height: 1;
+  }
+  .share-moment-modal-close:hover { color: white; }
+  .share-moment-canvas-wrap {
+    padding: 16px;
+  }
+  .share-moment-canvas-wrap canvas {
+    width: 100%; height: auto; display: block; border-radius: 10px;
+  }
+  .share-moment-actions {
+    padding: 12px 16px 16px;
+    display: flex; gap: 10px;
+  }
+  .share-moment-action-btn {
+    flex: 1; padding: 11px;
+    border-radius: 100px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px; font-weight: 500;
+    cursor: pointer; transition: opacity 0.15s;
+    border: none;
+  }
+  .share-moment-action-btn.dl { background: #c9a84c; color: #0a1a1a; }
+  .share-moment-action-btn.dl:hover { opacity: 0.85; }
+  .share-moment-action-btn.sh { background: rgba(93,202,165,0.15); color: #5DCAA5; border: 1px solid rgba(93,202,165,0.3); }
+  .share-moment-action-btn.sh:hover { background: rgba(93,202,165,0.25); }
+
   /* ── Milestone modal ── */
   .milestone-overlay {
     position: fixed;
@@ -1154,6 +1230,9 @@
     </div>
     <div class="error-msg" id="errorMsg"></div>
     <div class="response-body" id="responseBody"></div>
+    <button class="share-moment-btn" id="shareMomentBtn" onclick="openShareMomentModal()">
+      ✦ <span id="shareMomentBtnText">Share this moment</span>
+    </button>
     <div class="share-section" id="shareSection">
       <span class="share-label" id="shareLabel">Share</span>
       <div class="share-platform-btns">
@@ -1273,6 +1352,23 @@
 
 
 </main>
+
+<!-- Share this moment modal -->
+<div class="share-moment-overlay" id="shareMomentOverlay" style="display:none" onclick="closeShareMomentModal(event)">
+  <div class="share-moment-modal">
+    <div class="share-moment-modal-header">
+      <span class="share-moment-modal-title">Share this moment</span>
+      <button class="share-moment-modal-close" onclick="document.getElementById('shareMomentOverlay').style.display='none';document.body.style.overflow=''">×</button>
+    </div>
+    <div class="share-moment-canvas-wrap">
+      <canvas id="shareMomentCanvas" width="600" height="600"></canvas>
+    </div>
+    <div class="share-moment-actions">
+      <button class="share-moment-action-btn dl" onclick="downloadShareMomentCard()">↓ Download</button>
+      <button class="share-moment-action-btn sh" onclick="shareShareMomentNative()">Share ↗</button>
+    </div>
+  </div>
+</div>
 
 <!-- Milestone card modal -->
 <div class="milestone-overlay" id="milestoneOverlay" style="display:none" onclick="closeMilestoneModal(event)">
@@ -1848,8 +1944,10 @@ async function sendMessage() {
     attachedFile = null;
     renderFilePreview();
 
-    // Show share section
+    // Show share section + share moment button
     document.getElementById('shareSection').style.display = 'flex';
+    document.getElementById('shareMomentBtn').classList.add('visible');
+    document.getElementById('shareMomentBtnText').textContent = currentLang === 'he' ? 'שתפי את הרגע הזה' : 'Share this moment';
 
     // Show save note section
     const saveSection = document.getElementById('saveNoteSection');
@@ -2381,6 +2479,146 @@ function shareMilestoneWhatsApp() {
 
 function shareMilestoneFacebook() {
   window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(SHARE_URL)}`, '_blank');
+}
+
+// ── Share this moment ──
+function extractOneSentence(text) {
+  const plain = text
+    .replace(/#{1,6}\s[^\n]*/g, '')
+    .replace(/\*\*/g, '').replace(/\*/g, '')
+    .replace(/\n+/g, ' ')
+    .trim();
+  const match = plain.match(/^.{20,200}?[.!?](?=\s|$)/);
+  if (match) return match[0].trim();
+  return plain.slice(0, 150).trim() + (plain.length > 150 ? '…' : '');
+}
+
+function drawSvgOnCanvas(ctx, svgStr, x, y, w, h) {
+  return new Promise(resolve => {
+    const blob = new Blob([svgStr], { type: 'image/svg+xml' });
+    const url = URL.createObjectURL(blob);
+    const img = new Image();
+    img.onload = () => { ctx.drawImage(img, x, y, w, h); URL.revokeObjectURL(url); resolve(); };
+    img.onerror = () => resolve();
+    img.src = url;
+  });
+}
+
+async function openShareMomentModal() {
+  document.getElementById('shareMomentOverlay').style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+  await drawShareMomentCard();
+}
+
+function closeShareMomentModal(e) {
+  if (e && e.target !== document.getElementById('shareMomentOverlay')) return;
+  document.getElementById('shareMomentOverlay').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+async function drawShareMomentCard() {
+  const canvas = document.getElementById('shareMomentCanvas');
+  const ctx = canvas.getContext('2d');
+  const W = 600, H = 600;
+
+  // Background
+  ctx.fillStyle = '#0a1a1a';
+  ctx.fillRect(0, 0, W, H);
+
+  // Teal top glow
+  const topG = ctx.createRadialGradient(W/2, 0, 0, W/2, 0, 380);
+  topG.addColorStop(0, 'rgba(14,107,107,0.18)');
+  topG.addColorStop(1, 'rgba(14,107,107,0)');
+  ctx.fillStyle = topG;
+  ctx.fillRect(0, 0, W, H);
+
+  // Gold bottom glow
+  const botG = ctx.createRadialGradient(W/2, H, 0, W/2, H, 300);
+  botG.addColorStop(0, 'rgba(201,168,76,0.1)');
+  botG.addColorStop(1, 'rgba(201,168,76,0)');
+  ctx.fillStyle = botG;
+  ctx.fillRect(0, 0, W, H);
+
+  await document.fonts.ready;
+
+  // Melody embryo logo SVG
+  const logoSvg = `<svg width="44" height="54" viewBox="0 0 28 34" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="25" r="7" fill="#0a1a1a" stroke="#5DCAA5" stroke-width="1.3"/><circle cx="7.5" cy="21.5" r="2.6" fill="#0c3d3d" stroke="#5DCAA5" stroke-width="0.85"/><circle cx="7.5" cy="21.5" r="1.05" stroke="#c9a84c" stroke-width="0.55" fill="none"/><circle cx="7.8" cy="21.2" r="0.32" fill="#c9a84c"/><circle cx="13" cy="23" r="2.6" fill="#0c3d3d" stroke="#5DCAA5" stroke-width="0.85"/><circle cx="13" cy="23" r="1.05" stroke="#c9a84c" stroke-width="0.55" fill="none"/><circle cx="13.3" cy="22.7" r="0.32" fill="#c9a84c"/><circle cx="7" cy="27.5" r="2.6" fill="#0c3d3d" stroke="#5DCAA5" stroke-width="0.85"/><circle cx="7" cy="27.5" r="1.05" stroke="#c9a84c" stroke-width="0.55" fill="none"/><circle cx="7.3" cy="27.2" r="0.32" fill="#c9a84c"/><circle cx="12.5" cy="28.5" r="2.6" fill="#0c3d3d" stroke="#5DCAA5" stroke-width="0.85"/><circle cx="12.5" cy="28.5" r="1.05" stroke="#c9a84c" stroke-width="0.55" fill="none"/><circle cx="12.8" cy="28.2" r="0.32" fill="#c9a84c"/><circle cx="10" cy="25" r="0.5" fill="#c9a84c"/><line x1="17" y1="25" x2="17" y2="4" stroke="#5DCAA5" stroke-width="1.5" stroke-linecap="round"/><path d="M17,4 C22,5 23.5,10 18,16" stroke="#5DCAA5" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>`;
+  await drawSvgOnCanvas(ctx, logoSvg, 36, 32, 44, 54);
+
+  // "melody" wordmark
+  ctx.fillStyle = '#c9a84c';
+  ctx.font = "500 20px 'DM Sans', sans-serif";
+  ctx.textAlign = 'left';
+  ctx.fillText('melody', 90, 63);
+
+  // Top separator
+  ctx.strokeStyle = 'rgba(93,202,165,0.15)';
+  ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(36, 108); ctx.lineTo(W - 36, 108); ctx.stroke();
+
+  // Large decorative quote
+  ctx.fillStyle = 'rgba(14,107,107,0.22)';
+  ctx.font = "160px 'DM Serif Display', Georgia, serif";
+  ctx.textAlign = 'left';
+  ctx.fillText('\u201C', 28, 270);
+
+  // Summary text
+  const summary = extractOneSentence(getResponseText());
+  ctx.fillStyle = '#ffffff';
+  ctx.font = "400 22px 'DM Serif Display', Georgia, serif";
+  ctx.textAlign = 'center';
+  ctx.direction = currentLang === 'he' ? 'rtl' : 'ltr';
+  wrapCanvasText(ctx, summary, W / 2, 310, W - 90, 34);
+  ctx.direction = 'ltr';
+
+  // Phase pill
+  const phaseLabels = { en: content.en?.phases, he: content.he?.phases };
+  const phases = phaseLabels[currentLang] || [];
+  const phaseObj = phases.find(p => p.id === selectedPhase);
+  if (phaseObj) {
+    const label = `${phaseObj.icon}  ${phaseObj.label}`;
+    ctx.font = "500 13px 'DM Sans', sans-serif";
+    const tw = ctx.measureText(label).width;
+    const pw = tw + 28, ph = 30, px = W/2 - pw/2, py = 448;
+    ctx.fillStyle = '#0e6b6b';
+    ctx.beginPath(); ctx.roundRect(px, py, pw, ph, 15); ctx.fill();
+    ctx.fillStyle = 'rgba(255,255,255,0.9)';
+    ctx.textAlign = 'center';
+    ctx.fillText(label, W / 2, py + 20);
+  }
+
+  // Bottom separator
+  ctx.strokeStyle = 'rgba(201,168,76,0.15)';
+  ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(36, 528); ctx.lineTo(W - 36, 528); ctx.stroke();
+
+  // Bottom wordmark
+  ctx.fillStyle = 'rgba(201,168,76,0.5)';
+  ctx.font = "300 12px 'DM Sans', sans-serif";
+  ctx.textAlign = 'center';
+  ctx.fillText('melody · IVF companion · seidman-ai.com', W / 2, 560);
+}
+
+function downloadShareMomentCard() {
+  const canvas = document.getElementById('shareMomentCanvas');
+  const a = document.createElement('a');
+  a.download = 'melody-moment.png';
+  a.href = canvas.toDataURL('image/png');
+  a.click();
+}
+
+async function shareShareMomentNative() {
+  const canvas = document.getElementById('shareMomentCanvas');
+  try {
+    canvas.toBlob(async blob => {
+      const file = new File([blob], 'melody-moment.png', { type: 'image/png' });
+      if (navigator.canShare?.({ files: [file] })) {
+        await navigator.share({ files: [file] });
+      } else {
+        downloadShareMomentCard();
+      }
+    }, 'image/png');
+  } catch(e) { downloadShareMomentCard(); }
 }
 
 document.body.classList.add('rtl');
