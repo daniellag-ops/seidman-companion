@@ -3043,20 +3043,37 @@ async function handleEmbryoFile(file) {
   let base64;
   embryoMimeType = 'image/jpeg';
 
+  const thumb = document.getElementById('embryoThumb');
+
   if (isVideo) {
+    // Try browser frame extraction first (works for MP4/MOV)
     base64 = await extractVideoFrame(file);
-    // AVI and some video formats won't decode in browser — fall back gracefully
-    if (!base64) {
-      showEmbryoError('Could not extract a frame from this video. Please try MP4 or MOV, or upload a still image instead.');
-      return;
+    if (base64) {
+      embryoMimeType = 'image/jpeg';
+      thumb.style.display = '';
+      thumb.src = 'data:image/jpeg;base64,' + base64;
+    } else {
+      // Browser can't decode this format (e.g. AVI) — send raw video to Gemini directly
+      if (file.size > 3.5 * 1024 * 1024) {
+        showEmbryoError('This video file is too large (max ~3.5MB). Please use a still image or a shorter clip.');
+        return;
+      }
+      base64 = await readFileAsBase64(file);
+      embryoMimeType = file.type || 'video/avi';
+      // Show a video placeholder thumbnail
+      thumb.style.display = '';
+      thumb.src = 'data:image/svg+xml,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120"><rect width="120" height="120" rx="14" fill="#0a3a3a"/><text x="50%" y="52%" dominant-baseline="middle" text-anchor="middle" font-size="36">🎬</text><text x="50%" y="72%" dominant-baseline="middle" text-anchor="middle" font-family="sans-serif" font-size="11" fill="rgba(255,255,255,0.5)">${file.name.split('.').pop().toUpperCase()}</text></svg>`);
     }
   } else {
-    // Try canvas compression first, fall back to raw FileReader (handles HEIC etc.)
+    // Image: try canvas compression, fall back to raw FileReader (handles HEIC etc.)
     base64 = await compressImage(file);
     if (!base64) {
       base64 = await readFileAsBase64(file);
       embryoMimeType = file.type || 'image/jpeg';
     }
+    thumb.style.display = '';
+    thumb.src = `data:${embryoMimeType};base64,` + base64;
+    thumb.onerror = () => { thumb.style.display = 'none'; };
   }
 
   if (!base64) {
@@ -3065,10 +3082,6 @@ async function handleEmbryoFile(file) {
   }
 
   embryoImageBase64 = base64;
-  // Show thumbnail — use original file for display if HEIC canvas failed
-  const thumb = document.getElementById('embryoThumb');
-  thumb.src = `data:${embryoMimeType};base64,` + base64;
-  thumb.onerror = () => { thumb.style.display = 'none'; }; // hide thumb if HEIC can't display
   document.getElementById('embryoUploadZone').style.display = 'none';
   document.getElementById('embryoPreview').classList.add('visible');
 }
