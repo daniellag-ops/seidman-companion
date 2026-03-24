@@ -1864,9 +1864,12 @@ function renderFilePreview() {
   }
 }
 
+let lastQuestion = '';
+
 async function sendMessage() {
   const input = document.getElementById('userInput').value.trim();
   if (!input) return;
+  lastQuestion = input;
 
   const c = content[currentLang];
   const card = document.getElementById('responseCard');
@@ -2536,87 +2539,110 @@ async function drawShareMomentCard() {
   const canvas = document.getElementById('shareMomentCanvas');
   const ctx = canvas.getContext('2d');
   const W = 600, H = 600;
+  const isHe = currentLang === 'he';
+  // Hebrew-safe font stack — DM Sans has no Hebrew glyphs, fall back to system
+  const bodyFont = isHe ? 'Arial, Helvetica, sans-serif' : "'DM Sans', Arial, sans-serif";
+  const serifFont = isHe ? 'Arial, Helvetica, sans-serif' : "'DM Serif Display', Georgia, serif";
 
   // Background
   ctx.fillStyle = '#0a1a1a';
   ctx.fillRect(0, 0, W, H);
 
   // Teal top glow
-  const topG = ctx.createRadialGradient(W/2, 0, 0, W/2, 0, 380);
-  topG.addColorStop(0, 'rgba(14,107,107,0.18)');
+  const topG = ctx.createRadialGradient(W/2, 0, 0, W/2, 0, 360);
+  topG.addColorStop(0, 'rgba(14,107,107,0.2)');
   topG.addColorStop(1, 'rgba(14,107,107,0)');
-  ctx.fillStyle = topG;
-  ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = topG; ctx.fillRect(0, 0, W, H);
 
   // Gold bottom glow
-  const botG = ctx.createRadialGradient(W/2, H, 0, W/2, H, 300);
-  botG.addColorStop(0, 'rgba(201,168,76,0.1)');
+  const botG = ctx.createRadialGradient(W/2, H, 0, W/2, H, 280);
+  botG.addColorStop(0, 'rgba(201,168,76,0.12)');
   botG.addColorStop(1, 'rgba(201,168,76,0)');
-  ctx.fillStyle = botG;
-  ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = botG; ctx.fillRect(0, 0, W, H);
 
   await document.fonts.ready;
 
-  // Melody embryo logo SVG
+  // ── Melody logo top-left ──
   const logoSvg = `<svg width="44" height="54" viewBox="0 0 28 34" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="25" r="7" fill="#0a1a1a" stroke="#5DCAA5" stroke-width="1.3"/><circle cx="7.5" cy="21.5" r="2.6" fill="#0c3d3d" stroke="#5DCAA5" stroke-width="0.85"/><circle cx="7.5" cy="21.5" r="1.05" stroke="#c9a84c" stroke-width="0.55" fill="none"/><circle cx="7.8" cy="21.2" r="0.32" fill="#c9a84c"/><circle cx="13" cy="23" r="2.6" fill="#0c3d3d" stroke="#5DCAA5" stroke-width="0.85"/><circle cx="13" cy="23" r="1.05" stroke="#c9a84c" stroke-width="0.55" fill="none"/><circle cx="13.3" cy="22.7" r="0.32" fill="#c9a84c"/><circle cx="7" cy="27.5" r="2.6" fill="#0c3d3d" stroke="#5DCAA5" stroke-width="0.85"/><circle cx="7" cy="27.5" r="1.05" stroke="#c9a84c" stroke-width="0.55" fill="none"/><circle cx="7.3" cy="27.2" r="0.32" fill="#c9a84c"/><circle cx="12.5" cy="28.5" r="2.6" fill="#0c3d3d" stroke="#5DCAA5" stroke-width="0.85"/><circle cx="12.5" cy="28.5" r="1.05" stroke="#c9a84c" stroke-width="0.55" fill="none"/><circle cx="12.8" cy="28.2" r="0.32" fill="#c9a84c"/><circle cx="10" cy="25" r="0.5" fill="#c9a84c"/><line x1="17" y1="25" x2="17" y2="4" stroke="#5DCAA5" stroke-width="1.5" stroke-linecap="round"/><path d="M17,4 C22,5 23.5,10 18,16" stroke="#5DCAA5" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>`;
-  await drawSvgOnCanvas(ctx, logoSvg, 36, 32, 44, 54);
-
-  // "melody" wordmark
+  await drawSvgOnCanvas(ctx, logoSvg, 36, 28, 44, 54);
   ctx.fillStyle = '#c9a84c';
-  ctx.font = "500 20px 'DM Sans', sans-serif";
-  ctx.textAlign = 'left';
-  ctx.fillText('melody', 90, 63);
+  ctx.font = `500 19px ${bodyFont}`;
+  ctx.textAlign = 'left'; ctx.direction = 'ltr';
+  ctx.fillText('melody', 90, 59);
+
+  // Seidman credit top-right
+  ctx.fillStyle = 'rgba(255,255,255,0.35)';
+  ctx.font = `400 11px ${bodyFont}`;
+  ctx.textAlign = 'right'; ctx.direction = 'ltr';
+  ctx.fillText('Prof. Daniel Seidman · ALMA Clinic', W - 36, 52);
 
   // Top separator
-  ctx.strokeStyle = 'rgba(93,202,165,0.15)';
+  ctx.strokeStyle = 'rgba(93,202,165,0.18)';
   ctx.lineWidth = 1;
-  ctx.beginPath(); ctx.moveTo(36, 108); ctx.lineTo(W - 36, 108); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(36, 96); ctx.lineTo(W - 36, 96); ctx.stroke();
 
-  // Large decorative quote
-  ctx.fillStyle = 'rgba(14,107,107,0.22)';
-  ctx.font = "160px 'DM Serif Display', Georgia, serif";
-  ctx.textAlign = 'left';
-  ctx.fillText('\u201C', 28, 270);
+  // ── Question (short, muted, smaller) ──
+  const q = lastQuestion.slice(0, 120) + (lastQuestion.length > 120 ? '…' : '');
+  ctx.fillStyle = 'rgba(93,202,165,0.7)';
+  ctx.font = `400 14px ${bodyFont}`;
+  ctx.direction = isHe ? 'rtl' : 'ltr';
+  ctx.textAlign = 'center';
+  wrapCanvasText(ctx, q, W/2, 132, W - 80, 22);
 
-  // Summary text
+  // ── Divider between Q and A ──
+  ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+  ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(W/2 - 30, 168); ctx.lineTo(W/2 + 30, 168); ctx.stroke();
+
+  // ── Answer summary (large, white) ──
   const summary = extractOneSentence(getResponseText());
   ctx.fillStyle = '#ffffff';
-  ctx.font = "400 22px 'DM Serif Display', Georgia, serif";
+  ctx.font = `400 21px ${serifFont}`;
+  ctx.direction = isHe ? 'rtl' : 'ltr';
   ctx.textAlign = 'center';
-  ctx.direction = currentLang === 'he' ? 'rtl' : 'ltr';
-  wrapCanvasText(ctx, summary, W / 2, 310, W - 90, 34);
-  ctx.direction = 'ltr';
+  wrapCanvasText(ctx, summary, W/2, 210, W - 80, 33);
 
-  // Phase pill
-  const phaseLabels = { en: content.en?.phases, he: content.he?.phases };
-  const phases = phaseLabels[currentLang] || [];
+  // ── Phase pill ──
+  const phases = (content[currentLang]?.phases) || [];
   const phaseObj = phases.find(p => p.id === selectedPhase);
   if (phaseObj) {
     const label = `${phaseObj.icon}  ${phaseObj.label}`;
-    ctx.font = "500 13px 'DM Sans', sans-serif";
+    ctx.font = `500 13px ${bodyFont}`;
+    ctx.direction = 'ltr';
     const tw = ctx.measureText(label).width;
-    const pw = tw + 28, ph = 30, px = W/2 - pw/2, py = 448;
+    const pw = tw + 28, ph = 30, px = W/2 - pw/2, py = 420;
     ctx.fillStyle = '#0e6b6b';
     ctx.beginPath(); ctx.roundRect(px, py, pw, ph, 15); ctx.fill();
     ctx.fillStyle = 'rgba(255,255,255,0.9)';
     ctx.textAlign = 'center';
-    ctx.fillText(label, W / 2, py + 20);
+    ctx.fillText(label, W/2, py + 20);
   }
 
-  // Bottom separator
-  ctx.strokeStyle = 'rgba(201,168,76,0.15)';
+  // ── Bottom separator ──
+  ctx.strokeStyle = 'rgba(201,168,76,0.18)';
   ctx.lineWidth = 1;
-  ctx.beginPath(); ctx.moveTo(36, 528); ctx.lineTo(W - 36, 528); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(36, 490); ctx.lineTo(W - 36, 490); ctx.stroke();
 
-  // Bottom URL + wordmark
-  const shareUrl = currentShareId ? `seidman-ai.com/share/${currentShareId}` : 'seidman-ai.com';
-  ctx.fillStyle = 'rgba(201,168,76,0.55)';
-  ctx.font = "500 12px 'DM Sans', sans-serif";
+  // ── CTA: get your companion ──
+  const ctaLine1 = isHe ? 'קבלי מלווה IVF אישי עם פרופ׳ זיידמן' : 'Get your personal IVF companion with Prof. Seidman';
+  ctx.fillStyle = 'rgba(255,255,255,0.45)';
+  ctx.font = `400 13px ${bodyFont}`;
+  ctx.direction = isHe ? 'rtl' : 'ltr';
   ctx.textAlign = 'center';
-  ctx.fillText(shareUrl, W / 2, 552);
-  ctx.fillStyle = 'rgba(255,255,255,0.18)';
-  ctx.font = "300 11px 'DM Sans', sans-serif";
-  ctx.fillText('melody · IVF companion', W / 2, 572);
+  ctx.fillText(ctaLine1, W/2, 520);
+
+  // ── Share URL (gold, prominent) ──
+  const shareUrl = currentShareId ? `seidman-ai.com/share/${currentShareId}` : 'seidman-ai.com';
+  ctx.fillStyle = '#c9a84c';
+  ctx.font = `500 13px ${bodyFont}`;
+  ctx.direction = 'ltr';
+  ctx.textAlign = 'center';
+  ctx.fillText(shareUrl, W/2, 548);
+
+  // ── Bottom melody tag ──
+  ctx.fillStyle = 'rgba(93,202,165,0.3)';
+  ctx.font = `300 11px ${bodyFont}`;
+  ctx.fillText('powered by melody', W/2, 575);
 }
 
 function downloadShareMomentCard() {
