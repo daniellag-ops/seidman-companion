@@ -2388,15 +2388,32 @@ loadMedications();
 </script>
 
 <div class="melody-footer">
-  <svg width="17" height="17" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <!-- 4-cell embryo: outer zona + 4 cells -->
-    <circle cx="16" cy="16" r="14" stroke="var(--gold)" stroke-width="1.5"/>
-    <circle cx="10.5" cy="10.5" r="5" stroke="var(--gold)" stroke-width="1.5"/>
-    <circle cx="21.5" cy="10.5" r="5" stroke="var(--gold)" stroke-width="1.5"/>
-    <circle cx="10.5" cy="21.5" r="5" stroke="var(--gold)" stroke-width="1.5"/>
-    <circle cx="21.5" cy="21.5" r="5" stroke="var(--gold)" stroke-width="1.5"/>
-    <!-- small music note top-right -->
-    <text x="19" y="12" font-size="7" fill="var(--accent)" font-family="sans-serif">♪</text>
+  <!-- Music note where note head = 4-cell embryo with zona pellucida -->
+  <svg width="22" height="27" viewBox="0 0 28 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Zona pellucida (note head) -->
+    <circle cx="10" cy="25" r="7" fill="#0a1a1a" stroke="#5DCAA5" stroke-width="1.3"/>
+    <!-- Blastomere 1: top-left -->
+    <circle cx="7.5" cy="21.5" r="2.6" fill="#0c3d3d" stroke="#5DCAA5" stroke-width="0.85"/>
+    <circle cx="7.5" cy="21.5" r="1.05" stroke="#c9a84c" stroke-width="0.55" fill="none"/>
+    <circle cx="7.8" cy="21.2" r="0.32" fill="#c9a84c"/>
+    <!-- Blastomere 2: top-right (offset diagonally) -->
+    <circle cx="13" cy="23" r="2.6" fill="#0c3d3d" stroke="#5DCAA5" stroke-width="0.85"/>
+    <circle cx="13" cy="23" r="1.05" stroke="#c9a84c" stroke-width="0.55" fill="none"/>
+    <circle cx="13.3" cy="22.7" r="0.32" fill="#c9a84c"/>
+    <!-- Blastomere 3: bottom-left (diagonal from top-right) -->
+    <circle cx="7" cy="27.5" r="2.6" fill="#0c3d3d" stroke="#5DCAA5" stroke-width="0.85"/>
+    <circle cx="7" cy="27.5" r="1.05" stroke="#c9a84c" stroke-width="0.55" fill="none"/>
+    <circle cx="7.3" cy="27.2" r="0.32" fill="#c9a84c"/>
+    <!-- Blastomere 4: bottom-right -->
+    <circle cx="12.5" cy="28.5" r="2.6" fill="#0c3d3d" stroke="#5DCAA5" stroke-width="0.85"/>
+    <circle cx="12.5" cy="28.5" r="1.05" stroke="#c9a84c" stroke-width="0.55" fill="none"/>
+    <circle cx="12.8" cy="28.2" r="0.32" fill="#c9a84c"/>
+    <!-- Central midbody dot -->
+    <circle cx="10" cy="25" r="0.5" fill="#c9a84c"/>
+    <!-- Stem: rises up-right from right edge of zona -->
+    <line x1="17" y1="25" x2="17" y2="4" stroke="#5DCAA5" stroke-width="1.5" stroke-linecap="round"/>
+    <!-- Single flag: curves right from top of stem -->
+    <path d="M17,4 C22,5 23.5,10 18,16" stroke="#5DCAA5" stroke-width="1.5" fill="none" stroke-linecap="round"/>
   </svg>
   Powered by <a href="https://melodyhealth.ai" target="_blank" rel="noopener">Melody</a>
 </div>
