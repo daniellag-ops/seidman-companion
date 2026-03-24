@@ -534,6 +534,7 @@ async function loadDashboard() {
             <div class="patient-date">${p.createdAt ? formatDate(p.createdAt) : ''}</div>
           </div>
           <button class="copy-small" onclick="copyPatientLink('${p.slug}', this)">Copy link</button>
+          <button class="copy-small" style="color:#b94b2b;border-color:#f0c0b0" onclick="deactivatePatient('${p.slug}', '${escHtml(p.name)}', this)">Deactivate</button>
         </div>
       `).join('');
     }
@@ -545,6 +546,27 @@ async function loadDashboard() {
 
   } catch (err) {
     console.error(err);
+  }
+}
+
+async function deactivatePatient(slug, name, btn) {
+  if (!confirm(`Deactivate ${name}? Their link will stop working immediately.`)) return;
+  btn.disabled = true;
+  btn.textContent = 'Deactivating…';
+  try {
+    const res = await fetch('/api/deactivate-patient', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ adminKey, token: slug })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Failed');
+    btn.closest('.patient-row').style.opacity = '0.4';
+    btn.textContent = 'Deactivated';
+  } catch (err) {
+    alert('Error: ' + err.message);
+    btn.disabled = false;
+    btn.textContent = 'Deactivate';
   }
 }
 
