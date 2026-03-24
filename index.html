@@ -2965,22 +2965,41 @@ function toggleEmbryo() {
   toggle.textContent = open ? '＋' : '－';
 }
 
+// Read any file as base64 via FileReader (no canvas, works for all formats)
+async function readFileAsBase64(file) {
+  return new Promise(resolve => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const result = e.target.result;
+      resolve(result.includes(',') ? result.split(',')[1] : btoa(result));
+    };
+    reader.onerror = () => resolve(null);
+    reader.readAsDataURL(file);
+  });
+}
+
 async function compressImage(file) {
   return new Promise(resolve => {
     const img = new Image();
     const url = URL.createObjectURL(file);
     img.onload = () => {
-      const MAX = 1024;
-      let w = img.width, h = img.height;
-      if (w > MAX || h > MAX) {
-        if (w > h) { h = Math.round(h * MAX / w); w = MAX; }
-        else { w = Math.round(w * MAX / h); h = MAX; }
+      try {
+        const MAX = 1024;
+        let w = img.width, h = img.height;
+        if (w > MAX || h > MAX) {
+          if (w > h) { h = Math.round(h * MAX / w); w = MAX; }
+          else { w = Math.round(w * MAX / h); h = MAX; }
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = w; canvas.height = h;
+        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+        URL.revokeObjectURL(url);
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.82);
+        resolve(dataUrl === 'data:,' ? null : dataUrl.split(',')[1]);
+      } catch (e) {
+        URL.revokeObjectURL(url);
+        resolve(null);
       }
-      const canvas = document.createElement('canvas');
-      canvas.width = w; canvas.height = h;
-      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-      URL.revokeObjectURL(url);
-      resolve(canvas.toDataURL('image/jpeg', 0.82).split(',')[1]);
     };
     img.onerror = () => { URL.revokeObjectURL(url); resolve(null); };
     img.src = url;
@@ -2991,24 +3010,28 @@ async function extractVideoFrame(file) {
   return new Promise(resolve => {
     const video = document.createElement('video');
     video.muted = true;
-    video.src = URL.createObjectURL(file);
-    video.onloadeddata = () => {
-      video.currentTime = Math.min(2, video.duration / 2);
-    };
+    const url = URL.createObjectURL(file);
+    video.src = url;
+    const cleanup = () => URL.revokeObjectURL(url);
+    video.onloadeddata = () => { video.currentTime = Math.min(2, video.duration / 2 || 0); };
     video.onseeked = () => {
-      const canvas = document.createElement('canvas');
-      const MAX = 1024;
-      let w = video.videoWidth, h = video.videoHeight;
-      if (w > MAX || h > MAX) {
-        if (w > h) { h = Math.round(h * MAX / w); w = MAX; }
-        else { w = Math.round(w * MAX / h); h = MAX; }
-      }
-      canvas.width = w; canvas.height = h;
-      canvas.getContext('2d').drawImage(video, 0, 0, w, h);
-      URL.revokeObjectURL(video.src);
-      resolve(canvas.toDataURL('image/jpeg', 0.82).split(',')[1]);
+      try {
+        const canvas = document.createElement('canvas');
+        const MAX = 1024;
+        let w = video.videoWidth || 640, h = video.videoHeight || 480;
+        if (w > MAX || h > MAX) {
+          if (w > h) { h = Math.round(h * MAX / w); w = MAX; }
+          else { w = Math.round(w * MAX / h); h = MAX; }
+        }
+        canvas.width = w; canvas.height = h;
+        canvas.getContext('2d').drawImage(video, 0, 0, w, h);
+        cleanup();
+        resolve(canvas.toDataURL('image/jpeg', 0.82).split(',')[1]);
+      } catch (e) { cleanup(); resolve(null); }
     };
-    video.onerror = () => { URL.revokeObjectURL(video.src); resolve(null); };
+    // Fallback: if onseeked never fires, resolve after timeout
+    setTimeout(() => { cleanup(); resolve(null); }, 8000);
+    video.onerror = () => { cleanup(); resolve(null); };
   });
 }
 
@@ -3016,24 +3039,36 @@ async function handleEmbryoFile(file) {
   if (!file) return;
   resetEmbryoPlayer();
 
-  const isVideo = file.type.startsWith('video/');
+  const isVideo = file.type.startsWith('video/') || /\.(avi|mp4|mov|mkv)$/i.test(file.name);
   let base64;
+  embryoMimeType = 'image/jpeg';
+
   if (isVideo) {
     base64 = await extractVideoFrame(file);
-    embryoMimeType = 'image/jpeg'; // always send extracted frame as JPEG
+    // AVI and some video formats won't decode in browser — fall back gracefully
+    if (!base64) {
+      showEmbryoError('Could not extract a frame from this video. Please try MP4 or MOV, or upload a still image instead.');
+      return;
+    }
   } else {
+    // Try canvas compression first, fall back to raw FileReader (handles HEIC etc.)
     base64 = await compressImage(file);
-    embryoMimeType = 'image/jpeg';
+    if (!base64) {
+      base64 = await readFileAsBase64(file);
+      embryoMimeType = file.type || 'image/jpeg';
+    }
   }
 
   if (!base64) {
-    showEmbryoError('Could not read file. Please try a different image.');
+    showEmbryoError('Could not read this file. Please try a JPEG or PNG image.');
     return;
   }
 
   embryoImageBase64 = base64;
+  // Show thumbnail — use original file for display if HEIC canvas failed
   const thumb = document.getElementById('embryoThumb');
-  thumb.src = 'data:image/jpeg;base64,' + base64;
+  thumb.src = `data:${embryoMimeType};base64,` + base64;
+  thumb.onerror = () => { thumb.style.display = 'none'; }; // hide thumb if HEIC can't display
   document.getElementById('embryoUploadZone').style.display = 'none';
   document.getElementById('embryoPreview').classList.add('visible');
 }
