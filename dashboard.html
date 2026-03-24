@@ -568,7 +568,25 @@ async function deactivatePatient(slug, name, btn) {
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Failed');
-    loadDashboard();
+    // Update row directly — don't depend on reload
+    const row = btn.closest('.patient-row');
+    row.style.opacity = '0.45';
+    const nameEl = row.querySelector('.patient-name');
+    if (!nameEl.querySelector('.inactive-badge')) {
+      const badge = document.createElement('span');
+      badge.className = 'inactive-badge';
+      badge.style.cssText = 'font-size:11px;color:#b94b2b;font-weight:400;margin-left:6px';
+      badge.textContent = 'inactive';
+      nameEl.appendChild(badge);
+    }
+    // Replace both buttons with single Reactivate button
+    row.querySelectorAll('.copy-small').forEach(b => b.remove());
+    const reBtn = document.createElement('button');
+    reBtn.className = 'copy-small';
+    reBtn.style.cssText = 'color:#0e6b6b;border-color:#a0d0d0';
+    reBtn.textContent = 'Reactivate';
+    reBtn.onclick = () => reactivatePatient(slug, name, reBtn);
+    row.appendChild(reBtn);
   } catch (err) {
     alert('Error: ' + err.message);
     btn.disabled = false;
@@ -587,7 +605,22 @@ async function reactivatePatient(slug, name, btn) {
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Failed');
-    loadDashboard();
+    // Update row directly
+    const row = btn.closest('.patient-row');
+    row.style.opacity = '';
+    row.querySelector('.inactive-badge')?.remove();
+    row.querySelectorAll('.copy-small').forEach(b => b.remove());
+    const copyBtn = document.createElement('button');
+    copyBtn.className = 'copy-small';
+    copyBtn.textContent = 'Copy link';
+    copyBtn.onclick = () => copyPatientLink(slug, copyBtn);
+    const deactBtn = document.createElement('button');
+    deactBtn.className = 'copy-small';
+    deactBtn.style.cssText = 'color:#b94b2b;border-color:#f0c0b0';
+    deactBtn.textContent = 'Deactivate';
+    deactBtn.onclick = () => deactivatePatient(slug, name, deactBtn);
+    row.appendChild(copyBtn);
+    row.appendChild(deactBtn);
   } catch (err) {
     alert('Error: ' + err.message);
     btn.disabled = false;
