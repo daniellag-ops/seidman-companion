@@ -1479,6 +1479,7 @@ function setLang(lang) {
   renderUI();
   renderMedications();
   if (Object.keys(currentDates).length) checkProactiveMessage(currentDates);
+  if (activeReminderData) showClinicReminder(activeReminderData);
 }
 
 function renderUI() {
@@ -1615,9 +1616,11 @@ const patientToken = pathSlug || new URLSearchParams(window.location.search).get
 
 // ── Clinic reminders ──
 let activeReminderId = null;
+let activeReminderData = null;
 
 function showClinicReminder(reminder) {
   activeReminderId = reminder.id;
+  activeReminderData = reminder;
   const isHe = currentLang === 'he';
   const isAppt = reminder.type === 'appointment';
   const el = document.getElementById('clinicReminder');
@@ -1644,6 +1647,7 @@ async function acknowledgeReminder() {
   } catch(e) {}
   document.getElementById('clinicReminder').style.display = 'none';
   activeReminderId = null;
+  activeReminderData = null;
 }
 
 function showMemoryCard(notes) {
