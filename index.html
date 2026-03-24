@@ -1065,6 +1065,166 @@
     line-height: 1.6;
   }
 
+  /* ── Embryo Melody ── */
+  .embryo-card {
+    background: var(--dark);
+    border-radius: 18px;
+    overflow: hidden;
+    border: 1px solid rgba(93,202,165,0.2);
+    position: relative;
+    margin: 0 0 16px;
+  }
+  .embryo-card::after {
+    content: '';
+    position: absolute;
+    bottom: -60px; left: 50%;
+    transform: translateX(-50%);
+    width: 280px; height: 200px;
+    background: radial-gradient(ellipse, rgba(201,168,76,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .embryo-header {
+    padding: 15px 18px;
+    display: flex; align-items: center; justify-content: space-between;
+    cursor: pointer; user-select: none;
+  }
+  .embryo-label {
+    font-size: 11px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.8px;
+    color: #5DCAA5; margin: 0;
+  }
+  .embryo-sublabel { font-size: 12px; color: rgba(255,255,255,0.4); margin-top: 2px; }
+  .embryo-toggle { font-size: 20px; color: rgba(255,255,255,0.3); line-height: 1; }
+  .embryo-body { padding: 0 18px 22px; }
+
+  .embryo-upload-zone {
+    border: 1.5px dashed rgba(93,202,165,0.35);
+    border-radius: 14px;
+    padding: 28px 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .embryo-upload-zone:hover, .embryo-upload-zone.drag-over {
+    border-color: #5DCAA5;
+    background: rgba(93,202,165,0.04);
+  }
+  .embryo-bilingual-he {
+    font-family: 'DM Serif Display', serif;
+    font-size: 15px; color: rgba(255,255,255,0.9);
+    margin-bottom: 5px; direction: rtl;
+  }
+  .embryo-bilingual-en {
+    font-size: 12px; color: rgba(255,255,255,0.35);
+    margin-bottom: 20px;
+  }
+  .embryo-upload-btn {
+    display: inline-flex; align-items: center; gap: 7px;
+    background: rgba(93,202,165,0.12);
+    border: 1px solid rgba(93,202,165,0.35);
+    border-radius: 100px;
+    padding: 9px 20px;
+    color: #5DCAA5; font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .embryo-upload-btn:hover { background: rgba(93,202,165,0.22); border-color: #5DCAA5; }
+
+  .embryo-preview { display: none; flex-direction: column; align-items: center; gap: 14px; }
+  .embryo-preview.visible { display: flex; }
+  .embryo-thumb { width: 110px; height: 110px; object-fit: cover; border-radius: 12px; border: 2px solid rgba(93,202,165,0.25); }
+  .embryo-create-btn {
+    background: linear-gradient(135deg, #0e6b6b 0%, #5DCAA5 100%);
+    border: none; border-radius: 100px;
+    padding: 13px 0; width: 100%;
+    color: white; font-size: 14px; font-weight: 500;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer; transition: opacity 0.15s;
+  }
+  .embryo-create-btn:hover { opacity: 0.88; }
+  .embryo-create-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+  .embryo-change-link {
+    font-size: 11px; color: rgba(255,255,255,0.3);
+    cursor: pointer; text-decoration: underline; text-underline-offset: 2px;
+  }
+  .embryo-change-link:hover { color: rgba(255,255,255,0.5); }
+
+  .embryo-progress { display: none; flex-direction: column; gap: 8px; padding: 4px 0; }
+  .embryo-progress.visible { display: flex; }
+  .ep-step { display: flex; align-items: center; gap: 12px; padding: 9px 12px; border-radius: 10px; opacity: 0.35; transition: all 0.3s; }
+  .ep-step.active { opacity: 1; background: rgba(93,202,165,0.07); }
+  .ep-step.done { opacity: 0.55; }
+  .ep-dot { width: 7px; height: 7px; border-radius: 50%; background: rgba(93,202,165,0.3); flex-shrink: 0; transition: background 0.3s; }
+  .ep-step.active .ep-dot { background: #5DCAA5; box-shadow: 0 0 6px rgba(93,202,165,0.7); }
+  .ep-step.done .ep-dot { background: #c9a84c; }
+  .ep-label { font-size: 13px; color: rgba(255,255,255,0.8); flex: 1; }
+  .ep-step.done .ep-label { color: rgba(255,255,255,0.4); }
+  @keyframes ep-spin { to { transform: rotate(360deg); } }
+  .ep-spinner { width: 13px; height: 13px; border-radius: 50%; border: 2px solid rgba(93,202,165,0.15); border-top-color: #5DCAA5; animation: ep-spin 0.7s linear infinite; flex-shrink: 0; }
+
+  .embryo-analysis-box {
+    display: none;
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px; padding: 14px 16px;
+    font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.65;
+    margin-bottom: 14px;
+  }
+  .embryo-analysis-box.visible { display: block; }
+  .embryo-analysis-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.7px; color: rgba(93,202,165,0.6); margin-bottom: 7px; font-weight: 600; }
+
+  .embryo-player {
+    display: none;
+    background: rgba(201,168,76,0.07);
+    border: 1.5px solid rgba(201,168,76,0.2);
+    border-radius: 14px; padding: 15px 16px;
+  }
+  .embryo-player.visible { display: block; }
+  .ep-player-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+  .ep-play-btn {
+    width: 42px; height: 42px; border-radius: 50%;
+    background: var(--gold); border: none;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; flex-shrink: 0; transition: opacity 0.15s;
+  }
+  .ep-play-btn:hover { opacity: 0.85; }
+  .ep-info { flex: 1; }
+  .ep-title { font-size: 13px; color: white; font-weight: 500; margin-bottom: 1px; }
+  .ep-duration { font-size: 11px; color: rgba(255,255,255,0.35); }
+  .ep-download-btn {
+    background: none; border: 1px solid rgba(201,168,76,0.35);
+    border-radius: 100px; padding: 6px 13px;
+    color: #c9a84c; font-size: 11px;
+    font-family: 'DM Sans', sans-serif; cursor: pointer; transition: all 0.15s;
+    white-space: nowrap; flex-shrink: 0;
+  }
+  .ep-download-btn:hover { background: rgba(201,168,76,0.1); border-color: #c9a84c; }
+
+  .ep-waveform { display: flex; align-items: center; gap: 2.5px; height: 20px; }
+  .ep-bar { width: 2.5px; border-radius: 3px; background: rgba(201,168,76,0.25); transition: height 0.1s; }
+  .ep-waveform.playing .ep-bar { background: rgba(201,168,76,0.6); }
+  @keyframes ew1 { 0%,100%{height:3px} 50%{height:16px} }
+  @keyframes ew2 { 0%,100%{height:7px} 50%{height:11px} }
+  @keyframes ew3 { 0%,100%{height:12px} 50%{height:5px} }
+  @keyframes ew4 { 0%,100%{height:5px} 50%{height:18px} }
+  .ep-waveform.playing .ep-bar:nth-child(1){animation:ew1 0.8s ease-in-out infinite}
+  .ep-waveform.playing .ep-bar:nth-child(2){animation:ew2 0.6s ease-in-out infinite}
+  .ep-waveform.playing .ep-bar:nth-child(3){animation:ew3 0.7s ease-in-out infinite}
+  .ep-waveform.playing .ep-bar:nth-child(4){animation:ew4 0.5s ease-in-out infinite}
+  .ep-waveform.playing .ep-bar:nth-child(5){animation:ew1 0.9s ease-in-out infinite}
+  .ep-waveform.playing .ep-bar:nth-child(6){animation:ew3 0.6s ease-in-out infinite}
+  .ep-waveform.playing .ep-bar:nth-child(7){animation:ew2 0.8s ease-in-out infinite}
+  .ep-waveform.playing .ep-bar:nth-child(8){animation:ew4 0.7s ease-in-out infinite}
+  .ep-waveform.playing .ep-bar:nth-child(9){animation:ew1 0.5s ease-in-out infinite}
+  .ep-waveform.playing .ep-bar:nth-child(10){animation:ew3 0.9s ease-in-out infinite}
+  .ep-waveform.playing .ep-bar:nth-child(11){animation:ew2 0.6s ease-in-out infinite}
+  .ep-waveform.playing .ep-bar:nth-child(12){animation:ew4 0.8s ease-in-out infinite}
+  .ep-waveform.playing .ep-bar:nth-child(13){animation:ew1 0.7s ease-in-out infinite}
+  .ep-waveform.playing .ep-bar:nth-child(14){animation:ew3 0.5s ease-in-out infinite}
+  .ep-waveform.playing .ep-bar:nth-child(15){animation:ew2 0.9s ease-in-out infinite}
+
+  .embryo-error { display: none; font-size: 12px; color: #f09090; background: rgba(240,100,100,0.07); border-radius: 10px; padding: 11px 14px; margin-top: 12px; line-height: 1.55; }
+  .embryo-error.visible { display: block; }
+
   .melody-footer {
     position: fixed;
     bottom: 0;
@@ -1343,6 +1503,118 @@
           <button class="add-med-btn" onclick="addMedication()">+</button>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- Embryo Melody -->
+  <div class="embryo-card" id="embryoCard">
+    <div class="embryo-header" onclick="toggleEmbryo()">
+      <div>
+        <div class="embryo-label" id="embryoLabel">Your embryo melody · המנגינה של העובר שלך</div>
+        <div class="embryo-sublabel" id="embryoSublabel">Powered by Melody AI</div>
+      </div>
+      <span class="embryo-toggle" id="embryoToggle">＋</span>
+    </div>
+    <div class="embryo-body" id="embryoBody" style="display:none">
+
+      <!-- Upload zone (idle) -->
+      <div class="embryo-upload-zone" id="embryoUploadZone"
+           onclick="document.getElementById('embryoFileInput').click()"
+           ondragover="event.preventDefault();this.classList.add('drag-over')"
+           ondragleave="this.classList.remove('drag-over')"
+           ondrop="handleEmbryoDrop(event)">
+        <div style="margin-bottom:14px">
+          <svg width="36" height="44" viewBox="0 0 28 34" fill="none" xmlns="http://www.w3.org/2000/svg" style="opacity:0.7">
+            <circle cx="10" cy="25" r="7" fill="#0a1a1a" stroke="#5DCAA5" stroke-width="1.3"/>
+            <circle cx="7.5" cy="21.5" r="2.6" fill="#0c3d3d" stroke="#5DCAA5" stroke-width="0.85"/>
+            <circle cx="7.5" cy="21.5" r="1.05" stroke="#c9a84c" stroke-width="0.55" fill="none"/>
+            <circle cx="13" cy="23" r="2.6" fill="#0c3d3d" stroke="#5DCAA5" stroke-width="0.85"/>
+            <circle cx="13" cy="23" r="1.05" stroke="#c9a84c" stroke-width="0.55" fill="none"/>
+            <circle cx="7" cy="27.5" r="2.6" fill="#0c3d3d" stroke="#5DCAA5" stroke-width="0.85"/>
+            <circle cx="7" cy="27.5" r="1.05" stroke="#c9a84c" stroke-width="0.55" fill="none"/>
+            <circle cx="12.5" cy="28.5" r="2.6" fill="#0c3d3d" stroke="#5DCAA5" stroke-width="0.85"/>
+            <circle cx="12.5" cy="28.5" r="1.05" stroke="#c9a84c" stroke-width="0.55" fill="none"/>
+            <line x1="10" y1="18" x2="16" y2="14" stroke="#5DCAA5" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="16" y1="14" x2="16" y2="8" stroke="#5DCAA5" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="13" y1="9.5" x2="16" y2="8" stroke="#5DCAA5" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="embryo-bilingual-he">העלי תמונה או סרטון של העובר שלך ליצירת המנגינה האישית שלך</div>
+        <div class="embryo-bilingual-en">Upload your embryo photo or video to create your personal melody</div>
+        <div class="embryo-upload-btn">
+          <span>📎</span> Choose file
+        </div>
+      </div>
+      <input type="file" id="embryoFileInput" accept="image/*,video/*" style="display:none" onchange="handleEmbryoFile(this.files[0])">
+
+      <!-- Preview (after file selected) -->
+      <div class="embryo-preview" id="embryoPreview">
+        <img class="embryo-thumb" id="embryoThumb" src="" alt="embryo preview">
+        <button class="embryo-create-btn" id="embryoCreateBtn" onclick="createEmbryoMelody()">
+          ✨ Create my melody
+        </button>
+        <span class="embryo-change-link" onclick="document.getElementById('embryoFileInput').click()">Change photo</span>
+      </div>
+
+      <!-- Progress -->
+      <div class="embryo-progress" id="embryoProgress">
+        <div class="ep-step" id="epStep1">
+          <div class="ep-dot"></div>
+          <div class="ep-label">🔬 Analyzing your embryo</div>
+          <div class="ep-spinner" style="display:none" id="epSpinner1"></div>
+        </div>
+        <div class="ep-step" id="epStep2">
+          <div class="ep-dot"></div>
+          <div class="ep-label">🎼 Composing your melody</div>
+          <div class="ep-spinner" style="display:none" id="epSpinner2"></div>
+        </div>
+        <div class="ep-step" id="epStep3">
+          <div class="ep-dot"></div>
+          <div class="ep-label">✨ Almost ready</div>
+          <div class="ep-spinner" style="display:none" id="epSpinner3"></div>
+        </div>
+      </div>
+
+      <!-- Analysis result -->
+      <div class="embryo-analysis-box" id="embryoAnalysisBox">
+        <div class="embryo-analysis-label">Embryo analysis</div>
+        <div id="embryoAnalysisText"></div>
+      </div>
+
+      <!-- Audio player -->
+      <div class="embryo-player" id="embryoPlayer">
+        <div class="ep-player-row">
+          <button class="ep-play-btn" id="epPlayBtn" onclick="toggleEmbryoPlay()">
+            <svg id="epPlayIcon" width="14" height="16" viewBox="0 0 14 16" fill="none">
+              <path d="M2 1.5L12.5 8L2 14.5V1.5Z" fill="white"/>
+            </svg>
+            <svg id="epPauseIcon" width="12" height="14" viewBox="0 0 12 14" fill="none" style="display:none">
+              <rect x="1" y="1" width="3.5" height="12" rx="1" fill="white"/>
+              <rect x="7.5" y="1" width="3.5" height="12" rx="1" fill="white"/>
+            </svg>
+          </button>
+          <div class="ep-info">
+            <div class="ep-title" id="epTitle">Your personal embryo melody</div>
+            <div class="ep-duration" id="epDuration">—</div>
+          </div>
+          <button class="ep-download-btn" id="epDownloadBtn" onclick="downloadEmbryoMelody()">↓ Save</button>
+        </div>
+        <div class="ep-waveform" id="epWaveform">
+          <div class="ep-bar" style="height:5px"></div><div class="ep-bar" style="height:9px"></div>
+          <div class="ep-bar" style="height:14px"></div><div class="ep-bar" style="height:7px"></div>
+          <div class="ep-bar" style="height:16px"></div><div class="ep-bar" style="height:10px"></div>
+          <div class="ep-bar" style="height:13px"></div><div class="ep-bar" style="height:6px"></div>
+          <div class="ep-bar" style="height:11px"></div><div class="ep-bar" style="height:15px"></div>
+          <div class="ep-bar" style="height:8px"></div><div class="ep-bar" style="height:12px"></div>
+          <div class="ep-bar" style="height:5px"></div><div class="ep-bar" style="height:10px"></div>
+          <div class="ep-bar" style="height:14px"></div>
+        </div>
+        <audio id="embryoAudio" style="display:none"></audio>
+      </div>
+
+      <!-- Error -->
+      <div class="embryo-error" id="embryoError"></div>
+
     </div>
   </div>
 
@@ -2673,6 +2945,217 @@ renderUI();
 loadMemory();
 loadDates();
 loadMedications();
+
+// ── Embryo Melody ──
+let embryoImageBase64 = null;
+let embryoMimeType = null;
+let embryoAudioBlob = null;
+
+function toggleEmbryo() {
+  const body = document.getElementById('embryoBody');
+  const toggle = document.getElementById('embryoToggle');
+  const open = body.style.display !== 'none';
+  body.style.display = open ? 'none' : 'block';
+  toggle.textContent = open ? '＋' : '－';
+}
+
+async function compressImage(file) {
+  return new Promise(resolve => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      const MAX = 1024;
+      let w = img.width, h = img.height;
+      if (w > MAX || h > MAX) {
+        if (w > h) { h = Math.round(h * MAX / w); w = MAX; }
+        else { w = Math.round(w * MAX / h); h = MAX; }
+      }
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      URL.revokeObjectURL(url);
+      resolve(canvas.toDataURL('image/jpeg', 0.82).split(',')[1]);
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); resolve(null); };
+    img.src = url;
+  });
+}
+
+async function extractVideoFrame(file) {
+  return new Promise(resolve => {
+    const video = document.createElement('video');
+    video.muted = true;
+    video.src = URL.createObjectURL(file);
+    video.onloadeddata = () => {
+      video.currentTime = Math.min(2, video.duration / 2);
+    };
+    video.onseeked = () => {
+      const canvas = document.createElement('canvas');
+      const MAX = 1024;
+      let w = video.videoWidth, h = video.videoHeight;
+      if (w > MAX || h > MAX) {
+        if (w > h) { h = Math.round(h * MAX / w); w = MAX; }
+        else { w = Math.round(w * MAX / h); h = MAX; }
+      }
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(video, 0, 0, w, h);
+      URL.revokeObjectURL(video.src);
+      resolve(canvas.toDataURL('image/jpeg', 0.82).split(',')[1]);
+    };
+    video.onerror = () => { URL.revokeObjectURL(video.src); resolve(null); };
+  });
+}
+
+async function handleEmbryoFile(file) {
+  if (!file) return;
+  resetEmbryoPlayer();
+
+  const isVideo = file.type.startsWith('video/');
+  let base64;
+  if (isVideo) {
+    base64 = await extractVideoFrame(file);
+    embryoMimeType = 'image/jpeg'; // always send extracted frame as JPEG
+  } else {
+    base64 = await compressImage(file);
+    embryoMimeType = 'image/jpeg';
+  }
+
+  if (!base64) {
+    showEmbryoError('Could not read file. Please try a different image.');
+    return;
+  }
+
+  embryoImageBase64 = base64;
+  const thumb = document.getElementById('embryoThumb');
+  thumb.src = 'data:image/jpeg;base64,' + base64;
+  document.getElementById('embryoUploadZone').style.display = 'none';
+  document.getElementById('embryoPreview').classList.add('visible');
+}
+
+function handleEmbryoDrop(e) {
+  e.preventDefault();
+  document.getElementById('embryoUploadZone').classList.remove('drag-over');
+  const file = e.dataTransfer.files[0];
+  if (file) handleEmbryoFile(file);
+}
+
+function setEmbryoStep(step) {
+  // step: 1, 2, or 3
+  ['1','2','3'].forEach(n => {
+    const el = document.getElementById('epStep' + n);
+    const spinner = document.getElementById('epSpinner' + n);
+    el.classList.remove('active', 'done');
+    spinner.style.display = 'none';
+    if (parseInt(n) < step) { el.classList.add('done'); }
+    else if (parseInt(n) === step) { el.classList.add('active'); spinner.style.display = 'block'; }
+  });
+}
+
+async function createEmbryoMelody() {
+  if (!embryoImageBase64 || !patientToken) return;
+  const btn = document.getElementById('embryoCreateBtn');
+  btn.disabled = true;
+
+  document.getElementById('embryoError').classList.remove('visible');
+  document.getElementById('embryoPreview').classList.remove('visible');
+  document.getElementById('embryoProgress').classList.add('visible');
+  setEmbryoStep(1);
+
+  try {
+    // After 3s, show step 2 (gives visual feedback while API processes)
+    await new Promise(r => setTimeout(r, 3000));
+    setEmbryoStep(2);
+
+    const res = await fetch('/api/embryo', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ imageBase64: embryoImageBase64, mimeType: embryoMimeType, token: patientToken })
+    });
+
+    setEmbryoStep(3);
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error || 'Something went wrong');
+    }
+
+    const { analysis, audioBase64, audioMimeType } = await res.json();
+
+    document.getElementById('embryoProgress').classList.remove('visible');
+
+    // Show analysis
+    document.getElementById('embryoAnalysisText').textContent = analysis;
+    document.getElementById('embryoAnalysisBox').classList.add('visible');
+
+    // Set up audio player
+    const byteChars = atob(audioBase64);
+    const byteArr = new Uint8Array(byteChars.length);
+    for (let i = 0; i < byteChars.length; i++) byteArr[i] = byteChars.charCodeAt(i);
+    embryoAudioBlob = new Blob([byteArr], { type: audioMimeType });
+
+    const audioUrl = URL.createObjectURL(embryoAudioBlob);
+    const audio = document.getElementById('embryoAudio');
+    audio.src = audioUrl;
+    audio.onloadedmetadata = () => {
+      const dur = Math.round(audio.duration);
+      document.getElementById('epDuration').textContent = `0:${dur < 10 ? '0' : ''}${dur}`;
+    };
+    audio.onended = () => {
+      document.getElementById('epPlayIcon').style.display = '';
+      document.getElementById('epPauseIcon').style.display = 'none';
+      document.getElementById('epWaveform').classList.remove('playing');
+    };
+
+    document.getElementById('embryoPlayer').classList.add('visible');
+
+  } catch (err) {
+    document.getElementById('embryoProgress').classList.remove('visible');
+    document.getElementById('embryoPreview').classList.add('visible');
+    showEmbryoError(err.message);
+    btn.disabled = false;
+  }
+}
+
+function toggleEmbryoPlay() {
+  const audio = document.getElementById('embryoAudio');
+  const playIcon = document.getElementById('epPlayIcon');
+  const pauseIcon = document.getElementById('epPauseIcon');
+  const waveform = document.getElementById('epWaveform');
+
+  if (audio.paused) {
+    audio.play();
+    playIcon.style.display = 'none';
+    pauseIcon.style.display = '';
+    waveform.classList.add('playing');
+  } else {
+    audio.pause();
+    playIcon.style.display = '';
+    pauseIcon.style.display = 'none';
+    waveform.classList.remove('playing');
+  }
+}
+
+function downloadEmbryoMelody() {
+  if (!embryoAudioBlob) return;
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(embryoAudioBlob);
+  a.download = 'my-embryo-melody.wav';
+  a.click();
+}
+
+function showEmbryoError(msg) {
+  const el = document.getElementById('embryoError');
+  el.textContent = msg;
+  el.classList.add('visible');
+}
+
+function resetEmbryoPlayer() {
+  document.getElementById('embryoError').classList.remove('visible');
+  document.getElementById('embryoAnalysisBox').classList.remove('visible');
+  document.getElementById('embryoPlayer').classList.remove('visible');
+  document.getElementById('embryoProgress').classList.remove('visible');
+  document.getElementById('embryoWaveform')?.classList?.remove('playing');
+}
 </script>
 
 <div class="melody-footer">
