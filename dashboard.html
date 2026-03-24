@@ -546,10 +546,8 @@ async function loadDashboard() {
       }).join('');
     }
 
-    // Reminder dropdown
-    const select = document.getElementById('reminderPatient');
-    select.innerHTML = '<option value="">— Select patient —</option>' +
-      patients.map(p => `<option value="${p.slug}">${escHtml(p.name)}</option>`).join('');
+    // Reminder dropdown — active patients only
+    refreshReminderDropdown(patients.filter(p => p.active));
 
   } catch (err) {
     console.error(err);
@@ -587,6 +585,7 @@ async function deactivatePatient(slug, name, btn) {
     reBtn.textContent = 'Reactivate';
     reBtn.onclick = () => reactivatePatient(slug, name, reBtn);
     row.appendChild(reBtn);
+    refreshReminderDropdown();
   } catch (err) {
     alert('Error: ' + err.message);
     btn.disabled = false;
@@ -621,11 +620,34 @@ async function reactivatePatient(slug, name, btn) {
     deactBtn.onclick = () => deactivatePatient(slug, name, deactBtn);
     row.appendChild(copyBtn);
     row.appendChild(deactBtn);
+    refreshReminderDropdown();
   } catch (err) {
     alert('Error: ' + err.message);
     btn.disabled = false;
     btn.textContent = 'Reactivate';
   }
+}
+
+function refreshReminderDropdown(activePatientsArr) {
+  // If called with no arg, rebuild from current DOM rows
+  if (!activePatientsArr) {
+    activePatientsArr = [];
+    document.querySelectorAll('.patient-row').forEach(row => {
+      if (row.style.opacity !== '0.45') {
+        const name = row.querySelector('.patient-name')?.childNodes[0]?.textContent?.trim();
+        const copyBtn = Array.from(row.querySelectorAll('.copy-small')).find(b => b.textContent === 'Copy link');
+        if (copyBtn && name) {
+          const slug = copyBtn.getAttribute('onclick')?.match(/'([^']+)'/)?.[1];
+          if (slug) activePatientsArr.push({ slug, name });
+        }
+      }
+    });
+  }
+  const select = document.getElementById('reminderPatient');
+  const current = select.value;
+  select.innerHTML = '<option value="">— Select patient —</option>' +
+    activePatientsArr.map(p => `<option value="${p.slug}">${escHtml(p.name)}</option>`).join('');
+  if (current) select.value = current;
 }
 
 function copyPatientLink(slug, btn) {
