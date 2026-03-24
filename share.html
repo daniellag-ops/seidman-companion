@@ -162,7 +162,7 @@ const id = new URLSearchParams(window.location.search).get('id');
 if (!id) {
   document.getElementById('content').innerHTML = '<div class="error-state">Share not found.</div>';
 } else {
-  fetch(`/api/get-share?id=${encodeURIComponent(id)}`)
+  fetch(`/api/data?action=get-share&id=${encodeURIComponent(id)}`)
     .then(r => r.json())
     .then(data => {
       if (data.error) {

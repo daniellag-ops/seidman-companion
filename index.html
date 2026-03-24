@@ -1735,10 +1735,10 @@ async function acknowledgeReminder() {
   const btn = document.getElementById('clinicReminderBtn');
   btn.disabled = true;
   try {
-    await fetch('/api/save-memory', {
+    await fetch('/api/data', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ token: patientToken, acknowledgeReminder: activeReminderId })
+      body: JSON.stringify({ action: 'save-memory', token: patientToken, acknowledgeReminder: activeReminderId })
     });
   } catch(e) {}
   document.getElementById('clinicReminder').style.display = 'none';
@@ -1765,10 +1765,10 @@ function showMemoryCard(notes) {
 async function loadMemory() {
   if (!patientToken) return;
   try {
-    const res = await fetch('/api/get-memory', {
+    const res = await fetch('/api/data', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ token: patientToken })
+      body: JSON.stringify({ action: 'get-memory', token: patientToken })
     });
     if (res.ok) {
       const data = await res.json();
@@ -1802,10 +1802,10 @@ async function saveNote() {
   btnText.textContent = currentLang === 'he' ? 'שומר...' : 'Saving...';
 
   try {
-    await fetch('/api/save-memory', {
+    await fetch('/api/data', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ token: patientToken, note })
+      body: JSON.stringify({ action: 'save-memory', token: patientToken, note })
     });
     noteInput.value = '';
     btnText.textContent = currentLang === 'he' ? 'נשמר ✓' : 'Saved ✓';
@@ -1997,10 +1997,10 @@ async function saveDates() {
   localStorage.setItem('dates_' + patientToken, JSON.stringify(dates));
   checkProactiveMessage(dates);
   try {
-    await fetch('/api/save-memory', {
+    await fetch('/api/data', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ token: patientToken, dates })
+      body: JSON.stringify({ action: 'save-memory', token: patientToken, dates })
     });
   } catch (err) {}
 }
@@ -2022,10 +2022,10 @@ async function loadDates() {
   if (localDates && Object.values(localDates).some(v => v)) applyDates(localDates);
 
   try {
-    const res = await fetch('/api/get-memory', {
+    const res = await fetch('/api/data', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ token: patientToken })
+      body: JSON.stringify({ action: 'get-memory', token: patientToken })
     });
     if (!res.ok) return;
     const data = await res.json();
@@ -2178,10 +2178,10 @@ function toggleMeds() {
 async function loadMedications() {
   if (!patientToken) return;
   try {
-    const res = await fetch('/api/get-memory', {
+    const res = await fetch('/api/data', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ token: patientToken })
+      body: JSON.stringify({ action: 'get-memory', token: patientToken })
     });
     if (!res.ok) return;
     const data = await res.json();
@@ -2194,10 +2194,10 @@ async function loadMedications() {
 async function saveMedications() {
   if (!patientToken) return;
   try {
-    await fetch('/api/save-memory', {
+    await fetch('/api/data', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ token: patientToken, medications, medLog: { date: TODAY, logs: todayLogs } })
+      body: JSON.stringify({ action: 'save-memory', token: patientToken, medications, medLog: { date: TODAY, logs: todayLogs } })
     });
   } catch (err) {}
 }
@@ -2519,10 +2519,10 @@ async function openShareMomentModal() {
   // Save to Edge Config in background (non-blocking)
   const summary = extractOneSentence(getResponseText());
   if (patientToken) {
-    fetch('/api/save-share', {
+    fetch('/api/data', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ token: patientToken, id: currentShareId, summary, phase: selectedPhase })
+      body: JSON.stringify({ action: 'save-share', token: patientToken, id: currentShareId, summary, phase: selectedPhase })
     }).catch(() => {});
   }
 

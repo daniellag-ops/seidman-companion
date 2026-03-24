@@ -601,7 +601,7 @@ async function submitTOTP() {
   btn.disabled = true; btn.textContent = 'Verifying…';
   errEl.classList.remove('visible');
   try {
-    const res = await fetch('/api/verify-login', {
+    const res = await fetch('/api/admin', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ adminKey, totpCode: code })
@@ -629,7 +629,7 @@ async function showSetup() {
   const secretEl = document.getElementById('setupSecret');
   if (qrEl.dataset.loaded) return; // already rendered
   try {
-    const res = await fetch('/api/totp-setup', { headers: { 'x-admin-key': adminKey } });
+    const res = await fetch('/api/admin?action=totp-setup', { headers: { 'x-admin-key': adminKey } });
     if (!res.ok) { secretEl.textContent = 'Could not load — check admin key'; return; }
     const { uri, secret } = await res.json();
     secretEl.textContent = secret;
@@ -800,10 +800,10 @@ async function deactivatePatient(slug, name, btn) {
   btn.disabled = true;
   btn.textContent = 'Deactivating…';
   try {
-    const res = await fetch('/api/deactivate-patient', {
+    const res = await fetch('/api/data', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ adminKey, token: slug })
+      body: JSON.stringify({ action: 'deactivate-patient', adminKey, token: slug })
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Failed');
@@ -838,10 +838,10 @@ async function reactivatePatient(slug, name, btn) {
   btn.disabled = true;
   btn.textContent = 'Reactivating…';
   try {
-    const res = await fetch('/api/reactivate-patient', {
+    const res = await fetch('/api/data', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ adminKey, token: slug })
+      body: JSON.stringify({ action: 'reactivate-patient', adminKey, token: slug })
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Failed');
@@ -962,10 +962,10 @@ async function sendReminder() {
   btn.disabled = true; btn.textContent = 'Sending…';
 
   try {
-    const res = await fetch('/api/add-reminder', {
+    const res = await fetch('/api/data', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ adminKey, token, message, type: reminderType })
+      body: JSON.stringify({ action: 'add-reminder', adminKey, token, message, type: reminderType })
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Failed');
