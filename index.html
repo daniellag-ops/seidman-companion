@@ -2504,9 +2504,25 @@ function drawSvgOnCanvas(ctx, svgStr, x, y, w, h) {
   });
 }
 
+let currentShareId = null;
+
 async function openShareMomentModal() {
   document.getElementById('shareMomentOverlay').style.display = 'flex';
   document.body.style.overflow = 'hidden';
+
+  // Generate unique ID
+  currentShareId = Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+
+  // Save to Edge Config in background (non-blocking)
+  const summary = extractOneSentence(getResponseText());
+  if (patientToken) {
+    fetch('/api/save-share', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token: patientToken, id: currentShareId, summary, phase: selectedPhase })
+    }).catch(() => {});
+  }
+
   await drawShareMomentCard();
 }
 
@@ -2592,11 +2608,15 @@ async function drawShareMomentCard() {
   ctx.lineWidth = 1;
   ctx.beginPath(); ctx.moveTo(36, 528); ctx.lineTo(W - 36, 528); ctx.stroke();
 
-  // Bottom wordmark
-  ctx.fillStyle = 'rgba(201,168,76,0.5)';
-  ctx.font = "300 12px 'DM Sans', sans-serif";
+  // Bottom URL + wordmark
+  const shareUrl = currentShareId ? `seidman-ai.com/share/${currentShareId}` : 'seidman-ai.com';
+  ctx.fillStyle = 'rgba(201,168,76,0.55)';
+  ctx.font = "500 12px 'DM Sans', sans-serif";
   ctx.textAlign = 'center';
-  ctx.fillText('melody · IVF companion · seidman-ai.com', W / 2, 560);
+  ctx.fillText(shareUrl, W / 2, 552);
+  ctx.fillStyle = 'rgba(255,255,255,0.18)';
+  ctx.font = "300 11px 'DM Sans', sans-serif";
+  ctx.fillText('melody · IVF companion', W / 2, 572);
 }
 
 function downloadShareMomentCard() {
