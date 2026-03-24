@@ -22,12 +22,10 @@ export default async function handler(req, res) {
 
   try {
     const readRes = await fetch(
-      `https://api.vercel.com/v1/edge-config/${process.env.EDGE_CONFIG_ID}/items`,
-      { headers: { Authorization: `Bearer ${process.env.VERCEL_MANAGEMENT_TOKEN}` } }
+      `https://edge-config.vercel.com/${process.env.EDGE_CONFIG_ID}/item/tokens`,
+      { headers: { Authorization: `Bearer ${process.env.EDGE_CONFIG_TOKEN}` } }
     );
-    const existing = await readRes.json();
-    const tokensItem = (existing.items || []).find(i => i.key === 'tokens');
-    const currentTokens = tokensItem ? tokensItem.value : {};
+    const currentTokens = readRes.ok ? await readRes.json() : {};
 
     // Handle duplicate names by appending a number
     let finalSlug = slug;
