@@ -23,8 +23,7 @@ export default async function handler(req, res) {
     const uniqueUsers = new Set(logs.map(l => l.tokenHash)).size;
 
     const patients = Object.entries(tokens)
-      .filter(([, v]) => v.active !== false)
-      .map(([slug, v]) => ({ slug, name: v.name, createdAt: v.createdAt }))
+      .map(([slug, v]) => ({ slug, name: v.name, createdAt: v.createdAt, active: v.active !== false }))
       .sort((a, b) => a.name.localeCompare(b.name));
 
     return res.status(200).json({

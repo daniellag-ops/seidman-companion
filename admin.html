@@ -528,13 +528,16 @@ async function loadDashboard() {
       document.getElementById('patientsList').innerHTML = '<div class="empty-state">No patients yet.</div>';
     } else {
       document.getElementById('patientsList').innerHTML = patients.map(p => `
-        <div class="patient-row">
+        <div class="patient-row" style="${p.active ? '' : 'opacity:0.45'}">
           <div>
-            <div class="patient-name">${escHtml(p.name)}</div>
+            <div class="patient-name">${escHtml(p.name)}${p.active ? '' : ' <span style="font-size:11px;color:#b94b2b;font-weight:400">inactive</span>'}</div>
             <div class="patient-date">${p.createdAt ? formatDate(p.createdAt) : ''}</div>
           </div>
-          <button class="copy-small" onclick="copyPatientLink('${p.slug}', this)">Copy link</button>
-          <button class="copy-small" style="color:#b94b2b;border-color:#f0c0b0" onclick="deactivatePatient('${p.slug}', '${escHtml(p.name)}', this)">Deactivate</button>
+          ${p.active
+            ? `<button class="copy-small" onclick="copyPatientLink('${p.slug}', this)">Copy link</button>
+               <button class="copy-small" style="color:#b94b2b;border-color:#f0c0b0" onclick="deactivatePatient('${p.slug}', '${escHtml(p.name)}', this)">Deactivate</button>`
+            : `<button class="copy-small" style="color:#0e6b6b;border-color:#a0d0d0" onclick="reactivatePatient('${p.slug}', '${escHtml(p.name)}', this)">Reactivate</button>`
+          }
         </div>
       `).join('');
     }
@@ -567,6 +570,25 @@ async function deactivatePatient(slug, name, btn) {
     alert('Error: ' + err.message);
     btn.disabled = false;
     btn.textContent = 'Deactivate';
+  }
+}
+
+async function reactivatePatient(slug, name, btn) {
+  btn.disabled = true;
+  btn.textContent = 'Reactivating…';
+  try {
+    const res = await fetch('/api/reactivate-patient', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ adminKey, token: slug })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Failed');
+    loadDashboard();
+  } catch (err) {
+    alert('Error: ' + err.message);
+    btn.disabled = false;
+    btn.textContent = 'Reactivate';
   }
 }
 
