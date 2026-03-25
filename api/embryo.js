@@ -26,7 +26,7 @@ export default async function handler(req, res) {
   // ── Step 1: Gemini Vision analysis ──
   let analysis = '';
   try {
-    const visionRes = await fetch(`${GEMINI_BASE}/models/gemini-2.0-flash:generateContent?key=${apiKey}`, {
+    const visionRes = await fetch(`${GEMINI_BASE}/models/gemini-2.5-flash-preview-04-17:generateContent?key=${apiKey}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
