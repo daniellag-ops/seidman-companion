@@ -2729,13 +2729,6 @@ async function shareShareMomentNative() {
   } catch(e) { downloadShareMomentCard(); }
 }
 
-document.body.classList.add('rtl');
-document.documentElement.lang = 'he';
-renderUI();
-loadMemory();
-loadDates();
-loadMedications();
-
 // ── Daily Tips ──
 const tipMeta = {
   en: { title: "Today's tip", diet: ['🥗', 'Nutrition'], exercise: ['🏃', 'Movement'], relaxation: ['🧘', 'Relaxation'] },
@@ -2932,6 +2925,14 @@ function renderDailyTip() {
   document.getElementById('tipCategoryPill').textContent = icon + ' ' + label;
   document.getElementById('tipBody').textContent = isHe ? tip.he : tip.en;
 }
+
+document.body.classList.add('rtl');
+document.documentElement.lang = 'he';
+renderUI();
+loadMemory();
+loadDates();
+loadMedications();
+
 
 </script>
 
