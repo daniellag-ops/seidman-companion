@@ -1184,61 +1184,94 @@
   }
   @keyframes espin { to { transform: rotate(360deg); } }
 
-  .embryo-analysis {
+  .embryo-poem {
     display: none;
-    background: rgba(0,0,0,0.2);
-    border-radius: 10px;
-    padding: 14px 16px;
-    font-size: 13px;
-    color: rgba(255,255,255,0.75);
-    line-height: 1.6;
-    margin-bottom: 16px;
-    font-style: italic;
   }
-  .embryo-analysis.visible { display: block; }
+  .embryo-poem.visible { display: block; }
 
-  .embryo-player {
-    display: none;
-    background: rgba(0,0,0,0.25);
-    border-radius: 12px;
-    padding: 16px;
+  .embryo-poem-card {
+    background: #0a1a1a;
+    border-radius: 16px;
+    padding: 32px 28px 28px;
     text-align: center;
+    margin-bottom: 14px;
+    position: relative;
+    overflow: hidden;
   }
-  .embryo-player.visible { display: block; }
-  .embryo-player-label {
-    font-size: 13px;
-    color: rgba(255,255,255,0.6);
-    margin-bottom: 12px;
+  .embryo-poem-card::before {
+    content: '';
+    position: absolute;
+    top: -60px; left: 50%;
+    transform: translateX(-50%);
+    width: 320px; height: 220px;
+    background: radial-gradient(ellipse, rgba(14,107,107,0.3) 0%, transparent 70%);
+    pointer-events: none;
   }
-  .embryo-player-btns {
+  .embryo-poem-card::after {
+    content: '';
+    position: absolute;
+    bottom: -60px; left: 50%;
+    transform: translateX(-50%);
+    width: 280px; height: 180px;
+    background: radial-gradient(ellipse, rgba(201,168,76,0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .embryo-poem-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+  .embryo-poem-logo-text {
+    font-size: 15px;
+    font-weight: 500;
+    color: #c9a84c;
+    letter-spacing: 0.5px;
+  }
+  .embryo-poem-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(201,168,76,0.3), transparent);
+    margin-bottom: 24px;
+  }
+  .embryo-poem-text {
+    font-family: 'DM Serif Display', serif;
+    font-size: 20px;
+    line-height: 1.75;
+    color: #c9a84c;
+    white-space: pre-line;
+    position: relative;
+  }
+  .embryo-poem-date {
+    font-size: 11px;
+    color: rgba(255,255,255,0.25);
+    margin-top: 22px;
+    letter-spacing: 0.3px;
+  }
+  .embryo-poem-actions {
     display: flex;
     gap: 10px;
     justify-content: center;
+    flex-wrap: wrap;
   }
   .ep-btn {
-    padding: 10px 22px;
+    padding: 11px 24px;
     border-radius: 100px;
     border: none;
     cursor: pointer;
     font-size: 14px;
     font-weight: 500;
     transition: opacity 0.15s;
+    font-family: 'DM Sans', sans-serif;
   }
   .ep-btn:hover { opacity: 0.85; }
-  .ep-play {
+  .ep-download {
     background: #c9a84c;
     color: #0a1a1a;
   }
-  .ep-download {
-    background: rgba(255,255,255,0.12);
-    color: #fff;
-  }
   .ep-retry {
-    background: transparent;
-    color: rgba(255,255,255,0.5);
-    font-size: 12px;
-    padding: 8px 14px;
-    text-decoration: underline;
+    background: rgba(255,255,255,0.1);
+    color: rgba(255,255,255,0.7);
   }
 
   .embryo-error {
@@ -1307,16 +1340,22 @@
       <div class="embryo-spinner"></div>
     </div>
 
-    <div class="embryo-analysis" id="embryoAnalysis"></div>
-
-    <div class="embryo-player" id="embryoPlayer">
-      <div class="embryo-player-label" id="embryoPlayerLabel">Your embryo's melody is ready 🎵</div>
-      <div class="embryo-player-btns">
-        <button class="ep-btn ep-play" id="epPlayBtn" onclick="toggleEmbryoPlay()">▶ Play</button>
-        <button class="ep-btn ep-download" id="epDownloadBtn" onclick="downloadEmbryoMelody()">↓ Download</button>
+    <div class="embryo-poem" id="embryoPoem">
+      <div class="embryo-poem-card">
+        <div class="embryo-poem-logo">
+          <svg width="28" height="34" viewBox="0 0 28 34" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="25" r="7" fill="#0a1a1a" stroke="#5DCAA5" stroke-width="1.3"/><circle cx="7.5" cy="21.5" r="2.6" fill="#0c3d3d" stroke="#5DCAA5" stroke-width="0.85"/><circle cx="7.5" cy="21.5" r="1.05" stroke="#c9a84c" stroke-width="0.55" fill="none"/><circle cx="7.8" cy="21.2" r="0.32" fill="#c9a84c"/><circle cx="13" cy="23" r="2.6" fill="#0c3d3d" stroke="#5DCAA5" stroke-width="0.85"/><circle cx="13" cy="23" r="1.05" stroke="#c9a84c" stroke-width="0.55" fill="none"/><circle cx="13.3" cy="22.7" r="0.32" fill="#c9a84c"/><circle cx="7" cy="27.5" r="2.6" fill="#0c3d3d" stroke="#5DCAA5" stroke-width="0.85"/><circle cx="7" cy="27.5" r="1.05" stroke="#c9a84c" stroke-width="0.55" fill="none"/><circle cx="7.3" cy="27.2" r="0.32" fill="#c9a84c"/><circle cx="12.5" cy="28.5" r="2.6" fill="#0c3d3d" stroke="#5DCAA5" stroke-width="0.85"/><circle cx="12.5" cy="28.5" r="1.05" stroke="#c9a84c" stroke-width="0.55" fill="none"/><circle cx="12.8" cy="28.2" r="0.32" fill="#c9a84c"/><circle cx="10" cy="25" r="0.5" fill="#c9a84c"/><line x1="17" y1="25" x2="17" y2="4" stroke="#5DCAA5" stroke-width="1.5" stroke-linecap="round"/><path d="M17,4 C22,5 23.5,10 18,16" stroke="#5DCAA5" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+          <span class="embryo-poem-logo-text">melody</span>
+        </div>
+        <div class="embryo-poem-divider"></div>
+        <div class="embryo-poem-text" id="embryoPoemText"></div>
+        <div class="embryo-poem-date" id="embryoPoemDate"></div>
       </div>
-      <button class="ep-btn ep-retry" id="epRetryBtn" onclick="resetEmbryoPlayer()">Upload a different image</button>
+      <div class="embryo-poem-actions">
+        <button class="ep-btn ep-download" id="epDownloadBtn" onclick="downloadEmbryoPoem()">↓ Download card</button>
+        <button class="ep-btn ep-retry" id="epRetryBtn" onclick="resetEmbryoPlayer()">Upload another</button>
+      </div>
     </div>
+    <canvas id="embryoPoemCanvas" width="1080" height="1080" style="display:none"></canvas>
 
     <div class="embryo-error" id="embryoError"></div>
   </div>
@@ -1637,19 +1676,16 @@ const content = {
     milestoneDownload: '↓ Download',
     milestoneShareNative: 'Share ↗',
     shareCopied: 'Copied! Paste it into your post.',
-    embryoTitle: "Your Embryo's Melody",
-    embryoSubtitle: 'Upload a photo or video of your embryo to create a personal piece of music',
+    embryoTitle: "Your Embryo's Poem",
+    embryoSubtitle: 'Upload a photo or video of your embryo to receive a personal poem',
     embryoDropLabel: 'Upload embryo photo or video',
     embryoDropHint: 'JPG, PNG, HEIC, MP4, MOV, AVI · max 10 MB',
     embryoAnalyzingVision: 'Analyzing your embryo…',
     embryoAnalyzingFrame: 'Extracting frame from video…',
     embryoAnalyzingReading: 'Reading video file…',
-    embryoAnalyzingMusic: 'Creating your melody… (this takes ~30 seconds)',
-    embryoPlayerLabel: "Your embryo's melody is ready 🎵",
-    embryoPlayBtn: '▶ Play',
-    embryoPauseBtn: '⏸ Pause',
-    embryoDownloadBtn: '↓ Download',
-    embryoRetryBtn: 'Upload a different image',
+    embryoAnalyzingPoem: 'Writing your poem…',
+    embryoDownloadBtn: '↓ Download card',
+    embryoRetryBtn: 'Upload another',
     responseTitle: 'Clinical explanation',
     loadingText: 'Preparing your explanation…',
     errorText: 'Something went wrong. Please try again.',
@@ -1725,18 +1761,15 @@ Patient's current treatment phase: ${phase}`
     milestoneDownload: '↓ הורדה',
     milestoneShareNative: 'שתפי ↗',
     shareCopied: 'הועתק! הדביקי בפוסט שלך.',
-    embryoTitle: 'המנגינה של העובר שלך',
-    embryoSubtitle: 'העלי תמונה או וידאו של העובר ליצירת מנגינה אישית',
+    embryoTitle: 'השיר של העובר שלך',
+    embryoSubtitle: 'העלי תמונה או וידאו של העובר לקבלת שיר אישי',
     embryoDropLabel: 'העלאת תמונה או וידאו של העובר',
     embryoDropHint: 'JPG, PNG, HEIC, MP4, MOV, AVI · עד 10 MB',
     embryoAnalyzingVision: 'מנתחת את העובר שלך…',
     embryoAnalyzingFrame: 'מחלצת פריים מהוידאו…',
     embryoAnalyzingReading: 'קוראת את קובץ הוידאו…',
-    embryoAnalyzingMusic: 'יוצרת את המנגינה שלך… (כ-30 שניות)',
-    embryoPlayerLabel: 'המנגינה של העובר שלך מוכנה 🎵',
-    embryoPlayBtn: '▶ נגן',
-    embryoPauseBtn: '⏸ השהה',
-    embryoDownloadBtn: '↓ הורדה',
+    embryoAnalyzingPoem: 'כותבת את השיר שלך…',
+    embryoDownloadBtn: '↓ הורדת כרטיס',
     embryoRetryBtn: 'העלאת תמונה אחרת',
     responseTitle: 'הסבר קליני',
     loadingText: 'מכינה את ההסבר שלך…',
@@ -1826,8 +1859,6 @@ function renderUI() {
   document.getElementById('embryoSubtitle').textContent = c.embryoSubtitle;
   document.getElementById('embryoDropLabel').textContent = c.embryoDropLabel;
   document.getElementById('embryoDropHint').textContent = c.embryoDropHint;
-  document.getElementById('embryoPlayerLabel').textContent = c.embryoPlayerLabel;
-  document.getElementById('epPlayBtn').textContent = c.embryoPlayBtn;
   document.getElementById('epDownloadBtn').textContent = c.embryoDownloadBtn;
   document.getElementById('epRetryBtn').textContent = c.embryoRetryBtn;
 
@@ -2900,19 +2931,13 @@ loadMemory();
 loadDates();
 loadMedications();
 
-// ── Embryo Melody ──
-let embryoAudioBlob = null;
-let embryoAudioEl = null;
+// ── Embryo Poem ──
+let currentEmbryoPoem = '';
 
 async function readFileAsBase64(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
-    reader.onload = e => {
-      const dataUrl = e.target.result;
-      // Strip the data:mime;base64, prefix
-      const b64 = dataUrl.split(',')[1];
-      resolve(b64);
-    };
+    reader.onload = e => resolve(e.target.result.split(',')[1]);
     reader.onerror = reject;
     reader.readAsDataURL(file);
   });
@@ -2925,11 +2950,9 @@ async function extractVideoFrame(file) {
     video.src = url;
     video.muted = true;
     video.playsInline = true;
-
     let done = false;
     const capture = () => {
-      if (done) return;
-      if (video.videoWidth === 0) return;
+      if (done || video.videoWidth === 0) return;
       done = true;
       URL.revokeObjectURL(url);
       const canvas = document.createElement('canvas');
@@ -2944,9 +2967,7 @@ async function extractVideoFrame(file) {
         reader.readAsDataURL(blob);
       }, 'image/jpeg', 0.85);
     };
-
     const timeout = setTimeout(() => { if (!done) { done = true; URL.revokeObjectURL(url); resolve(null); } }, 8000);
-
     video.onloadedmetadata = () => { video.currentTime = 0.5; };
     video.onseeked = () => { clearTimeout(timeout); capture(); };
     video.oncanplay = () => { if (!done) { clearTimeout(timeout); capture(); } };
@@ -2964,95 +2985,71 @@ function handleEmbryoDrop(e) {
 
 async function handleEmbryoFile(file) {
   if (!file) return;
+  const ec = content[currentLang];
   showEmbryoError('');
-  document.getElementById('embryoAnalysis').classList.remove('visible');
-  document.getElementById('embryoPlayer').classList.remove('visible');
+  document.getElementById('embryoPoem').classList.remove('visible');
   document.getElementById('embryoDrop').style.display = 'none';
 
-  const MAX_BYTES = 10 * 1024 * 1024;
-  if (file.size > MAX_BYTES) {
+  if (file.size > 10 * 1024 * 1024) {
     document.getElementById('embryoDrop').style.display = '';
-    return showEmbryoError('File too large (max 10 MB). Try a shorter clip or a still image.');
+    return showEmbryoError(currentLang === 'he'
+      ? 'הקובץ גדול מדי (מקסימום 10 MB). נסי תמונה קצרה יותר.'
+      : 'File too large (max 10 MB). Try a still image or shorter clip.');
   }
 
   const isVideo = file.type.startsWith('video/');
-  const ec = content[currentLang];
   document.getElementById('embryoAnalyzing').classList.add('visible');
-  document.getElementById('embryoAnalyzingLabel').textContent = isVideo
-    ? ec.embryoAnalyzingFrame
-    : ec.embryoAnalyzingVision;
+  document.getElementById('embryoAnalyzingLabel').textContent = isVideo ? ec.embryoAnalyzingFrame : ec.embryoAnalyzingVision;
 
   let imageBase64 = null;
   let mimeType = 'image/jpeg';
 
   if (isVideo) {
-    document.getElementById('embryoAnalyzingLabel').textContent = ec.embryoAnalyzingFrame;
     imageBase64 = await extractVideoFrame(file);
     if (!imageBase64) {
-      // Fall back to sending raw video bytes
       document.getElementById('embryoAnalyzingLabel').textContent = ec.embryoAnalyzingReading;
       try {
         imageBase64 = await readFileAsBase64(file);
         mimeType = file.type || 'video/mp4';
-      } catch (e) {
+      } catch {
         document.getElementById('embryoAnalyzing').classList.remove('visible');
         document.getElementById('embryoDrop').style.display = '';
-        return showEmbryoError('Could not read this video. Try a still image instead.');
+        return showEmbryoError(currentLang === 'he' ? 'לא ניתן לקרוא את הוידאו. נסי תמונה.' : 'Could not read this video. Try a still image instead.');
       }
-    } else {
-      mimeType = 'image/jpeg';
     }
   } else {
-    document.getElementById('embryoAnalyzingLabel').textContent = ec.embryoAnalyzingVision;
     try {
       imageBase64 = await readFileAsBase64(file);
       mimeType = file.type || 'image/jpeg';
-    } catch (e) {
+    } catch {
       document.getElementById('embryoAnalyzing').classList.remove('visible');
       document.getElementById('embryoDrop').style.display = '';
-      return showEmbryoError('Could not read this file. Try a different image.');
+      return showEmbryoError(currentLang === 'he' ? 'לא ניתן לקרוא את הקובץ. נסי תמונה אחרת.' : 'Could not read this file. Try a different image.');
     }
   }
 
-  document.getElementById('embryoAnalyzingLabel').textContent = ec.embryoAnalyzingMusic;
+  document.getElementById('embryoAnalyzingLabel').textContent = ec.embryoAnalyzingPoem;
 
   try {
     const resp = await fetch('/api/embryo', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ imageData: imageBase64, mimeType })
+      body: JSON.stringify({ imageData: imageBase64, mimeType, lang: currentLang })
     });
-
     const data = await resp.json();
     document.getElementById('embryoAnalyzing').classList.remove('visible');
 
     if (!resp.ok || data.error) {
       document.getElementById('embryoDrop').style.display = '';
-      // If we got analysis but music failed, show both
-      if (data.analysis) {
-        const analysisEl = document.getElementById('embryoAnalysis');
-        analysisEl.textContent = data.analysis;
-        analysisEl.classList.add('visible');
-      }
-      return showEmbryoError(data.error || 'Something went wrong. Please try again.');
+      return showEmbryoError(data.error || (currentLang === 'he' ? 'משהו השתבש. נסי שוב.' : 'Something went wrong. Please try again.'));
     }
 
-    // Show analysis
-    if (data.analysis) {
-      const analysisEl = document.getElementById('embryoAnalysis');
-      analysisEl.textContent = data.analysis;
-      analysisEl.classList.add('visible');
-    }
+    currentEmbryoPoem = data.poem;
+    const dateStr = new Date().toLocaleDateString(currentLang === 'he' ? 'he-IL' : 'en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
 
-    // Build audio blob and show player
-    const audioBytes = Uint8Array.from(atob(data.audioBase64), c => c.charCodeAt(0));
-    embryoAudioBlob = new Blob([audioBytes], { type: data.audioMime || 'audio/wav' });
-    embryoAudioEl = new Audio(URL.createObjectURL(embryoAudioBlob));
-    embryoAudioEl.onended = () => {
-      document.getElementById('epPlayBtn').textContent = content[currentLang].embryoPlayBtn;
-    };
-
-    document.getElementById('embryoPlayer').classList.add('visible');
+    document.getElementById('embryoPoemText').textContent = data.poem;
+    document.getElementById('embryoPoemDate').textContent = dateStr;
+    document.getElementById('embryoPoem').classList.add('visible');
 
   } catch (err) {
     document.getElementById('embryoAnalyzing').classList.remove('visible');
@@ -3061,47 +3058,94 @@ async function handleEmbryoFile(file) {
   }
 }
 
-function toggleEmbryoPlay() {
-  if (!embryoAudioEl) return;
-  const btn = document.getElementById('epPlayBtn');
-  const ec = content[currentLang];
-  if (embryoAudioEl.paused) {
-    embryoAudioEl.play();
-    btn.textContent = ec.embryoPauseBtn;
-  } else {
-    embryoAudioEl.pause();
-    btn.textContent = ec.embryoPlayBtn;
-  }
-}
+async function downloadEmbryoPoem() {
+  if (!currentEmbryoPoem) return;
+  await document.fonts.ready;
 
-function downloadEmbryoMelody() {
-  if (!embryoAudioBlob) return;
+  const canvas = document.getElementById('embryoPoemCanvas');
+  const ctx = canvas.getContext('2d');
+  const W = 1080, H = 1080;
+  const isHe = currentLang === 'he';
+
+  // Background
+  ctx.fillStyle = '#0a1a1a';
+  ctx.fillRect(0, 0, W, H);
+
+  // Teal glow top
+  const g1 = ctx.createRadialGradient(W/2, 0, 0, W/2, 0, 480);
+  g1.addColorStop(0, 'rgba(14,107,107,0.35)'); g1.addColorStop(1, 'rgba(14,107,107,0)');
+  ctx.fillStyle = g1; ctx.fillRect(0, 0, W, H);
+
+  // Gold glow bottom
+  const g2 = ctx.createRadialGradient(W/2, H, 0, W/2, H, 400);
+  g2.addColorStop(0, 'rgba(201,168,76,0.2)'); g2.addColorStop(1, 'rgba(201,168,76,0)');
+  ctx.fillStyle = g2; ctx.fillRect(0, 0, W, H);
+
+  // Melody logo text
+  ctx.fillStyle = '#c9a84c';
+  ctx.font = `500 38px 'DM Sans', Arial, sans-serif`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('melody', W/2, 130);
+
+  // Gold divider
+  ctx.strokeStyle = 'rgba(201,168,76,0.3)';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(200, 180); ctx.lineTo(W-200, 180); ctx.stroke();
+
+  // Poem
+  const lines = currentEmbryoPoem.split('\n').filter(l => l.trim());
+  const lineHeight = 88;
+  const totalH = lines.length * lineHeight;
+  let poemY = (H - totalH) / 2;
+
+  ctx.fillStyle = '#c9a84c';
+  ctx.font = `400 52px 'DM Serif Display', Georgia, serif`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.direction = isHe ? 'rtl' : 'ltr';
+
+  for (const line of lines) {
+    wrapCanvasText(ctx, line, W/2, poemY + lineHeight/2, W - 160, lineHeight);
+    poemY += lineHeight;
+  }
+
+  // Bottom divider
+  ctx.strokeStyle = 'rgba(201,168,76,0.2)';
+  ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(200, 900); ctx.lineTo(W-200, 900); ctx.stroke();
+
+  // Date
+  const dateStr = new Date().toLocaleDateString(isHe ? 'he-IL' : 'en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+  ctx.fillStyle = 'rgba(255,255,255,0.25)';
+  ctx.font = `300 26px 'DM Sans', Arial, sans-serif`;
+  ctx.direction = 'ltr';
+  ctx.fillText(dateStr, W/2, 940);
+
+  // seidman-ai.com
+  ctx.fillStyle = 'rgba(201,168,76,0.5)';
+  ctx.font = `300 22px 'DM Sans', Arial, sans-serif`;
+  ctx.fillText('seidman-ai.com', W/2, 990);
+
+  // Download
   const a = document.createElement('a');
-  a.href = URL.createObjectURL(embryoAudioBlob);
-  a.download = 'embryo-melody.wav';
+  a.download = 'embryo-poem.png';
+  a.href = canvas.toDataURL('image/png');
   a.click();
 }
 
 function showEmbryoError(msg) {
   const el = document.getElementById('embryoError');
-  if (msg) {
-    el.textContent = msg;
-    el.classList.add('visible');
-  } else {
-    el.textContent = '';
-    el.classList.remove('visible');
-  }
+  el.textContent = msg;
+  el.classList.toggle('visible', !!msg);
 }
 
 function resetEmbryoPlayer() {
-  if (embryoAudioEl) { embryoAudioEl.pause(); embryoAudioEl = null; }
-  embryoAudioBlob = null;
-  document.getElementById('embryoPlayer').classList.remove('visible');
-  document.getElementById('embryoAnalysis').classList.remove('visible');
+  currentEmbryoPoem = '';
+  document.getElementById('embryoPoem').classList.remove('visible');
   document.getElementById('embryoError').classList.remove('visible');
   document.getElementById('embryoDrop').style.display = '';
   document.getElementById('embryoInput').value = '';
-  document.getElementById('epPlayBtn').textContent = '▶ Play';
 }
 
 </script>
