@@ -1102,7 +1102,7 @@
   .embryo-card {
     background: #0e6b6b;
     border-radius: var(--radius);
-    padding: 28px 24px 24px;
+    padding: 32px 28px 28px;
     margin-bottom: 16px;
     position: relative;
     overflow: hidden;
@@ -1110,50 +1110,56 @@
   .embryo-card::before {
     content: '';
     position: absolute;
-    top: -60px; right: -60px;
+    top: -80px; right: -80px;
+    width: 280px; height: 280px;
+    background: radial-gradient(ellipse, rgba(201,168,76,0.22) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .embryo-card::after {
+    content: '';
+    position: absolute;
+    bottom: -60px; left: -60px;
     width: 200px; height: 200px;
-    background: radial-gradient(ellipse, rgba(201,168,76,0.18) 0%, transparent 70%);
+    background: radial-gradient(ellipse, rgba(93,202,165,0.12) 0%, transparent 70%);
     pointer-events: none;
   }
   .embryo-title {
     font-family: 'DM Serif Display', serif;
-    font-size: 22px;
+    font-size: 28px;
     color: #fff;
-    margin-bottom: 4px;
+    margin-bottom: 6px;
+    line-height: 1.2;
   }
   .embryo-subtitle {
     font-size: 14px;
-    color: rgba(255,255,255,0.65);
-    margin-bottom: 20px;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 24px;
+    line-height: 1.5;
   }
   .embryo-drop {
-    border: 2px dashed rgba(255,255,255,0.3);
-    border-radius: 12px;
-    padding: 32px 20px;
+    border: 2px dashed rgba(255,255,255,0.35);
+    border-radius: 14px;
+    padding: 40px 24px;
     text-align: center;
     cursor: pointer;
     transition: border-color 0.2s, background 0.2s;
+    background: rgba(0,0,0,0.1);
   }
   .embryo-drop:hover, .embryo-drop.dragover {
     border-color: #c9a84c;
-    background: rgba(201,168,76,0.08);
+    background: rgba(201,168,76,0.1);
   }
-  .embryo-drop-icon { font-size: 32px; margin-bottom: 10px; }
+  .embryo-drop-icon { font-size: 40px; margin-bottom: 14px; }
   .embryo-drop-label {
-    font-size: 15px;
-    color: rgba(255,255,255,0.85);
+    font-size: 17px;
+    color: rgba(255,255,255,0.9);
     margin-bottom: 4px;
     font-weight: 500;
-  }
-  .embryo-drop-label-he {
-    font-size: 14px;
-    color: rgba(255,255,255,0.55);
-    direction: rtl;
   }
   .embryo-drop-hint {
     font-size: 12px;
     color: rgba(255,255,255,0.4);
-    margin-top: 8px;
+    margin-top: 10px;
   }
   .embryo-input { display: none; }
 
@@ -1280,8 +1286,8 @@
 
   <!-- Embryo Melody -->
   <div class="embryo-card" id="embryoCard">
-    <div class="embryo-title">Your Embryo's Melody</div>
-    <div class="embryo-subtitle">Upload a photo or video of your embryo to create a personal piece of music · העלי תמונה או וידאו של העובר ליצירת מנגינה אישית</div>
+    <div class="embryo-title" id="embryoTitle">Your Embryo's Melody</div>
+    <div class="embryo-subtitle" id="embryoSubtitle">Upload a photo or video of your embryo to create a personal piece of music</div>
 
     <div class="embryo-drop" id="embryoDrop"
       onclick="document.getElementById('embryoInput').click()"
@@ -1289,9 +1295,8 @@
       ondragleave="this.classList.remove('dragover')"
       ondrop="handleEmbryoDrop(event)">
       <div class="embryo-drop-icon">🔬</div>
-      <div class="embryo-drop-label">Upload embryo photo or video</div>
-      <div class="embryo-drop-label-he">העלאת תמונה או וידאו של העובר</div>
-      <div class="embryo-drop-hint">JPG, PNG, HEIC, MP4, MOV, AVI · max 10 MB</div>
+      <div class="embryo-drop-label" id="embryoDropLabel">Upload embryo photo or video</div>
+      <div class="embryo-drop-hint" id="embryoDropHint">JPG, PNG, HEIC, MP4, MOV, AVI · max 10 MB</div>
     </div>
     <input type="file" id="embryoInput" class="embryo-input"
       accept="image/*,video/mp4,video/quicktime,video/avi,video/x-msvideo"
@@ -1305,12 +1310,12 @@
     <div class="embryo-analysis" id="embryoAnalysis"></div>
 
     <div class="embryo-player" id="embryoPlayer">
-      <div class="embryo-player-label">Your embryo's melody is ready 🎵</div>
+      <div class="embryo-player-label" id="embryoPlayerLabel">Your embryo's melody is ready 🎵</div>
       <div class="embryo-player-btns">
         <button class="ep-btn ep-play" id="epPlayBtn" onclick="toggleEmbryoPlay()">▶ Play</button>
-        <button class="ep-btn ep-download" onclick="downloadEmbryoMelody()">↓ Download</button>
+        <button class="ep-btn ep-download" id="epDownloadBtn" onclick="downloadEmbryoMelody()">↓ Download</button>
       </div>
-      <button class="ep-btn ep-retry" onclick="resetEmbryoPlayer()">Upload a different image</button>
+      <button class="ep-btn ep-retry" id="epRetryBtn" onclick="resetEmbryoPlayer()">Upload a different image</button>
     </div>
 
     <div class="embryo-error" id="embryoError"></div>
@@ -1632,6 +1637,19 @@ const content = {
     milestoneDownload: '↓ Download',
     milestoneShareNative: 'Share ↗',
     shareCopied: 'Copied! Paste it into your post.',
+    embryoTitle: "Your Embryo's Melody",
+    embryoSubtitle: 'Upload a photo or video of your embryo to create a personal piece of music',
+    embryoDropLabel: 'Upload embryo photo or video',
+    embryoDropHint: 'JPG, PNG, HEIC, MP4, MOV, AVI · max 10 MB',
+    embryoAnalyzingVision: 'Analyzing your embryo…',
+    embryoAnalyzingFrame: 'Extracting frame from video…',
+    embryoAnalyzingReading: 'Reading video file…',
+    embryoAnalyzingMusic: 'Creating your melody… (this takes ~30 seconds)',
+    embryoPlayerLabel: "Your embryo's melody is ready 🎵",
+    embryoPlayBtn: '▶ Play',
+    embryoPauseBtn: '⏸ Pause',
+    embryoDownloadBtn: '↓ Download',
+    embryoRetryBtn: 'Upload a different image',
     responseTitle: 'Clinical explanation',
     loadingText: 'Preparing your explanation…',
     errorText: 'Something went wrong. Please try again.',
@@ -1707,6 +1725,19 @@ Patient's current treatment phase: ${phase}`
     milestoneDownload: '↓ הורדה',
     milestoneShareNative: 'שתפי ↗',
     shareCopied: 'הועתק! הדביקי בפוסט שלך.',
+    embryoTitle: 'המנגינה של העובר שלך',
+    embryoSubtitle: 'העלי תמונה או וידאו של העובר ליצירת מנגינה אישית',
+    embryoDropLabel: 'העלאת תמונה או וידאו של העובר',
+    embryoDropHint: 'JPG, PNG, HEIC, MP4, MOV, AVI · עד 10 MB',
+    embryoAnalyzingVision: 'מנתחת את העובר שלך…',
+    embryoAnalyzingFrame: 'מחלצת פריים מהוידאו…',
+    embryoAnalyzingReading: 'קוראת את קובץ הוידאו…',
+    embryoAnalyzingMusic: 'יוצרת את המנגינה שלך… (כ-30 שניות)',
+    embryoPlayerLabel: 'המנגינה של העובר שלך מוכנה 🎵',
+    embryoPlayBtn: '▶ נגן',
+    embryoPauseBtn: '⏸ השהה',
+    embryoDownloadBtn: '↓ הורדה',
+    embryoRetryBtn: 'העלאת תמונה אחרת',
     responseTitle: 'הסבר קליני',
     loadingText: 'מכינה את ההסבר שלך…',
     errorText: 'משהו השתבש. אנא נסי שוב.',
@@ -1791,6 +1822,14 @@ function renderUI() {
   document.getElementById('milestoneModalTitle').textContent = c.milestoneModalTitle;
   document.getElementById('milestoneDownloadBtn').textContent = c.milestoneDownload;
   document.getElementById('milestoneShareNativeBtn').textContent = c.milestoneShareNative;
+  document.getElementById('embryoTitle').textContent = c.embryoTitle;
+  document.getElementById('embryoSubtitle').textContent = c.embryoSubtitle;
+  document.getElementById('embryoDropLabel').textContent = c.embryoDropLabel;
+  document.getElementById('embryoDropHint').textContent = c.embryoDropHint;
+  document.getElementById('embryoPlayerLabel').textContent = c.embryoPlayerLabel;
+  document.getElementById('epPlayBtn').textContent = c.embryoPlayBtn;
+  document.getElementById('epDownloadBtn').textContent = c.embryoDownloadBtn;
+  document.getElementById('epRetryBtn').textContent = c.embryoRetryBtn;
 
   // Update med select placeholders
   const medNameSelect = document.getElementById('medName');
@@ -2937,20 +2976,21 @@ async function handleEmbryoFile(file) {
   }
 
   const isVideo = file.type.startsWith('video/');
+  const ec = content[currentLang];
   document.getElementById('embryoAnalyzing').classList.add('visible');
   document.getElementById('embryoAnalyzingLabel').textContent = isVideo
-    ? 'Extracting frame from video…'
-    : 'Analyzing your embryo…';
+    ? ec.embryoAnalyzingFrame
+    : ec.embryoAnalyzingVision;
 
   let imageBase64 = null;
   let mimeType = 'image/jpeg';
 
   if (isVideo) {
-    document.getElementById('embryoAnalyzingLabel').textContent = 'Extracting frame from video…';
+    document.getElementById('embryoAnalyzingLabel').textContent = ec.embryoAnalyzingFrame;
     imageBase64 = await extractVideoFrame(file);
     if (!imageBase64) {
       // Fall back to sending raw video bytes
-      document.getElementById('embryoAnalyzingLabel').textContent = 'Reading video file…';
+      document.getElementById('embryoAnalyzingLabel').textContent = ec.embryoAnalyzingReading;
       try {
         imageBase64 = await readFileAsBase64(file);
         mimeType = file.type || 'video/mp4';
@@ -2963,7 +3003,7 @@ async function handleEmbryoFile(file) {
       mimeType = 'image/jpeg';
     }
   } else {
-    document.getElementById('embryoAnalyzingLabel').textContent = 'Analyzing your embryo…';
+    document.getElementById('embryoAnalyzingLabel').textContent = ec.embryoAnalyzingVision;
     try {
       imageBase64 = await readFileAsBase64(file);
       mimeType = file.type || 'image/jpeg';
@@ -2974,7 +3014,7 @@ async function handleEmbryoFile(file) {
     }
   }
 
-  document.getElementById('embryoAnalyzingLabel').textContent = 'Creating your melody… (this takes ~30 seconds)';
+  document.getElementById('embryoAnalyzingLabel').textContent = ec.embryoAnalyzingMusic;
 
   try {
     const resp = await fetch('/api/embryo', {
@@ -3009,7 +3049,7 @@ async function handleEmbryoFile(file) {
     embryoAudioBlob = new Blob([audioBytes], { type: data.audioMime || 'audio/wav' });
     embryoAudioEl = new Audio(URL.createObjectURL(embryoAudioBlob));
     embryoAudioEl.onended = () => {
-      document.getElementById('epPlayBtn').textContent = '▶ Play';
+      document.getElementById('epPlayBtn').textContent = content[currentLang].embryoPlayBtn;
     };
 
     document.getElementById('embryoPlayer').classList.add('visible');
@@ -3024,12 +3064,13 @@ async function handleEmbryoFile(file) {
 function toggleEmbryoPlay() {
   if (!embryoAudioEl) return;
   const btn = document.getElementById('epPlayBtn');
+  const ec = content[currentLang];
   if (embryoAudioEl.paused) {
     embryoAudioEl.play();
-    btn.textContent = '⏸ Pause';
+    btn.textContent = ec.embryoPauseBtn;
   } else {
     embryoAudioEl.pause();
-    btn.textContent = '▶ Play';
+    btn.textContent = ec.embryoPlayBtn;
   }
 }
 
