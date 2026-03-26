@@ -59,17 +59,6 @@
   .step { display: none; }
   .step.active { display: block; }
 
-  .step-indicator {
-    display: flex; align-items: center; gap: 6px;
-    margin-bottom: 20px;
-  }
-  .step-dot {
-    width: 7px; height: 7px; border-radius: 50%;
-    background: var(--border); transition: background 0.2s;
-  }
-  .step-dot.active { background: var(--accent); }
-  .step-label { font-size: 11px; color: var(--text-light); }
-
   .step-title { font-size: 13px; color: var(--text-mid); margin-bottom: 20px; }
 
   label {
@@ -89,13 +78,6 @@
     margin-bottom: 14px; background: white;
   }
   input:focus { border-color: var(--accent); }
-
-  .totp-input {
-    font-size: 24px !important;
-    letter-spacing: 8px !important;
-    text-align: center;
-    font-family: 'DM Serif Display', serif !important;
-  }
 
   .btn {
     background: var(--accent);
@@ -177,32 +159,11 @@
 
   <!-- Step 1: admin key -->
   <div class="step active" id="step1">
-    <div class="step-indicator">
-      <div class="step-dot active"></div>
-      <div class="step-dot"></div>
-      <span class="step-label">Step 1 of 2</span>
-    </div>
     <div class="step-title">Enter your admin password</div>
     <label>Admin key</label>
     <input type="password" id="adminKeyInput" placeholder="Enter admin key" />
-    <button class="btn" onclick="submitAdminKey()">Continue →</button>
+    <button class="btn" id="loginBtn" onclick="submitAdminKey()">Sign in</button>
     <div class="feedback error" id="err1"></div>
-  </div>
-
-  <!-- Step 2: TOTP -->
-  <div class="step" id="step2">
-    <div class="step-indicator">
-      <div class="step-dot"></div>
-      <div class="step-dot active"></div>
-      <span class="step-label">Step 2 of 2</span>
-    </div>
-    <div class="step-title">Enter the 6-digit code from your authenticator app</div>
-    <label>Verification code</label>
-    <input type="text" inputmode="numeric" pattern="[0-9 ]*" maxlength="7"
-           class="totp-input" id="totpInput" placeholder="000 000" autocomplete="one-time-code" />
-    <button class="btn" id="totpBtn" onclick="submitTOTP()">Sign in</button>
-    <div class="feedback error" id="err2"></div>
-    <span class="back-link" onclick="backToStep1()">← Back</span>
   </div>
 
   <!-- Step 3: Generate link -->
@@ -230,47 +191,27 @@ function show(id) {
   document.getElementById(id).classList.add('active');
 }
 
-function submitAdminKey() {
+async function submitAdminKey() {
   const val = document.getElementById('adminKeyInput').value.trim();
   if (!val) return;
-  adminKey = val;
-  document.getElementById('err1').classList.remove('visible');
-  show('step2');
-  setTimeout(() => document.getElementById('totpInput').focus(), 50);
-}
-
-function backToStep1() {
-  document.getElementById('err2').classList.remove('visible');
-  document.getElementById('totpInput').value = '';
-  show('step1');
-}
-
-async function submitTOTP() {
-  const code = document.getElementById('totpInput').value.replace(/\s/g, '');
-  if (code.length < 6) return;
-  const btn = document.getElementById('totpBtn');
-  const errEl = document.getElementById('err2');
-  btn.disabled = true; btn.textContent = 'Verifying…';
+  const btn = document.getElementById('loginBtn');
+  const errEl = document.getElementById('err1');
+  btn.disabled = true; btn.textContent = 'Signing in…';
   errEl.classList.remove('visible');
   try {
     const res = await fetch('/api/admin', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ adminKey, totpCode: code })
+      body: JSON.stringify({ adminKey: val, totpCode: '000000' })
     });
-    if (res.status === 403) {
-      const data = await res.json();
-      if (data.error === 'Invalid password') {
-        errEl.textContent = 'Incorrect admin key.';
-        errEl.classList.add('visible');
-        backToStep1();
-      } else {
-        errEl.textContent = 'Invalid code. Please try again.';
-        errEl.classList.add('visible');
-      }
+    const data = await res.json();
+    if (res.status === 403 && data.error === 'Invalid password') {
+      errEl.textContent = 'Incorrect password.';
+      errEl.classList.add('visible');
       return;
     }
-    if (!res.ok) throw new Error('Server error');
+    // Any response other than "Invalid password" means the key is correct
+    adminKey = val;
     show('step3');
     document.getElementById('patientName').focus();
   } catch (err) {
@@ -318,7 +259,6 @@ function copyLink() {
 function signOut() {
   adminKey = '';
   document.getElementById('adminKeyInput').value = '';
-  document.getElementById('totpInput').value = '';
   document.getElementById('result').classList.remove('visible');
   document.getElementById('patientName').value = '';
   show('step1');
@@ -326,13 +266,6 @@ function signOut() {
 
 document.getElementById('adminKeyInput').addEventListener('keydown', e => {
   if (e.key === 'Enter') submitAdminKey();
-});
-document.getElementById('totpInput').addEventListener('keydown', e => {
-  if (e.key === 'Enter') submitTOTP();
-});
-document.getElementById('totpInput').addEventListener('input', e => {
-  let val = e.target.value.replace(/\D/g, '').slice(0, 6);
-  e.target.value = val.length > 3 ? val.slice(0,3) + ' ' + val.slice(3) : val;
 });
 </script>
 </body>
