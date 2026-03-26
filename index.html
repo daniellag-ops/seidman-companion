@@ -1100,8 +1100,9 @@
 
   /* ── Wellness Tips ── */
   .wellness-section {
-    background: rgba(255,255,255,0.03);
-    border: 1px solid rgba(93,202,165,0.15);
+    background: white;
+    border: 1.5px solid var(--border);
+    border-top: 4px solid var(--accent);
     border-radius: var(--radius);
     padding: 18px 18px 20px;
     margin-bottom: 16px;
@@ -1111,7 +1112,7 @@
     font-weight: 600;
     letter-spacing: 0.9px;
     text-transform: uppercase;
-    color: rgba(255,255,255,0.4);
+    color: var(--text-light);
     display: block;
     margin-bottom: 14px;
   }
@@ -1130,19 +1131,19 @@
     font-size: 12px;
     font-weight: 500;
     cursor: pointer;
-    border: 1px solid rgba(93,202,165,0.2);
+    border: 1.5px solid var(--border);
     background: transparent;
-    color: rgba(255,255,255,0.55);
+    color: var(--text-mid);
     transition: all 0.15s;
   }
   .wcat-pill.active {
-    background: #0e6b6b;
-    border-color: #0e6b6b;
+    background: var(--accent);
+    border-color: var(--accent);
     color: #fff;
   }
   .wcat-pill:not(.active):hover {
-    border-color: rgba(93,202,165,0.45);
-    color: rgba(255,255,255,0.8);
+    border-color: var(--accent);
+    color: var(--accent);
   }
   .wellness-cards {
     display: flex;
@@ -1150,13 +1151,13 @@
     gap: 10px;
   }
   .wtip-card {
-    background: rgba(14,107,107,0.1);
-    border: 1px solid rgba(93,202,165,0.12);
-    border-radius: 12px;
+    background: #f7fafa;
+    border: 1px solid var(--border);
+    border-radius: 10px;
     padding: 13px 15px;
     font-size: 14px;
     line-height: 1.65;
-    color: rgba(255,255,255,0.85);
+    color: var(--text);
   }
 </style>
 </head>
