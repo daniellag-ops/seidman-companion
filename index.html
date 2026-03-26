@@ -1299,9 +1299,6 @@
     </div>
     <div class="error-msg" id="errorMsg"></div>
     <div class="response-body" id="responseBody"></div>
-    <button class="share-moment-btn" id="shareMomentBtn" onclick="openShareMomentModal()">
-      ✦ <span id="shareMomentBtnText">Share this moment</span>
-    </button>
     <div class="share-section" id="shareSection">
       <span class="share-label" id="shareLabel">Share</span>
       <div class="share-platform-btns">
@@ -2023,9 +2020,6 @@ async function sendMessage() {
 
     // Show share section + share moment button
     document.getElementById('shareSection').style.display = 'flex';
-    document.getElementById('shareMomentBtn').classList.add('visible');
-    document.getElementById('shareMomentBtnText').textContent = currentLang === 'he' ? 'שתפי את הרגע הזה' : 'Share this moment';
-
     // Show save note section
     const saveSection = document.getElementById('saveNoteSection');
     const noteInput = document.getElementById('noteInput');
