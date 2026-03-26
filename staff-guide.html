@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Melody · Clinic Staff Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --accent: #0e6b6b;
+    --accent-soft: #e4eeee;
+    --gold: #c9a84c;
+    --bg: #f0f4f4;
+    --surface: #fff;
+    --border: #cddede;
+    --text: #0d1f1f;
+    --text-mid: #3d5c5c;
+    --text-light: #7a9e9e;
+    --radius: 16px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 40px 24px 80px;
+  }
+
+  .page {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  /* Header */
+  .header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 40px;
+  }
+
+  .logo-text {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--accent);
+  }
+
+  .divider {
+    width: 1px;
+    height: 20px;
+    background: var(--border);
+  }
+
+  .header-sub {
+    font-size: 13px;
+    color: var(--text-light);
+  }
+
+  /* Hero */
+  .hero {
+    margin-bottom: 40px;
+  }
+
+  .hero-label {
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+
+  .hero-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 36px;
+    line-height: 1.2;
+    color: var(--text);
+    margin-bottom: 14px;
+  }
+
+  .hero-desc {
+    font-size: 15px;
+    color: var(--text-mid);
+    line-height: 1.7;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px;
+    margin-bottom: 16px;
+  }
+
+  .card-label {
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--text-light);
+    margin-bottom: 10px;
+  }
+
+  .card-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    margin-bottom: 8px;
+  }
+
+  .card-desc {
+    font-size: 14px;
+    color: var(--text-mid);
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+
+  /* Steps */
+  .steps {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .step {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .step-num {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: white;
+    font-size: 13px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .step-text {
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.6;
+    padding-top: 4px;
+  }
+
+  .step-text strong {
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  /* URL chip */
+  .url-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--accent-soft);
+    border: 1.5px solid var(--accent);
+    border-radius: 100px;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--accent);
+    margin-bottom: 20px;
+    text-decoration: none;
+    transition: opacity 0.15s;
+  }
+  .url-chip:hover { opacity: 0.8; }
+
+  /* Patient card preview */
+  .preview-card {
+    background: var(--bg);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 18px;
+    font-size: 13px;
+    color: var(--text-mid);
+    line-height: 1.6;
+  }
+
+  .preview-card strong { color: var(--text); }
+
+  /* Note card */
+  .note-card {
+    background: #fffbf0;
+    border: 1.5px solid #e8d8a0;
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    margin-bottom: 16px;
+    font-size: 14px;
+    color: #5a4a1a;
+    line-height: 1.6;
+  }
+
+  .note-card strong { color: #3a2e0a; }
+
+  /* Footer */
+  .footer {
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--text-light);
+    text-align: center;
+    line-height: 1.7;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="header">
+    <svg width="28" height="34" viewBox="0 0 28 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="10" cy="25" r="7" fill="#f0f4f4" stroke="#0e6b6b" stroke-width="1.3"/>
+      <circle cx="7.5" cy="21.5" r="2.6" fill="#cde8e8" stroke="#0e6b6b" stroke-width="0.85"/>
+      <circle cx="7.5" cy="21.5" r="1.05" stroke="#c9a84c" stroke-width="0.55" fill="none"/>
+      <circle cx="7.8" cy="21.2" r="0.32" fill="#c9a84c"/>
+      <circle cx="13" cy="23" r="2.6" fill="#cde8e8" stroke="#0e6b6b" stroke-width="0.85"/>
+      <circle cx="13" cy="23" r="1.05" stroke="#c9a84c" stroke-width="0.55" fill="none"/>
+      <circle cx="13.3" cy="22.7" r="0.32" fill="#c9a84c"/>
+      <circle cx="7" cy="27.5" r="2.6" fill="#cde8e8" stroke="#0e6b6b" stroke-width="0.85"/>
+      <circle cx="7" cy="27.5" r="1.05" stroke="#c9a84c" stroke-width="0.55" fill="none"/>
+      <circle cx="7.3" cy="27.2" r="0.32" fill="#c9a84c"/>
+      <circle cx="12.5" cy="28.5" r="2.6" fill="#cde8e8" stroke="#0e6b6b" stroke-width="0.85"/>
+      <circle cx="12.5" cy="28.5" r="1.05" stroke="#c9a84c" stroke-width="0.55" fill="none"/>
+      <circle cx="12.8" cy="28.2" r="0.32" fill="#c9a84c"/>
+      <circle cx="10" cy="25" r="0.5" fill="#c9a84c"/>
+      <line x1="17" y1="25" x2="17" y2="4" stroke="#0e6b6b" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M17,4 C22,5 23.5,10 18,16" stroke="#0e6b6b" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+    </svg>
+    <span class="logo-text">melody</span>
+    <div class="divider"></div>
+    <span class="header-sub">Clinic Staff Guide</span>
+  </div>
+
+  <div class="hero">
+    <div class="hero-label">For clinic staff</div>
+    <div class="hero-title">Sending Melody<br>to a patient</div>
+    <div class="hero-desc">Melody is a personal AI companion for patients going through IVF. Each patient receives their own private link — it knows their treatment phase, answers their questions in real time, and supports them between appointments.</div>
+  </div>
+
+  <!-- Step by step -->
+  <div class="card">
+    <div class="card-label">How to generate a link</div>
+    <div class="card-title">Three steps</div>
+    <div class="card-desc">Takes under a minute. Each link is unique to that patient.</div>
+
+    <a class="url-chip" href="https://seidman-ai.com/admin" target="_blank">
+      🔗 seidman-ai.com/admin
+    </a>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-text">Go to <strong>seidman-ai.com/admin</strong> and enter the admin password.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-text">Type the patient's <strong>full name</strong> and click <strong>Generate link</strong>.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-text"><strong>Copy the link</strong> and send it to the patient via WhatsApp.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- What to send -->
+  <div class="card">
+    <div class="card-label">Suggested WhatsApp message</div>
+    <div class="card-title">What to send the patient</div>
+    <div class="card-desc">You can copy and paste the message below, with the link added at the end.</div>
+    <div class="preview-card">
+      <strong>שלום,</strong><br>
+      מצורף הקישור האישי שלך ל-Melody — הליווי הדיגיטלי של פרופ׳ זיידמן לאורך הטיפול.<br><br>
+      דרך הקישור תוכלי לשאול שאלות, לקרוא טיפים מותאמים לשלב שלך, ולקבל מידע בין הפגישות.<br><br>
+      🔗 <strong>[הכניסי כאן את הקישור שיצרת]</strong>
+    </div>
+  </div>
+
+  <!-- What the patient sees -->
+  <div class="card">
+    <div class="card-label">What happens next</div>
+    <div class="card-title">The patient's experience</div>
+    <div class="card-desc">When the patient opens their link for the first time, they choose their current treatment phase. From there they can ask questions, read personalised wellness tips, and save notes — all in Hebrew or English. The link is private and works only for them.</div>
+  </div>
+
+  <div class="note-card">
+    There is also a private doctor's dashboard available to Prof. Seidman for monitoring patient activity across the clinic.
+  </div>
+
+  <div class="footer">
+    Melody · Prof. Daniel Seidman · ALMA Clinic<br>
+    seidman-ai.com
+  </div>
+
+</div>
+</body>
+</html>

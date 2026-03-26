@@ -3,6 +3,7 @@
     { "source": "/p/:slug", "destination": "/index.html?token=:slug" },
     { "source": "/dashboard", "destination": "/dashboard.html" },
     { "source": "/share/:id", "destination": "/share.html?id=:id" },
-    { "source": "/start", "destination": "/start.html" }
+    { "source": "/start", "destination": "/start.html" },
+    { "source": "/staff", "destination": "/staff-guide.html" }
   ]
 }
