@@ -1186,7 +1186,7 @@
       <span class="badge-text" id="badgeText">Prof. Seidman's Patient Resource</span>
     </div>
     <h1 id="introTitle">What did we discuss at your appointment today?</h1>
-    <p id="introDesc">Enter your results or questions here — hormone levels, follicle counts, embryo updates — and get a clear explanation of what they mean and what to expect next.</p>
+    <p id="introDesc">Enter your results or questions here — hormone levels, follicle counts, embryo updates — and receive a clear, expert explanation of what they mean and what comes next.</p>
   </div>
 
   <div class="disclaimer-banner" id="disclaimerBanner"></div>
@@ -1221,7 +1221,7 @@
   <div class="memory-card" id="memoryCard" style="display:none">
     <div class="memory-header">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z" fill="currentColor"/></svg>
-      <span id="memoryTitle">Your journey</span>
+      <span id="memoryTitle">Your journey so far</span>
     </div>
     <div class="memory-facts" id="memoryFacts"></div>
   </div>
@@ -1289,13 +1289,13 @@
   <div class="response-card" id="responseCard">
     <div class="response-header">
       <div class="response-dot"></div>
-      <span class="response-title" id="responseTitle">Prof. Seidman's response</span>
+      <span class="response-title" id="responseTitle">Clinical explanation</span>
     </div>
     <div class="loading" id="loadingIndicator">
       <div class="dots">
         <div class="dot"></div><div class="dot"></div><div class="dot"></div>
       </div>
-      <span id="loadingText">On it…</span>
+      <span id="loadingText">Preparing your explanation…</span>
     </div>
     <div class="error-msg" id="errorMsg"></div>
     <div class="response-body" id="responseBody"></div>
@@ -1416,7 +1416,7 @@
   </div>
 
   <div class="footer-note" id="footerNote">
-    Prof. Daniel Seidman · ALMA Clinic
+    This resource was created by Prof. Daniel Seidman to help his patients better understand their fertility journey.
   </div>
 
 
@@ -1490,7 +1490,7 @@ const content = {
     phaseLabel: 'Your current phase',
     inputLabel: 'Your results or question',
     inputPlaceholder: "e.g. Day 6 of stims. Estradiol: 1,240 pg/mL. Ultrasound showed 5 follicles at 16mm, 3 at 14mm, 2 at 12mm. What does this mean?",
-    inputHint: 'Private & confidential — nothing is saved.',
+    inputHint: 'Private & confidential — nothing is stored.',
     sendBtn: 'Explain this',
     quickLabel: 'Frequently asked questions',
     datesLabel: 'My key dates',
@@ -1504,22 +1504,22 @@ const content = {
     medDosePlaceholder: '— Dose —',
     medDoseCustomPlaceholder: 'or type dose',
     medCustomPlaceholder: 'Type medication name',
-    memoryTitle: 'Your journey',
+    memoryTitle: 'Your journey so far',
     saveNoteBtn: 'Save',
     saveNotePlaceholder: 'Add a personal note to your journey...',
     uploadTitle: 'Attach a result (PDF or image)',
-    fileTooBig: 'That file is too large — maximum size is 5MB.',
+    fileTooBig: 'File too large. Maximum size is 5MB.',
     shareLabel: 'Share',
     milestoneCardBtn: '🎴 Milestone card',
     milestoneModalTitle: 'Your milestone card',
     milestoneDownload: '↓ Download',
     milestoneShareNative: 'Share ↗',
     shareCopied: 'Copied! Paste it into your post.',
-    responseTitle: 'Prof. Seidman\'s response',
-    loadingText: 'On it…',
-    errorText: 'Something went wrong — please try again.',
-    footerNote: 'Prof. Daniel Seidman\'s Patient Companion · ALMA Clinic',
-    disclaimer: 'This is here to help you understand your results and prepare for your appointments with Prof. Seidman. It's not a substitute for medical advice — any clinical questions will always be addressed directly by Prof. Seidman and his team.',
+    responseTitle: 'Clinical explanation',
+    loadingText: 'Preparing your explanation…',
+    errorText: 'Something went wrong. Please try again.',
+    footerNote: 'Prof. Daniel Seidman · ALMA Clinic',
+    disclaimer: 'This tool is for educational purposes only. It helps you understand your results and prepare for your conversations with Prof. Seidman. Any clinical questions or concerns will be addressed directly by Prof. Seidman and his team.',
     phases: [
       { label: '💉 IVF Stimulation', value: 'IVF stimulation', sample: 'Day 6 of stims. Estradiol: 1,240 pg/mL. Ultrasound: 5 follicles at 16mm, 3 at 14mm, 2 at 12mm. Is my response on track?' },
       { label: '🥚 Retrieval & Recovery', value: 'egg retrieval and recovery', sample: 'They retrieved 9 eggs, 7 were mature. I\'m feeling bloated and crampy. Is this normal, and what happens to my eggs now?' },
@@ -1546,7 +1546,7 @@ Your role:
 3. Explain what to expect next, practically and honestly
 4. End with 1-2 specific questions the patient might bring to their next appointment with Prof. Seidman
 
-Tone: balanced — warm and reassuring, but clinically grounded. You're speaking with Prof. Seidman's patients — they expect expertise. Never alarmist. Acknowledge difficulty when relevant. Be specific — avoid vague reassurances.
+Tone: balanced — warm and reassuring, but clinically grounded. These are Prof. Seidman's patients; they expect expertise. Never alarmist. Acknowledge difficulty when relevant. Be specific — avoid vague reassurances.
 
 Use markdown headers (###) to structure your response into clear sections. Max 4-5 sections. Always end with a "Questions to ask Prof. Seidman:" section.
 
@@ -1561,7 +1561,7 @@ Patient's current treatment phase: ${phase}`
     headerTagline: 'מדריך אישי להבנת מחזור טיפול IVF',
     badgeText: 'מהמרפאה של פרופ׳ זיידמן',
     introTitle: 'מה דיברנו בביקור שלך היום?',
-    introDesc: 'הכניסי כאן את התוצאות שלך או שאלות — רמות הורמונים, ספירת זקיקים, עדכוני עוברים — וקבלי הסבר ברור על מה שהן אומרות ומה הצעד הבא.',
+    introDesc: 'הכניסי כאן את התוצאות שלך או שאלות — רמות הורמונים, ספירת זקיקים, עדכוני עוברים — וקבלי הסבר מקצועי וברור על מה שהן אומרות ומה הצעד הבא.',
     phaseLabel: 'השלב הנוכחי שלך',
     inputLabel: 'התוצאות שלך או שאלה',
     inputPlaceholder: 'לדוגמה: יום 6 של סיטומלציה הורמונלית. אסטרדיול: 1,240. אולטרסאונד הראה 5 זקיקים של 16 מ"מ, 3 של 14 מ"מ, 2 של 12 מ"מ. מה זה אומר?',
@@ -1579,7 +1579,7 @@ Patient's current treatment phase: ${phase}`
     medDosePlaceholder: '— מינון —',
     medDoseCustomPlaceholder: 'או הקלידי מינון',
     medCustomPlaceholder: 'הקלידי שם תרופה',
-    memoryTitle: 'המסע שלך',
+    memoryTitle: 'המסע שלך עד כה',
     saveNoteBtn: 'שמור',
     saveNotePlaceholder: 'הוסיפי הערה אישית למסע שלך...',
     uploadTitle: 'צרפי תוצאה (PDF או תמונה)',
@@ -1590,11 +1590,11 @@ Patient's current treatment phase: ${phase}`
     milestoneDownload: '↓ הורדה',
     milestoneShareNative: 'שתפי ↗',
     shareCopied: 'הועתק! הדביקי בפוסט שלך.',
-    responseTitle: 'התשובה של פרופ׳ זיידמן',
-    loadingText: 'רגע…',
-    errorText: 'משהו השתבש — אפשר לנסות שוב.',
-    footerNote: 'המלווה של פרופ׳ דניאל זיידמן · מרפאת עלמה',
-    disclaimer: 'הכלי הזה נועד לעזור לך להבין את התוצאות ולהתכונן לפגישה עם פרופ׳ זיידמן. הוא לא תחליף לייעוץ רפואי — שאלות קליניות תמיד יטופלו ישירות על ידי פרופ׳ זיידמן וצוותו.',
+    responseTitle: 'הסבר קליני',
+    loadingText: 'מכינה את ההסבר שלך…',
+    errorText: 'משהו השתבש. אנא נסי שוב.',
+    footerNote: 'פרופ׳ דניאל זיידמן',
+    disclaimer: 'כלי זה נועד למטרות מידע בלבד. הוא נועד לסייע לך להבין את תוצאות הבדיקה ולהיערך לשיחה עם פרופ׳ זיידמן. מענה על שאלות רפואיות או בירור חששות קליניים יינתנו ישירות על ידי פרופ׳ זיידמן וצוותו.',
     phases: [
       { label: '💉 סיטומלציה הורמונלית (IVF)', value: 'סיטומלציה הורמונלית לטיפול IVF', sample: 'יום 6 של סיטומלציה הורמונלית. אסטרדיול: 1,240. אולטרסאונד: 5 זקיקים של 16 מ"מ, 3 של 14 מ"מ, 2 של 12 מ"מ. האם התגובה שלי תקינה?' },
       { label: '🥚 שאיבה והתאוששות', value: 'שאיבת ביציות והתאוששות', sample: 'שאבו 9 ביציות, 7 היו בשלות. אני מרגישה נפיחות וכאבים. האם זה תקין ומה קורה לביציות עכשיו?' },
@@ -1613,7 +1613,7 @@ Patient's current treatment phase: ${phase}`
       'PGT-A הראה 1 נורמלי מתוך 4 עוברים. האם זה רגיל?',
       'רירית הרחם שלי 7.2 מ"מ ביום 10 של הכנה ל-FET. האם מספיק עבה?',
     ],
-    systemPrompt: (phase) => `את המלווה הדיגיטלי שנוצר על ידי פרופ׳ דניאל זיידמן, אחד ממומחי הפוריות המובילים בישראל. את עוזרת לנשים שלו להבין את תוצאות הפוריות שלהן ואת מסע הטיפול.
+    systemPrompt: (phase) => `את כלי חינוך קליני למטופלות שנוצר על ידי פרופ׳ דניאל זיידמן, אחד ממומחי הפוריות המובילים בישראל. את עוזרת למטופלותיו להבין את תוצאות הפוריות שלהן ואת מסע הטיפול.
 
 תפקידך:
 1. להסביר תוצאות בצורה ברורה ומדויקת, בסגנון של מרפאת פרופ׳ זיידמן — חמה אך מדויקת
@@ -1621,7 +1621,7 @@ Patient's current treatment phase: ${phase}`
 3. להסביר מה צפוי להיות הצעד הבא, בצורה מעשית וכנה
 4. לסיים עם 1-2 שאלות ספציפיות שהמטופלת יכולה להביא לפגישה הבאה עם פרופ׳ זיידמן
 
-טון: חם ומדויק. כמו רופא שהוא גם חבר. מרגיעה, אבל לא מסתירה מידע. לא מדאיגה ולא מעורפלת. הכירי בקושי כשרלוונטי.
+טון: מאוזן — חמה ומרגיעה, אבל מבוססת קלינית. אלה מטופלות של פרופ׳ זיידמן; הן מצפות למומחיות. לא מדאיגה. הכירי בקושי כשרלוונטי. היי ספציפית — הימנעי מהרגעה מעורפלת.
 
 השתמשי בכותרות markdown (###) לארגון התשובה לחלקים ברורים. עד 4-5 חלקים. תמיד סיימי עם חלק "שאלות לפרופ׳ זיידמן:".
 
@@ -2772,48 +2772,48 @@ const tips = [
   // 0 — IVF Stimulation
   {
     diet: [
-      { en: 'Make protein a priority at every meal during stimulation — eggs, fish, legumes, and Greek yogurt support follicle development and ovarian response.', he: 'בשלב הסיטומלציה, חלבון בכל ארוחה — ביצים, דגים, קטניות, יוגורט יווני. הוא תומך ישירות בהתפתחות הזקיקים.' },
-      { en: 'Stay well-hydrated during stimulation — 8 to 10 glasses of water daily helps your ovaries respond better and lowers the risk of OHSS.', he: 'שתי הרבה מים בסיטומלציה — 8 עד 10 כוסות ביום. הידרציה טובה עוזרת לשחלות להגיב טוב יותר ומפחיתה סיכון ל-OHSS.' },
-      { en: 'Reduce processed sugars and refined carbs this week. Blood sugar spikes can disrupt the hormonal balance you\'re carefully building with your injections.', he: 'הפחיתי סוכר מעובד ופחמימות לבנות השבוע. תנודות חדות בסוכר עלולות לשבש את האיזון ההורמונלי שהזריקות שלך בונות בזהירות.' },
+      { en: 'Prioritise protein at every meal during stimulation — eggs, fish, legumes, and Greek yogurt support follicle development and ovarian response.', he: 'בשלב הסיטומלציה ההורמונלית, שמי על חלבון בכל ארוחה — ביצים, דגים, קטניות, יוגורט יווני. חלבון תומך ישירות בהתפתחות הזקיקים.' },
+      { en: 'Stay well-hydrated during stimulation — 8 to 10 glasses of water daily helps your ovaries respond optimally and reduces the risk of OHSS.', he: 'שתי הרבה מים בשלב הסיטומלציה ההורמונלית — 8 עד 10 כוסות ביום. הידרציה טובה מסייעת לשחלות להגיב בצורה מיטבית ומפחיתה סיכון ל-OHSS.' },
+      { en: 'Reduce processed sugars and refined carbs this week. Blood sugar spikes can disrupt the hormonal balance you\'re carefully building with your injections.', he: 'הגבילי סוכר מעובד ופחמימות לבנות השבוע. תנודות חדות בסוכר בדם עלולות לשבש את האיזון ההורמונלי שאת בונה בזהירות עם הזריקות.' },
       { en: 'Antioxidant-rich foods — berries, spinach, walnuts — may support egg quality during stimulation. Try adding a handful of one to each meal.', he: 'מזונות עשירים בנוגדי חמצון — פירות יער, תרד, אגוזי מלך — עשויים לתמוך באיכות הביציות. נסי להוסיף קומץ קטן מאחד מהם לכל ארוחה.' }
     ],
     exercise: [
-      { en: 'During stimulation, avoid vigorous exercise entirely. Your ovaries are enlarging and need protection — a gentle 20-minute walk is the ideal daily movement.', he: 'בשלב הסיטומלציה ההורמונלית, בשלב הסיטומלציה, תמנעי מפעילות מאומצת לגמרי. השחלות שלך מתנפחות — הליכה קלה של 20 דקות ביום זה בדיוק מה שצריך.' },
+      { en: 'During stimulation, avoid vigorous exercise entirely. Your ovaries are enlarging and need protection — a gentle 20-minute walk is the ideal daily movement.', he: 'בשלב הסיטומלציה ההורמונלית, הימנעי לחלוטין מפעילות גופנית מאומצת. השחלות שלך מתנפחות וזקוקות להגנה — הליכה קלה של 20 דקות היא הפעילות האידיאלית.' },
       { en: 'As follicles grow, the risk of ovarian torsion increases. Avoid high-impact activities, twisting, or anything that raises your heart rate significantly.', he: 'ככל שהזקיקים גדלים, עולה הסיכון לפיתול שחלה. הימנעי מפעילות בעצימות גבוהה, תנועות פיתול, או כל דבר שמעלה את הדופק משמעותית.' },
       { en: 'Gentle stretching or restorative yoga (no inversions) can help ease the bloating and heaviness of stimulation without stressing your ovaries.', he: 'מתיחות עדינות או יוגה משחזרת (ללא תנוחות הפוכות) יכולות להקל על הנפיחות ותחושת הכובד של שלב הסיטומלציה ההורמונלית, מבלי לעמיס על השחלות.' },
-      { en: 'If your abdomen feels heavy, tight, or uncomfortable, stop and rest. Your body is doing extraordinary work — this isn't the time to push through discomfort.', he: 'אם הבטן שלך מרגישה כבדה, מתוחה או לא נוחה, עצרי ונוחי. הגוף שלך עושה עבודה יוצאת דופן — זה לא הזמן לדחוף מעבר לאי-נוחות.' }
+      { en: 'If your abdomen feels heavy, tight, or uncomfortable, stop and rest. Your body is doing extraordinary work — this is not the time to push through discomfort.', he: 'אם הבטן שלך מרגישה כבדה, מתוחה או לא נוחה, עצרי ונוחי. הגוף שלך עושה עבודה יוצאת דופן — זה לא הזמן לדחוף מעבר לאי-נוחות.' }
     ],
     relaxation: [
-      { en: 'Stress hormones can affect your ovarian response during stimulation. Even 10 minutes of slow, deep breathing today helps regulate cortisol without any medication.', he: 'הורמוני סטרס יכולים להשפיע על תגובת השחלות. אפילו 10 דקות של נשימות עמוקות עוזרות לאזן קורטיזול — בלי שום תרופה.' },
-      { en: 'Resist the urge to Google your numbers during stimulation. Every protocol is different — your results only mean something in the context of your specific cycle.', he: 'לא לגגל את המספרים שלך בזמן הסיטומלציה. כל פרוטוקול הוא אישי — הנתונים שלך משמעותיים רק בהקשר של המחזור הספציפי שלך.' },
-      { en: 'A short walk in nature actually shifts your cortisol and anxiety levels. Even 15 minutes outdoors each day can support your hormonal balance during this phase.', he: 'הליכה קצרה בטבע ממש משנה את רמות הקורטיזול והחרדה. 15 דקות בחוץ כל יום — זה יכול לעשות הבדל.' },
+      { en: 'Stress hormones can affect your ovarian response during stimulation. Even 10 minutes of slow, deep breathing today helps regulate cortisol without any medication.', he: 'הורמוני לחץ עלולים להשפיע על תגובת השחלות בשלב הסיטומלציה ההורמונלית. אפילו 10 דקות של נשימות עמוקות ואיטיות מסייעות לווסת קורטיזול — ללא שום תרופה.' },
+      { en: 'Resist the urge to search your numbers online during stimulation. Every protocol is personalised — your results are only meaningful in the context of your specific cycle.', he: 'התנגדי לדחף לחפש את המספרים שלך באינטרנט בזמן הסיטומלציה ההורמונלית. כל פרוטוקול אישי — התוצאות שלך משמעותיות רק בהקשר של המחזור הספציפי שלך.' },
+      { en: 'A short walk in nature has measurable effects on cortisol and anxiety levels. Even 15 minutes outdoors each day can support your hormonal balance during this phase.', he: 'להליכה קצרה בטבע יש השפעה מדידה על רמות קורטיזול וחרדה. אפילו 15 דקות בחוץ מדי יום יכולות לתמוך באיזון ההורמונלי שלך בשלב הסיטומלציה ההורמונלית.' },
       { en: 'Acupuncture during stimulation may support blood flow to the ovaries. Ask Prof. Seidman if it is appropriate for your protocol before starting.', he: 'דיקור סיני בזמן הסיטומלציה ההורמונלית עשוי לתמוך בזרימת הדם לשחלות. שאלי את פרופ׳ זיידמן אם הוא מתאים לפרוטוקול שלך לפני שמתחילים.' }
     ],
     vitamins: [
       { en: 'CoQ10 (400–600 mg/day) started 2–3 months before stimulation may improve egg quality by supporting mitochondrial function. Discuss timing and dose with Prof. Seidman.', he: 'CoQ10 (400–600 מ"ג ליום) שהתחיל 2–3 חודשים לפני הסיטומלציה ההורמונלית עשוי לשפר את איכות הביציות על ידי תמיכה בתפקוד המיטוכונדריה. דיני עם פרופ׳ זיידמן על התזמון והמינון.' },
-      { en: 'Check that your vitamin D is adequate before stimulation — levels below 30 ng/mL are associated with lower ovarian response. Ask to have it checked if you haven\'t recently.', he: 'בדקי שרמת ויטמין D שלך תקינה לפני שמתחילים — רמות מתחת ל-30 ננוגרם/מ"ל קשורות לתגובת שחלות נמוכה יותר. אם לא בדקת לאחרונה, כדאי לבקש.' },
-      { en: 'Continue your folic acid or methylfolate throughout stimulation — it remains important for egg quality and early embryo development.', he: 'המשיכי בחומצה פולית או מתילפולאט לאורך כל הסיטומלציה — זה עדיין חשוב לאיכות הביציות ולפיתוח עוברים מוקדם.' },
+      { en: 'Ensure your vitamin D level is adequate before stimulation — levels below 30 ng/mL are associated with lower ovarian response. Ask to have it checked if you haven\'t recently.', he: 'ודאי שרמת ויטמין D שלך מספקת לפני הסיטומלציה ההורמונלית — רמות מתחת ל-30 ננוגרם/מ"ל קשורות לתגובת שחלות נמוכה יותר. בקשי בדיקה אם לא בדקת לאחרונה.' },
+      { en: 'Continue your folic acid or methylfolate throughout stimulation — it remains important for egg quality and early embryo development.', he: 'המשיכי בחומצה פולית או מתילפולאט לאורך כל הסיטומלציה ההורמונלית — היא נשארת חשובה לאיכות הביציות ולהתפתחות העוברים המוקדמת.' },
       { en: 'Avoid starting new supplements during your stimulation cycle without Prof. Seidman\'s approval — even well-intentioned additions can interact with your protocol unexpectedly.', he: 'הימנעי מתחילת תוספים חדשים במהלך מחזור הסיטומלציה ההורמונלית ללא אישור פרופ׳ זיידמן — אפילו תוספות בכוונה טובה עלולות לקיים אינטראקציה עם הפרוטוקול שלך בצורה בלתי צפויה.' }
     ],
     lifestyle: [
-      { en: 'Avoid hot tubs, saunas, and very hot baths entirely during stimulation — heat directly impairs egg quality and can stress your enlarging ovaries.', he: 'ג\'קוזי, סאונה ואמבטיות חמות מאוד — לא בזמן הסיטומלציה. חום פוגע ישירות באיכות הביציות.' },
-      { en: 'Eliminate alcohol entirely during your stimulation cycle — even moderate consumption can reduce egg quality and interfere with the hormonal signalling your injections are carefully calibrating.', he: 'אלכוהול — לא במחזור הסיטומלציה. אפילו כמות קטנה יכולה לפגוע באיכות הביציות ולהפריע לאיזון ההורמונלי שהזריקות בונות.' },
+      { en: 'Avoid hot tubs, saunas, and very hot baths entirely during stimulation — heat directly impairs egg quality and can stress your enlarging ovaries.', he: 'הימנעי לחלוטין מג\'קוזי, סאונה ואמבטיות חמות מאוד בזמן הסיטומלציה ההורמונלית — חום פוגע ישירות באיכות הביציות ועלול להעמיס על השחלות המתנפחות שלך.' },
+      { en: 'Eliminate alcohol entirely during your stimulation cycle — even moderate consumption can reduce egg quality and interfere with the hormonal signalling your injections are carefully calibrating.', he: 'בטלי לחלוטין אלכוהול במהלך מחזור הסיטומלציה ההורמונלית שלך — אפילו צריכה מתונה יכולה להפחית את איכות הביציות ולהפריע לאיתות ההורמונלי שהזריקות שלך מכיילות בקפידה.' },
       { en: 'Minimise exposure to BPA — choose glass or stainless containers, avoid heating food in plastic, and reduce tinned food this month. BPA is a documented endocrine disruptor.', he: 'מזערי חשיפה ל-BPA — בחרי כלי זכוכית או נירוסטה, הימנעי מחימום מזון בפלסטיק, והפחיתי מזון משומר החודש. BPA הוא מפריע אנדוקריני מתועד.' },
-      { en: 'Protect your sleep during stimulation — 7–9 hours of quality sleep regulates the hormonal cascade supporting your cycle. Keep a consistent bedtime this week.', he: 'שמרי על שינה טובה בסיטומלציה — 7–9 שעות מווסתות את הקסקדה ההורמונלית שמחזיקה את המחזור שלך. שעת שינה קבועה השבוע זה הדבר הכי פשוט שאת יכולה לעשות.' }
+      { en: 'Protect your sleep during stimulation — 7–9 hours of quality sleep regulates the hormonal cascade supporting your cycle. Prioritise a consistent bedtime this week.', he: 'הגיני על שנתך בשלב הסיטומלציה ההורמונלית — 7–9 שעות שינה איכותיות מווסתות את הקסקדה ההורמונלית התומכת במחזור שלך. תני עדיפות לשעת שינה קבועה השבוע.' }
     ],
     stress: [
-      { en: 'The daily injections of stimulation are both a physical and emotional burden. Acknowledge that — it is genuinely hard, and you're doing something incredibly demanding — with real courage.', he: 'הזריקות היומיות הן עומס גם פיזי וגם רגשי. מגיע לך לדעת את זה — מה שאת עוברת קשה, ואת עושה את זה עם אומץ.' },
+      { en: 'The daily injections of stimulation are both a physical and emotional burden. Acknowledge that — it is genuinely hard, and you are doing something very demanding with extraordinary courage.', he: 'הזריקות היומיות של הסיטומלציה ההורמונלית הן נטל פיזי ורגשי כאחד. הכירי בכך — זה באמת קשה, ואת עושה משהו מאוד תובעני עם אומץ יוצא דופן.' },
       { en: 'Limit how much you discuss your cycle with others during stimulation — too many opinions and predictions from well-meaning people can heighten anxiety rather than reduce it.', he: 'הגבילי כמה את מדברת על המחזור שלך עם אחרים בזמן הסיטומלציה ההורמונלית — יותר מדי דעות ותחזיות מאנשים בעלי כוונות טובות יכולות להגביר חרדה ולא להפחית אותה.' },
       { en: 'Diaphragmatic breathing for 5 minutes before your daily injection can reduce the cortisol spike associated with anticipatory anxiety — try it tonight.', he: 'נשימה סרעפתית למשך 5 דקות לפני הזריקה היומית שלך יכולה להפחית את עלייה בקורטיזול הקשורה לחרדה ציפייה — נסי הלילה.' },
-      { en: 'If this isn't your first cycle, let go of comparisons to previous ones. Each stimulation cycle is physiologically different — your body isn't repeating the past.', he: 'אם זה לא המחזור הראשון שלך, שחררי השוואות למחזורים קודמים. כל מחזור סיטומלציה הורמונלית שונה פיזיולוגית — גופך לא חוזר על העבר.' }
+      { en: 'If this is not your first cycle, let go of comparisons to previous ones. Each stimulation cycle is physiologically different — your body is not repeating the past.', he: 'אם זה לא המחזור הראשון שלך, שחררי השוואות למחזורים קודמים. כל מחזור סיטומלציה הורמונלית שונה פיזיולוגית — גופך לא חוזר על העבר.' }
     ]
   },
   // 1 — Retrieval & Recovery
   {
     diet: [
       { en: 'After retrieval, focus on protein and fluids to support tissue healing — bone broth, eggs, Greek yogurt, and plenty of water are ideal for the next 48 hours.', he: 'לאחר השאיבה, התמקדי בחלבון ונוזלים לתמיכה בריפוי הרקמות — ציר עצמות, ביצים, יוגורט יווני והרבה מים הם אידיאליים ל-48 השעות הבאות.' },
-      { en: 'If you experience bloating post-retrieval, salty snacks like crackers and pretzels can help balance fluid — this sounds counterintuitive but is actually supported for mild OHSS.', he: 'אם את חשה נפיחות לאחר השאיבה, חטיפים מלוחים כמו קרקרים ופרצל יכולים לסייע לאיזון הנוזלים — עצה שנראית הפוכה אך נתמכת קלינית בהתמודדות עם OHSS קל.' },
-      { en: 'Avoid alcohol completely following retrieval. It interferes with embryo development in the lab and with your body\'s hormonal recovery.', he: 'אלכוהול — לא אחרי השאיבה. הוא מפריע להתפתחות העוברים במעבדה ולהתאוששות הגוף.' },
+      { en: 'If you experience bloating post-retrieval, salty snacks like crackers and pretzels can help balance fluid — this counterintuitive advice is clinically supported for mild OHSS.', he: 'אם את חשה נפיחות לאחר השאיבה, חטיפים מלוחים כמו קרקרים ופרצל יכולים לסייע לאיזון הנוזלים — עצה שנראית הפוכה אך נתמכת קלינית בהתמודדות עם OHSS קל.' },
+      { en: 'Avoid alcohol completely following retrieval. It interferes with embryo development in the lab and with your body\'s hormonal recovery.', he: 'הימנעי לחלוטין מאלכוהול לאחר השאיבה. הוא מפריע להתפתחות העוברים במעבדה ולהתאוששות ההורמונלית של גופך.' },
       { en: 'Eat small, frequent meals today if you feel nauseous or bloated from the anaesthesia. Your body needs fuel to recover, even if your appetite is reduced.', he: 'אכלי ארוחות קטנות ותכופות אם את מרגישה בחילה או נפיחות מההרדמה. הגוף שלך זקוק לאנרגיה כדי להתאושש, גם אם התיאבון שלך ירד.' }
     ],
     exercise: [
@@ -2824,7 +2824,7 @@ const tips = [
     relaxation: [
       { en: 'Rest is medicine today. Give yourself permission to do absolutely nothing — watching a series, reading, sleeping. Your body is doing the hard work of recovery.', he: 'מנוחה היא תרופה היום. תני לעצמך רשות לא לעשות כלום — לצפות בסדרה, לקרוא, לישון. הגוף שלך עושה את העבודה הקשה של ההתאוששות.' },
       { en: 'A warm (not hot) compress on your lower abdomen can ease cramping and discomfort after retrieval. Heat promotes circulation and relaxes the surrounding muscles.', he: 'כרית חימום חמה (לא חמה מדי) על הבטן התחתונה יכולה להקל על עוויתות ואי-נוחות לאחר השאיבה. חום משפר מחזור דם ומרפה את השרירים.' },
-      { en: 'Waiting for the fertilisation report is one of the hardest parts of IVF. Whatever you are feeling right now — anxiety, hope, numbness — both are completely okay.', he: 'ההמתנה לדוח ההפריה היא אחד החלקים הקשים ב-IVF. מה שאת מרגישה עכשיו — חרדה, תקווה, חוסר תחושה — הכל בסדר.' },
+      { en: 'Waiting for the fertilisation report is one of the hardest parts of IVF. Whatever you are feeling right now — anxiety, hope, numbness — it is completely valid.', he: 'ההמתנה לדוח ההפריה היא אחת החלקים הקשים ביותר ב-IVF. כל מה שאת מרגישה עכשיו — חרדה, תקווה, חוסר תחושה — זה לגמרי מובן.' },
       { en: 'Avoid reading embryo development statistics online while waiting for updates. Your embryologist\'s report, in context, is far more meaningful than population averages.', he: 'הימנעי מקריאת סטטיסטיקות על התפתחות עוברים ברשת בזמן ההמתנה לעדכונים. הדוח של האמבריולוג שלך, בהקשר שלו, משמעותי הרבה יותר מממוצעי אוכלוסייה.' }
     ],
     vitamins: [
@@ -2833,14 +2833,14 @@ const tips = [
       { en: 'Probiotics can help restore gut balance after anaesthesia and any antibiotics given during retrieval. A daily probiotic for a week post-retrieval is a reasonable addition.', he: 'פרוביוטיקה יכולה לסייע לשחזר את האיזון במעיים לאחר הרדמה ואנטיביוטיקה שניתנה במהלך השאיבה. פרוביוטיקה יומית לשבוע לאחר השאיבה היא תוספת סבירה.' }
     ],
     lifestyle: [
-      { en: 'Arrange for someone to be with you at home today — not to monitor you medically, but for practical support and company. Recovery is easier when you're not alone.', he: 'דאגי שמישהו יהיה איתך בבית היום — לא לניטור רפואי, אלא לתמיכה מעשית ולחברה. ההתאוששות קלה יותר כשאת לא לבד.' },
+      { en: 'Arrange for someone to be with you at home today — not to monitor you medically, but for practical support and company. Recovery is easier when you are not alone.', he: 'דאגי שמישהו יהיה איתך בבית היום — לא לניטור רפואי, אלא לתמיכה מעשית ולחברה. ההתאוששות קלה יותר כשאת לא לבד.' },
       { en: 'Avoid driving for 24 hours after your anaesthesia. Plan your transport home and any next-day appointments in advance.', he: 'הימנעי מנהיגה למשך 24 שעות לאחר ההרדמה שלך. תכנני את ההסעה הביתה ואת כל הפגישות ביום שלמחרת מראש.' },
       { en: 'Take the day off work if at all possible. Retrieval is a medical procedure — physical and emotional rest today directly supports recovery and the embryo development ahead.', he: 'קחי יום חופש מהעבודה אם בכלל אפשרי. שאיבה היא התערבות רפואית — מנוחה פיזית ורגשית היום תומכת ישירות בהתאוששות ובהתפתחות העוברים שלפנינו.' }
     ],
     stress: [
       { en: 'The number of eggs retrieved is important context but not the final chapter. Fertilisation, development, and quality matter more than the raw count. Trust the process.', he: 'מספר הביציות שנשאבו הוא הקשר חשוב אך לא הפרק האחרון. הפריה, התפתחות ואיכות חשובים יותר מהמספר הגולמי. בטחי בתהליך.' },
       { en: 'Whatever number you heard today — whether it felt like a lot or too few — resist comparing it to others\' cycles online. Your biology is unique.', he: 'כל מספר שקיבלת היום — בין אם הרגיש הרבה או מעט מדי — התנגדי להשוות אותו למחזורים של אחרים ברשת. הביולוגיה שלך ייחודית.' },
-      { en: 'The 24–48 hours after retrieval often bring an emotional dip alongside the physical recovery. This is normal and doesn't reflect what is happening in the lab. Be patient with yourself.', he: '24–48 השעות לאחר השאיבה לעיתים מביאות ירידה רגשית לצד ההתאוששות הפיזית. זה נורמלי ואינו משקף את מה שקורה במעבדה. היי סבלנית עם עצמך.' }
+      { en: 'The 24–48 hours after retrieval often bring an emotional dip alongside the physical recovery. This is normal and does not reflect what is happening in the lab. Be patient with yourself.', he: '24–48 השעות לאחר השאיבה לעיתים מביאות ירידה רגשית לצד ההתאוששות הפיזית. זה נורמלי ואינו משקף את מה שקורה במעבדה. היי סבלנית עם עצמך.' }
     ]
   },
   // 2 — Embryo Development
@@ -2852,55 +2852,55 @@ const tips = [
       { en: 'Begin treating your body as if you are already pregnant — avoid raw fish, unpasteurised cheeses, and deli meats from now through your transfer and beyond.', he: 'התחילי להתייחס לגופך כאילו את כבר בהריון — הימנעי מדגים נאים, גבינות לא מפוסטרות ומוצרי מעדנייה מעכשיו ועד לאחר ההחזרה.' }
     ],
     exercise: [
-      { en: 'Light walking for 20–30 minutes during the wait for embryo updates is beneficial — it supports circulation, reduces anxiety, and is safe.', he: 'הליכה קלה של 20–30 דקות בזמן ההמתנה לעדכוני העוברים היא מיטיבה — משפרת מחזור דם, מפחיתה חרדה, ובטוחה לחלוטין.' },
+      { en: 'Light walking for 20–30 minutes during the wait for embryo updates is beneficial — it supports circulation, reduces anxiety, and is completely safe.', he: 'הליכה קלה של 20–30 דקות בזמן ההמתנה לעדכוני העוברים היא מיטיבה — משפרת מחזור דם, מפחיתה חרדה, ובטוחה לחלוטין.' },
       { en: 'Yoga nidra (yoga sleep) is an excellent practice during the embryo development wait — it promotes deep physiological rest without any physical stress.', he: 'יוגה נידרה (שינת יוגה) היא תרגול מצוין בזמן ההמתנה לעדכוני עוברים — מקדמת מנוחה פיזיולוגית עמוקה ללא מאמץ גופני כלשהו.' },
       { en: 'Avoid high-impact exercise until after transfer — your uterine lining is being prepared and your body deserves stability during this window.', he: 'הימנעי מפעילות גופנית עצימה עד לאחר ההחזרה — רירית הרחם שלך מתכוננת והגוף שלך ראוי ליציבות בחלון הזמן הזה.' }
     ],
     relaxation: [
-      { en: 'The embryo development wait is one of the most anxiety-laden phases of IVF. Notice what you're feeling — naming the emotion reduces its intensity.', he: 'ההמתנה להתפתחות העוברים היא אחת השלבים הטעונים ביותר ב-IVF. תני שם למה שאת מרגישה — זיהוי הרגש מפחית את עוצמתו.' },
+      { en: 'The embryo development wait is one of the most anxiety-laden phases of IVF. Acknowledge what you are feeling — naming the emotion reduces its intensity.', he: 'ההמתנה להתפתחות העוברים היא אחת השלבים הטעונים ביותר ב-IVF. תני שם למה שאת מרגישה — זיהוי הרגש מפחית את עוצמתו.' },
       { en: 'Plan something enjoyable today that has nothing to do with fertility — a meal out, time with someone who makes you laugh. The cycle continues whether you rest or worry.', he: 'תכנני משהו מהנה היום שאין לו שום קשר לפוריות — ארוחה בחוץ, זמן עם מישהו שגורם לך לצחוק. המחזור ממשיך בין אם תנוחי ובין אם תדאגי.' },
       { en: 'Limit checking your phone to designated times rather than constantly waiting for updates — sustained anticipation raises cortisol without any useful purpose.', he: 'הגבילי בדיקת הטלפון לשעות קבועות במקום להמתין כל הזמן לעדכונים — ציפייה מתמשכת מעלה קורטיזול ללא שום תועלת.' }
     ],
     vitamins: [
-      { en: 'Continue all prescribed supplements through the embryo development window — don't stop anything without checking with Prof. Seidman first.', he: 'המשיכי בכל התוספים שנרשמו לאורך חלון התפתחות העוברים — אל תפסיקי שום דבר ללא הנחיה מפורשת מפרופ׳ זיידמן.' },
+      { en: 'Continue all prescribed supplements through the embryo development window — do not stop anything without explicit guidance from Prof. Seidman.', he: 'המשיכי בכל התוספים שנרשמו לאורך חלון התפתחות העוברים — אל תפסיקי שום דבר ללא הנחיה מפורשת מפרופ׳ זיידמן.' },
       { en: 'If your clinic has prescribed melatonin during this phase, take it consistently at the same time each evening — timing matters for its effectiveness.', he: 'אם המרפאה שלך רשמה מלטונין בשלב זה, קחי אותו באופן עקבי באותה שעה כל ערב — התזמון חשוב לאפקטיביות שלו.' },
       { en: 'Vitamin B6 (in a prenatal or standalone supplement) can help with progesterone support during the luteal phase leading up to transfer.', he: 'ויטמין B6 (בויטמין לפני לידה או כתוסף עצמאי) יכול לסייע בתמיכה בפרוגסטרון בשלב הלוטאלי לקראת ההחזרה.' }
     ],
     lifestyle: [
-      { en: 'Maintain a consistent sleep schedule during the embryo development wait — cortisol disruption from poor sleep directly affects the hormonal environment you are trying to support.', he: 'שמרי על לוח זמנים שינה עקבי בזמן המתנת התפתחות העוברים — שיבוש הקורטיזול משינה לקויה משפיע ישירות על הסביבה ההורמונלית שאת מנסה לייטב.' },
-      { en: 'If you're still working, this is a reasonable time to pace yourself — you don't need to perform at full capacity while carrying this level of emotional and physical investment.', he: 'אם את עדיין עובדת, זהו זמן סביר להאט את הקצב — את לא צריכה לבצע ביכולת מלאה בזמן שאת נושאת רמה זו של השקעה רגשית ופיזית.' },
-      { en: 'Reduce alcohol to zero during this phase — even one drink can alter the hormonal environment ahead of transfer and isn't worth the risk.', he: 'הפחיתי אלכוהול לאפס בשלב זה — אפילו משקה אחד יכול לשנות את הסביבה ההורמונלית לקראת ההחזרה ואינו שווה את הסיכון.' }
+      { en: 'Maintain a consistent sleep schedule during the embryo development wait — cortisol disruption from poor sleep directly affects the hormonal environment you are trying to optimise.', he: 'שמרי על לוח זמנים שינה עקבי בזמן המתנת התפתחות העוברים — שיבוש הקורטיזול משינה לקויה משפיע ישירות על הסביבה ההורמונלית שאת מנסה לייטב.' },
+      { en: 'If you are still working, this is a reasonable time to pace yourself — you do not need to perform at full capacity while carrying this level of emotional and physical investment.', he: 'אם את עדיין עובדת, זהו זמן סביר להאט את הקצב — את לא צריכה לבצע ביכולת מלאה בזמן שאת נושאת רמה זו של השקעה רגשית ופיזית.' },
+      { en: 'Reduce alcohol to zero during this phase — even one drink can alter the hormonal environment ahead of transfer and is not worth the risk.', he: 'הפחיתי אלכוהול לאפס בשלב זה — אפילו משקה אחד יכול לשנות את הסביבה ההורמונלית לקראת ההחזרה ואינו שווה את הסיכון.' }
     ],
     stress: [
-      { en: 'It's normal for fewer embryos to make it from retrieval to blastocyst — that doesn't reflect anything you did or didn't do. The lab is doing its job.', he: 'זה נורמלי שמספר העוברים יורד בין השאיבה לבלסטוציסט — זה לא משקף כלום ממה שעשית. המעבדה עושה את עבודתה, תני לה.' },
+      { en: 'The embryo attrition between retrieval and blast stage is biologically normal and does not reflect what you did or did not do. The lab is doing its job — let it.', he: 'ירידה במספר העוברים בין השאיבה לשלב הבלסטוציסט היא נורמלית ביולוגית ואינה משקפת מה עשית או לא עשית. המעבדה עושה את עבודתה — תני לה.' },
       { en: 'Each daily update carries enormous emotional weight. Give yourself explicit permission to feel however you feel after each call — relief, fear, grief, hope — all are valid.', he: 'כל עדכון יומי נושא משקל רגשי עצום. תני לעצמך רשות מפורשת להרגיש מה שתרגישי לאחר כל שיחה — הקלה, פחד, אבל, תקווה — כולם תקפים.' },
-      { en: 'If this is a particularly anxious wait, consider asking Prof. Seidman\'s team for a midpoint update call — many clinics will accommodate this if you ask.', he: 'אם זו המתנה מלאת חרדה במיוחד, שקלי לבקש מצוות פרופ׳ זיידמן שיחת עדכון באמצע — מרפאות רבות עושות את זה עבור נשים שזקוקות לכך.' }
+      { en: 'If this is a particularly anxious wait, consider asking Prof. Seidman\'s team for a midpoint update call — many clinics accommodate this for patients who need it.', he: 'אם זו המתנה מלאת חרדה במיוחד, שקלי לבקש מצוות פרופ׳ זיידמן שיחת עדכון באמצע — מרפאות רבות מתאימות זאת למטופלות שזקוקות לכך.' }
     ]
   },
   // 3 — FET Prep
   {
     diet: [
       { en: 'Uterine lining development needs good circulation. Focus on iron, vitamin E (almonds, sunflower seeds, olive oil), and L-arginine (nuts, seeds) this week.', he: 'התפתחות רירית הרחם זקוקה למחזור דם טוב. התמקדי בברזל, ויטמין E (שקדים, גרעיני חמניה, שמן זית), ו-L-ארגינין (אגוזים, זרעים) השבוע.' },
-      { en: 'Pomegranate juice has been studied for its effect on uterine lining blood flow. One glass a day during FET prep is a simple, sensible thing to try.', he: 'מיץ רימון נחקר כתומך בזרימת דם לרירית הרחם — כוס אחת ביום בהכנה ל-FET זה משהו פשוט שכדאי לנסות.' },
+      { en: 'Pomegranate juice has been studied for its potential to support uterine lining blood flow — one glass per day during FET prep is a reasonable, evidence-based addition.', he: 'מיץ רימון נחקר בשל פוטנציאלו לשפר זרימת דם לרירית הרחם — כוס אחת ביום במהלך הכנה ל-FET היא תוספת סבירה ומבוססת מחקר.' },
       { en: 'Warm foods and drinks support uterine circulation according to both traditional and emerging research. Avoid very cold beverages and raw food excess during lining prep.', he: 'מזון ומשקאות חמים תומכים במחזור הדם ברחם על פי מחקר מסורתי ועדכני. הימנעי ממשקאות קרים מאוד ועודף מזון נא בזמן הכנת רירית הרחם.' },
       { en: 'Reduce trans fats and ultra-processed foods during lining preparation — inflammatory foods may negatively affect endometrial receptivity ahead of transfer.', he: 'הפחיתי שומני טראנס ומזון אולטרה-מעובד בזמן הכנת הרירית — מזון דלקתי עלול להשפיע לרעה על קליטת רירית הרחם לקראת ההחזרה.' }
     ],
     exercise: [
       { en: 'Daily walking of 30 minutes during FET prep may actively support uterine blood flow and endometrial thickness — a gentle, consistent rhythm is ideal.', he: 'הליכה יומית של 30 דקות בהכנה ל-FET עשויה לתמוך באופן פעיל בזרימת הדם לרחם ועובי רירית הרחם — קצב עדין וקבוע הוא אידיאלי.' },
       { en: 'Yoga, especially hip-opening and restorative poses, can increase pelvic circulation during lining preparation. Avoid hot yoga and heated rooms.', he: 'יוגה, במיוחד תנוחות פתיחת ירכיים ומשחזרות, יכולה להגביר את מחזור הדם באגן במהלך הכנת הרירית. הימנעי מיוגה חמה וחדרים מחוממים.' },
-      { en: 'After embryo transfer, rest for the remainder of that day. From day 2 onwards, gentle walking is beneficial — research doesn't support prolonged bed rest after transfer.', he: 'לאחר החזרת העובר, נוחי ביתרת היום. החל מיום 2, הליכה עדינה מיטיבה — מחקרים אינם תומכים במנוחה ממושכת במיטה לאחר ההחזרה.' },
+      { en: 'After embryo transfer, rest for the remainder of that day. From day 2 onwards, gentle walking is beneficial — research does not support prolonged bed rest after transfer.', he: 'לאחר החזרת העובר, נוחי ביתרת היום. החל מיום 2, הליכה עדינה מיטיבה — מחקרים אינם תומכים במנוחה ממושכת במיטה לאחר ההחזרה.' },
       { en: 'Avoid exercises that increase intra-abdominal pressure — heavy lifting, intense core work — while on progesterone supplementation during FET prep.', he: 'הימנעי מתרגילים המגבירים לחץ תוך-בטני — הרמת משקולות כבדים, עבודה עצימה על שרירי הליבה — בזמן שאת נוטלת פרוגסטרון בהכנה ל-FET.' }
     ],
     relaxation: [
       { en: 'FET preparation can feel like a long, uncertain wait. Set small, manageable milestones to focus on — today\'s lining check, this week\'s injection — rather than the transfer date.', he: 'הכנה ל-FET יכולה להרגיש כמו המתנה ארוכה ובלתי ודאית. הציבי לעצמך אבני דרך קטנות וניתנות לניהול — הבדיקה של היום, הזריקה של השבוע — במקום תאריך ההחזרה.' },
-      { en: 'Warmth is your friend during FET prep — warm socks, warm (not hot) baths, warm drinks. It supports pelvic circulation and honestly just feels good.', he: 'חמימות היא בת בריתך בהכנה ל-FET — גרביים חמים, אמבטיות חמות (לא חמות מדי), משקאות חמים. תמיכה במחזור הדם באגן מרגיעה גם פיזיולוגית וגם רגשית.' },
-      { en: 'Acupuncture on the day of transfer — before and after — has some evidence behind it for implantation rates. Discuss with Prof. Seidman if this is right for you.', he: 'דיקור סיני ביום ההחזרה — לפני ואחרי — יש כמה מחקרים שמראים שזה משפר שיעורי השרשה. שווה לשאול את פרופ׳ זיידמן אם זה מתאים לך.' },
-      { en: 'Try not to symptom-spot in the two weeks after transfer — whether you feel something or nothing, it doesn't reliably predict the outcome. One day at a time.', he: 'התנגדי לרצון לחפש סימנים בשבועיים שלאחר ההחזרה — נוכחות או היעדר תסמיני השרשה אינה מנבאת בצורה אמינה את התוצאה. התמקדי ביום אחד בכל פעם.' }
+      { en: 'Warmth is your ally during FET prep — warm socks, warm baths (not too hot), warm drinks. Supporting pelvic circulation is both physiologically and emotionally comforting.', he: 'חמימות היא בת בריתך בהכנה ל-FET — גרביים חמים, אמבטיות חמות (לא חמות מדי), משקאות חמים. תמיכה במחזור הדם באגן מרגיעה גם פיזיולוגית וגם רגשית.' },
+      { en: 'Acupuncture on the day of transfer — before and after — has some evidence supporting improved implantation rates. Discuss with Prof. Seidman if this is right for you.', he: 'דיקור סיני ביום ההחזרה — לפני ואחרי — מגובה בעדויות מסוימות לשיפור שיעורי ההשרשה. דיני עם פרופ׳ זיידמן אם זה מתאים לך.' },
+      { en: 'Resist symptom-spotting in the two weeks after transfer — the presence or absence of implantation symptoms is not a reliable predictor of outcome. Focus on one day at a time.', he: 'התנגדי לרצון לחפש סימנים בשבועיים שלאחר ההחזרה — נוכחות או היעדר תסמיני השרשה אינה מנבאת בצורה אמינה את התוצאה. התמקדי ביום אחד בכל פעם.' }
     ],
     vitamins: [
-      { en: 'If your lining has been thin in previous cycles, ask Prof. Seidman about vitamin E supplementation (400–800 IU/day) — it has some evidence behind it for improving lining thickness.', he: 'אם הרירית שלך הייתה דקה במחזורים קודמים, שאלי את פרופ׳ זיידמן על תוספת ויטמין E (400–800 יחב"ל ליום) — יש לו עדויות תומכות לשיפור עובי רירית הרחם.' },
+      { en: 'If your lining has been thin in previous cycles, ask Prof. Seidman about vitamin E supplementation (400–800 IU/day) — it has supportive evidence for improving endometrial thickness.', he: 'אם הרירית שלך הייתה דקה במחזורים קודמים, שאלי את פרופ׳ זיידמן על תוספת ויטמין E (400–800 יחב"ל ליום) — יש לו עדויות תומכות לשיפור עובי רירית הרחם.' },
       { en: 'Low-dose aspirin is commonly prescribed during FET prep to support uterine blood flow — take it exactly as prescribed and do not stop without medical guidance.', he: 'אספירין במינון נמוך נרשם בדרך כלל בהכנה ל-FET לתמיכה בזרימת הדם לרחם — קחי אותו בדיוק כפי שנרשם ואל תפסיקי ללא הנחיה רפואית.' },
-      { en: 'Keep your progesterone schedule consistent — timing and method of administration matter significantly for lining receptivity. Set phone alarms if needed.', he: 'שמרי על לוח הזמנים של הפרוגסטרון — תזמון ושיטת הלקיחה ממש משנים לקליטת הרירית. תזכורות בטלפון יכולות לעזור.' }
+      { en: 'Ensure your progesterone supplementation schedule is consistent — timing and method of administration matter significantly for lining receptivity. Set phone alarms if needed.', he: 'ודאי שלוח הזמנים של תוספת הפרוגסטרון שלך עקבי — תזמון ושיטת מתן חשובים מאוד לקליטת הרירית. הגדירי אזעקות בטלפון אם צריך.' }
     ],
     lifestyle: [
       { en: 'Keep your pelvis warm during FET preparation — avoid sitting on cold surfaces and wear an extra layer around your waist in cooler weather. Pelvic warmth supports circulation.', he: 'שמרי על חמימות האגן במהלך הכנת ה-FET — הימנעי מישיבה על משטחים קרים ולבשי שכבה נוספת סביב המותניים בקרה. חמימות האגן תומכת במחזור הדם.' },
@@ -2909,16 +2909,16 @@ const tips = [
     ],
     stress: [
       { en: 'The two-week wait after transfer is genuinely one of the hardest emotional experiences in fertility treatment. Planning daily anchors — small enjoyable activities — is not distraction, it is coping.', he: 'השבועיים של ההמתנה לאחר ההחזרה הם באמת אחת החוויות הרגשיות הקשות ביותר בטיפולי פוריות. תכנון עוגנים יומיים — פעילויות קטנות ומהנות — אינו הסחת דעת, זוהי התמודדות.' },
-      { en: 'If you feel the urge to test early, consider waiting — an early negative result before the test date isn't definitive and can cause significant unnecessary distress.', he: 'אם את מרגישה צורך לבדוק מוקדם, שקלי להמתין — תוצאה שלילית מוקדמת לפני תאריך הבדיקה אינה סופית ועלולה לגרום למצוקה לא הכרחית משמעותית.' },
-      { en: 'Your thoughts during the two-week wait do not influence the outcome. Positive thinking isn't a fertility treatment — you can't think your way to success or failure.', he: 'המחשבות שלך במהלך השבועיים של ההמתנה אינן משפיעות על התוצאה. חשיבה חיובית אינה טיפול פוריות — את לא יכולה לחשוב את זה להצלחה או כישלון.' }
+      { en: 'If you feel the urge to test early, consider waiting — an early negative result before the test date is not definitive and can cause significant unnecessary distress.', he: 'אם את מרגישה צורך לבדוק מוקדם, שקלי להמתין — תוצאה שלילית מוקדמת לפני תאריך הבדיקה אינה סופית ועלולה לגרום למצוקה לא הכרחית משמעותית.' },
+      { en: 'Your thoughts during the two-week wait do not influence the outcome. Positive thinking is not a fertility treatment — you cannot think this into success or failure.', he: 'המחשבות שלך במהלך השבועיים של ההמתנה אינן משפיעות על התוצאה. חשיבה חיובית אינה טיפול פוריות — את לא יכולה לחשוב את זה להצלחה או כישלון.' }
     ]
   },
   // 4 — Fertility Preservation
   {
     diet: [
-      { en: 'The same nutritional focus applies during egg freezing as in IVF — protein, antioxidants, and good hydration throughout your injections.', he: 'אותן עדיפויות תזונתיות חלות במחזור הקפאת הביציות שלך כמו ב-IVF — תני עדיפות לחלבון, נוגדי חמצון והידרציה לאורך כל הזריקות.' },
+      { en: 'The same nutritional priorities apply during your egg freezing cycle as in IVF stimulation — prioritise protein, antioxidants, and hydration throughout your injections.', he: 'אותן עדיפויות תזונתיות חלות במחזור הקפאת הביציות שלך כמו ב-IVF — תני עדיפות לחלבון, נוגדי חמצון והידרציה לאורך כל הזריקות.' },
       { en: 'Mediterranean diet patterns — olive oil, fish, vegetables, legumes, nuts — are consistently associated with better egg quality in fertility research. Focus on this approach in the weeks before your cycle.', he: 'דפוסי תזונה ים-תיכוניים — שמן זית, דגים, ירקות, קטניות, אגוזים — קשורים באופן עקבי לאיכות ביציות טובה יותר במחקר פוריות. התמקדי בגישה הזו בשבועות שלפני המחזור.' },
-      { en: 'Avoid alcohol completely during your stimulation cycle for egg freezing — it can reduce egg quality and interfere with the hormonal response to your injections.', he: 'אלכוהול — לא במהלך מחזור הקפאת הביציות. הוא עלול לפגוע באיכות הביציות ולהפריע לתגובה ההורמונלית.' }
+      { en: 'Avoid alcohol completely during your stimulation cycle for egg freezing — it can reduce egg quality and interfere with the hormonal response to your injections.', he: 'הימנעי לחלוטין מאלכוהול במהלך מחזור הסיטומלציה ההורמונלית שלך להקפאת ביציות — הוא עלול להפחית את איכות הביציות ולהפריע לתגובה ההורמונלית לזריקות.' }
     ],
     exercise: [
       { en: 'During your stimulation cycle for egg freezing, the same exercise restrictions apply as IVF — avoid vigorous activity once injections have started.', he: 'במהלך מחזור הסיטומלציה ההורמונלית שלך להקפאת ביציות, חלות אותן הגבלות כמו ב-IVF — הימנעי מפעילות מאומצת ברגע שהזריקות התחילו.' },
@@ -2941,7 +2941,7 @@ const tips = [
       { en: 'Use this cycle as a reset point for healthy habits — the investment in your future fertility is also an investment in your current overall health.', he: 'השתמשי במחזור הזה כנקודת איפוס להרגלים בריאים — ההשקעה בפוריות העתידית שלך היא גם השקעה בבריאותך הכללית הנוכחית.' }
     ],
     stress: [
-      { en: 'You don't owe anyone an explanation for your decision to preserve fertility. Protect your emotional energy — share only with people who will respond with genuine support.', he: 'את לא חייבת לאף אחד הסבר על ההחלטה שלך לשמר פוריות. הגיני על האנרגיה הרגשית שלך — שתפי רק עם אנשים שיגיבו עם תמיכה אמיתית.' },
+      { en: 'You do not owe anyone an explanation for your decision to preserve fertility. Protect your emotional energy — share only with people who will respond with genuine support.', he: 'את לא חייבת לאף אחד הסבר על ההחלטה שלך לשמר פוריות. הגיני על האנרגיה הרגשית שלך — שתפי רק עם אנשים שיגיבו עם תמיכה אמיתית.' },
       { en: 'Fertility preservation can feel like planning for uncertainty — which is exactly what it is. Sitting with ambiguity is hard. It is also one of the most rational and caring things you can do for yourself.', he: 'שימור פוריות יכול להרגיש כמו תכנון לעתיד לא ודאי — וזה בדיוק מה שזה. לשבת עם עמימות זה קשה. זה גם אחד הדברים הרציונליים ואוהבים ביותר שתוכלי לעשות לעצמך.' },
       { en: 'If you are freezing eggs due to a medical diagnosis, the emotional complexity of this cycle is layered. Consider speaking with a counsellor who specialises in fertility and chronic illness.', he: 'אם את מקפיאה ביציות בשל אבחנה רפואית, המורכבות הרגשית של המחזור הזה רב-שכבתית. שקלי לדבר עם יועץ המתמחה בפוריות ומחלה כרונית.' }
     ]
@@ -2952,15 +2952,15 @@ const tips = [
       { en: 'Congratulations — transition now to a pregnancy-focused diet. Folic acid, iron, calcium, and omega-3 DHA are your key nutritional priorities from today forward.', he: 'מזל טוב — עברי עכשיו לתזונה ממוקדת הריון. חומצה פולית, ברזל, סידן ואומגה-3 DHA הם עדיפויות התזונה המרכזיות שלך מהיום.' },
       { en: 'Small, frequent meals help manage first-trimester nausea. Keep dry crackers by the bed for morning sickness — eating before getting up can make a real difference.', he: 'ארוחות קטנות ותכופות עוזרות להתמודד עם בחילות השליש הראשון. שמרי קרקרים יבשים ליד המיטה לבחילות בוקר — אכילה לפני קימה יכולה לעשות הבדל ממשי.' },
       { en: 'Avoid raw fish, deli meats, unpasteurised products, and high-mercury fish — these restrictions begin from a positive beta, not from a heartbeat.', he: 'הימנעי מדגים נאים, מוצרי מעדנייה, מוצרים לא מפוסטרים ודגים עשירים בכספית — ההגבלות הללו מתחילות מבטא חיובי, לא מפעימות לב.' },
-      { en: 'Ginger — as tea, candied, or supplement — is safe in early pregnancy and has good evidence supporting its use for nausea management. Try a cup of ginger tea today.', he: 'ג\'ינג\'ר — כתה, מסוכר או כתוסף — בטוח בהריון מוקדם ויש עדויות טובות לשימוש בו לניהול בחילות. נסי כוס תה ג\'ינג\'ר היום.' }
+      { en: 'Ginger — as tea, candied, or supplement — is safe in early pregnancy and has good evidence supporting its use for nausea management. Try a cup of ginger tea today.', he: 'ג\'ינג\'ר — כתה, מסוכר או כתוסף — בטוח בהריון מוקדם ומגובה בעדויות טובות לניהול בחילות. נסי כוס תה ג\'ינג\'ר היום.' }
     ],
     exercise: [
-      { en: 'After a positive beta, continue light activity — gentle walking actively supports healthy placental blood flow in early pregnancy and is safe.', he: 'לאחר בטא חיובית, המשיכי בפעילות קלה — הליכה עדינה תומכת באופן פעיל בזרימת הדם לשליה בהריון מוקדם ובטוחה לחלוטין.' },
+      { en: 'After a positive beta, continue light activity — gentle walking actively supports healthy placental blood flow in early pregnancy and is completely safe.', he: 'לאחר בטא חיובית, המשיכי בפעילות קלה — הליכה עדינה תומכת באופן פעיל בזרימת הדם לשליה בהריון מוקדם ובטוחה לחלוטין.' },
       { en: 'Avoid vigorous exercise in early pregnancy after IVF until Prof. Seidman confirms your pregnancy is progressing well — the caution at this stage is medically justified.', he: 'הימנעי מפעילות גופנית מאומצת בהריון מוקדם לאחר IVF עד שפרופ׳ זיידמן מאשר שההריון מתקדם כשורה — הזהירות בשלב הזה מוצדקת מבחינה רפואית.' },
       { en: 'Pelvic floor exercises (Kegels) are safe to begin right from a positive beta and are highly beneficial throughout pregnancy. Start with 3 sets of 10 contractions daily.', he: 'תרגילי רצפת אגן (Kegel) בטוחים להתחלה כבר מבטא חיובית ומיטיבים מאוד לאורך ההריון. התחילי עם 3 סטים של 10 כיווצים ביום.' }
     ],
     relaxation: [
-      { en: 'Anxiety after a positive beta is completely normal — the fear of loss is real and valid, and it doesn't mean something is wrong. Talk to someone who understands.', he: 'לחוש חרדה אחרי בטא חיובית זה לגמרי נורמלי — הפחד מאובדן הוא אמיתי ותקף, ואינו אומר שמשהו לא בסדר. כדאי לדבר עם מישהו שמבין.' },
+      { en: 'Anxiety after a positive beta is completely normal for IVF patients — the fear of loss is real, valid, and does not mean something is wrong. Talk to someone who understands.', he: 'חרדה לאחר בטא חיובית היא לגמרי נורמלית למטופלות IVF — הפחד מאובדן אמיתי, תקף, ואינו אומר שמשהו לא בסדר. דברי עם מישהו שמבין.' },
       { en: 'Allow yourself to feel joy alongside the caution today. You have worked hard — and something meaningful is happening. Holding both feelings at once takes courage.', he: 'אפשרי לעצמך להרגיש שמחה לצד הזהירות היום. עבדת קשה — ומשהו משמעותי קורה. להחזיק את שתי התחושות בו-זמנית דורש אומץ.' },
       { en: 'The wait between beta tests is one of the most emotionally intense periods. Plan something genuinely kind for yourself in that window — completely unrelated to the cycle.', he: 'ההמתנה בין בדיקות הבטא היא אחת התקופות הרגשיות העצימות ביותר. תכנני לעצמך משהו נוח ממשי בחלון הזמן הזה — שאינו קשור כלל למחזור.' }
     ],
@@ -2975,9 +2975,9 @@ const tips = [
       { en: 'Avoid saunas, very hot baths, and fever-inducing environments in early pregnancy — core body temperature above 38.5°C in the first trimester carries developmental risk.', he: 'הימנעי מסאונה, אמבטיות חמות מאוד וסביבות גורמות חום בהריון מוקדם — טמפרטורת גוף מרכזית מעל 38.5°C בשליש הראשון נושאת סיכון התפתחותי.' }
     ],
     stress: [
-      { en: 'Uncertainty is the dominant feature of early pregnancy after IVF. You can't control the outcome — but you can choose how you spend each day of it. Choose kindness to yourself.', he: 'אי-ודאות היא המאפיין הדומיננטי בהריון מוקדם לאחר IVF. את לא יכולה לשלוט בתוצאה — אבל את יכולה לבחור כיצד לבלות כל יום בו. בחרי באדיבות כלפי עצמך.' },
-      { en: 'The heartbeat scan is one of the most emotionally loaded appointments in IVF. It's completely fine to ask Prof. Seidman\'s team questions, to ask them to pause, or to have someone with you.', he: 'סקירת פעימות הלב היא אחת הפגישות הרגשיות הטעונות ביותר ב-IVF. לגמרי בסדר לשאול את צוות פרופ׳ זיידמן שאלות, לבקש שיעצרו, או שיהיה מישהו איתך.' },
-      { en: 'If you are finding it impossible to feel hopeful, that isn't a sign of pathology — it is a rational protective response after difficulty and loss. Be patient with your own emotional pace.', he: 'אם את מוצאת שאי אפשר להרגיש תקווה, זה לא סימן לפתולוגיה — זוהי תגובה הגנתית רציונלית לאחר קושי ואובדן. היי סבלנית עם הקצב הרגשי שלך.' }
+      { en: 'Uncertainty is the dominant feature of early pregnancy after IVF. You cannot control the outcome — but you can choose how you spend each day of it. Choose kindness to yourself.', he: 'אי-ודאות היא המאפיין הדומיננטי בהריון מוקדם לאחר IVF. את לא יכולה לשלוט בתוצאה — אבל את יכולה לבחור כיצד לבלות כל יום בו. בחרי באדיבות כלפי עצמך.' },
+      { en: 'The heartbeat scan is one of the most emotionally loaded appointments in IVF. It is completely okay to ask Prof. Seidman\'s team questions, to ask them to pause, or to have someone with you.', he: 'סקירת פעימות הלב היא אחת הפגישות הרגשיות הטעונות ביותר ב-IVF. לגמרי בסדר לשאול את צוות פרופ׳ זיידמן שאלות, לבקש שיעצרו, או שיהיה מישהו איתך.' },
+      { en: 'If you are finding it impossible to feel hopeful, that is not a sign of pathology — it is a rational protective response after difficulty and loss. Be patient with your own emotional pace.', he: 'אם את מוצאת שאי אפשר להרגיש תקווה, זה לא סימן לפתולוגיה — זוהי תגובה הגנתית רציונלית לאחר קושי ואובדן. היי סבלנית עם הקצב הרגשי שלך.' }
     ]
   },
   // 6 — Early Pregnancy
@@ -2985,7 +2985,7 @@ const tips = [
     diet: [
       { en: 'Iron needs increase significantly from the second trimester — red meat, spinach, legumes, and fortified cereals are important daily sources. Pair with vitamin C to maximise absorption.', he: 'צרכי הברזל עולים משמעותית מהשליש השני — בשר אדום, תרד, קטניות ודגנים מועשרים הם מקורות יומיומיים חשובים. שלבי עם ויטמין C לספיגה מרבית.' },
       { en: 'Omega-3 DHA from oily fish (2 servings per week of low-mercury varieties) or supplements supports fetal brain and eye development throughout the second trimester.', he: 'אומגה-3 DHA מדגים שמנוניים (2 מנות בשבוע מזנים דלי כספית) או מתוספים תומכת בהתפתחות המוח והעיניים של העובר לאורך השליש השני.' },
-      { en: 'Avoid vitamin A in retinol supplement form — high doses are teratogenic. Beta-carotene from vegetables (sweet potato, carrots, leafy greens) is safe and beneficial.', he: 'הימנעי מוויטמין A בצורת תוסף רטינול — מינונים גבוהים הם טרטוגניים. בטא-קרוטן מירקות (בטטה, גזר, עלים ירוקים) בטוח לחלוטין ומיטיב.' },
+      { en: 'Avoid vitamin A in retinol supplement form — high doses are teratogenic. Beta-carotene from vegetables (sweet potato, carrots, leafy greens) is entirely safe and beneficial.', he: 'הימנעי מוויטמין A בצורת תוסף רטינול — מינונים גבוהים הם טרטוגניים. בטא-קרוטן מירקות (בטטה, גזר, עלים ירוקים) בטוח לחלוטין ומיטיב.' },
       { en: 'Continue your prenatal vitamins throughout — folic acid remains critical for neural tube development until at least 12 weeks.', he: 'המשיכי לקחת ויטמינים לפני לידה לאורך כל השליש הראשון ואילך — חומצה פולית נותרת חיונית להתפתחות צינור העצבים עד לפחות שבוע 12.' }
     ],
     exercise: [
@@ -2994,8 +2994,8 @@ const tips = [
       { en: 'Exercise in pregnancy reduces the risk of gestational diabetes and excessive weight gain. Aim for 150 minutes of moderate activity per week, distributed across several sessions.', he: 'פעילות גופנית בהריון מפחיתה את הסיכון לסוכרת הריון ועלייה מוגזמת במשקל. שאפי ל-150 דקות פעילות מתונה בשבוע, מחולקות על פני מספר אימונים.' }
     ],
     relaxation: [
-      { en: 'Birth anxiety is common after IVF and fertility treatment. Hypnobirthing courses or mindfulness-based childbirth preparation are approaches that research actually backs — and many women find really helpful.', he: 'חרדת לידה נפוצה לאחר IVF וטיפולי פוריות. קורסי היפנובירת\'ינג או הכנה מבוססת מיינדפולנס ללידה — יש מחקרים שמראים שהן ממש עוזרות, ונשים רבות מוצאות בהן תמיכה אמיתית.' },
-      { en: 'The transition from IVF care to standard obstetric care can feel emotionally vulnerable. It's completely fine to ask for more frequent check-ins as you make that transition.', he: 'המעבר מטיפול IVF לטיפול מיילדותי רגיל יכול להרגיש חשוף רגשית. זה לגמרי סביר לבקש מעקב תכוף יותר בזמן שאת "מסיימת" את הטיפול.' },
+      { en: 'Birth anxiety is common after IVF and fertility treatment. Hypnobirthing courses or mindfulness-based childbirth preparation are evidence-based approaches that genuinely help.', he: 'חרדת לידה נפוצה לאחר IVF וטיפולי פוריות. קורסי היפנובירת\'ינג או הכנה מבוססת מיינדפולנס ללידה הם גישות מבוססות ראיות שממש עוזרות.' },
+      { en: 'The transition from IVF care to standard obstetric care can feel emotionally vulnerable. It is completely reasonable to ask for more frequent check-ins as you graduate.', he: 'המעבר מטיפול IVF לטיפול מיילדותי רגיל יכול להרגיש חשוף רגשית. זה לגמרי סביר לבקש מעקב תכוף יותר בזמן שאת "מסיימת" את הטיפול.' },
       { en: 'Connect with your baby through daily quiet moments — a few minutes of hand on belly, noticing movement, speaking softly. This builds attachment and reduces anxiety simultaneously.', he: 'התחברי לתינוקך דרך רגעים יומיומיים של שקט — כמה דקות של יד על הבטן, שים לב לתנועה, דברי בעדינות. זה בונה קשר ומפחית חרדה בו-זמנית.' }
     ],
     vitamins: [
@@ -3010,7 +3010,7 @@ const tips = [
     ],
     stress: [
       { en: 'Anxiety about every scan, every symptom, every movement count is very common after IVF pregnancy. Consider seeing a perinatal therapist — this level of anxiety is treatable and you deserve support.', he: 'חרדה לגבי כל סריקה, כל תסמין, כל ספירת תנועות נפוצה מאוד בהריון לאחר IVF. שקלי לפגוש מטפל פרינטלי — רמת חרדה כזו ניתנת לטיפול ומגיעה לך תמיכה.' },
-      { en: 'If people minimise your anxiety with "you should just be grateful", that isn't a helpful response. Your fear isn't ingratitude — it is the predictable result of hard-won experience. It is valid.', he: 'אם אנשים ממזערים את החרדה שלך עם "צריכה פשוט להיות אסירת תודה", זו אינה תגובה מועילה. הפחד שלך אינו כפיות טובה — הוא התוצאה הצפויה של ניסיון שנרכש בקושי. הוא תקף.' },
+      { en: 'If people minimise your anxiety with "you should just be grateful", that is not a helpful response. Your fear is not ingratitude — it is the predictable result of hard-won experience. It is valid.', he: 'אם אנשים ממזערים את החרדה שלך עם "צריכה פשוט להיות אסירת תודה", זו אינה תגובה מועילה. הפחד שלך אינו כפיות טובה — הוא התוצאה הצפויה של ניסיון שנרכש בקושי. הוא תקף.' },
       { en: 'Consider joining a community of women pregnant after IVF — the shared emotional language of this experience is uniquely understood within that group. Shared experience reduces isolation powerfully.', he: 'שקלי להצטרף לקהילה של נשים בהריון לאחר IVF — השפה הרגשית המשותפת של חוויה זו מובנת באופן ייחודי בתוך הקבוצה הזו. חוויה משותפת מפחיתה בדידות בצורה עוצמתית.' }
     ]
   },
@@ -3019,7 +3019,7 @@ const tips = [
     diet: [
       { en: 'Be gentle with your nutrition right now — there is no pressure to optimise. Focus on nourishing, comforting foods you enjoy. Regular meals provide stability when little else does.', he: 'היי עדינה עם עצמך מבחינה תזונתית עכשיו — אין לחץ לבצע אופטימיזציה. התמקדי במאכלים מזינים ומנחמים שאת אוהבת. ארוחות סדירות מספקות יציבות כשמעט אחר כך.' },
       { en: 'Omega-3 fatty acids from fish, walnuts, and flaxseed have clinically documented anti-inflammatory and mood-supporting properties — a helpful addition during emotional recovery.', he: 'לחומצות שומן אומגה-3 מדגים, אגוזי מלך וזרעי פשתן יש תכונות אנטי-דלקתיות ותומכות מצב רוח מתועדות קלינית — תוספת מועילה בהתאוששות רגשית.' },
-      { en: 'If you're on a break between cycles, this is a good time to focus on foundational nutrition — Mediterranean-style eating has the strongest evidence for supporting ovarian reserve.', he: 'אם את בהפסקה בין מחזורים, זהו הזמן הטוב להתמקד בתזונה בסיסית — לתזונה ים-תיכונית יש את ההוכחות החזקות ביותר לתמיכה ברזרבת השחלות.' }
+      { en: 'If you are on a break between cycles, this is a good time to focus on foundational nutrition — Mediterranean-style eating has the strongest evidence for supporting ovarian reserve.', he: 'אם את בהפסקה בין מחזורים, זהו הזמן הטוב להתמקד בתזונה בסיסית — לתזונה ים-תיכונית יש את ההוכחות החזקות ביותר לתמיכה ברזרבת השחלות.' }
     ],
     exercise: [
       { en: 'Movement can be a powerful antidepressant — even a 20-minute daily walk can measurably shift your emotional state. Start wherever you are, with whatever feels manageable.', he: 'תנועה יכולה להיות נוגד דיכאון רב-עוצמה — אפילו הליכה יומית של 20 דקות יכולה לשנות באופן מדיד את מצבך הרגשי. התחילי מאיפה שאת, עם מה שנראה ניהולי.' },
@@ -3027,7 +3027,7 @@ const tips = [
       { en: 'If you were restricting exercise during your cycle, this may be the right time to return to activities you love. Exercise that brings joy is a form of emotional recovery.', he: 'אם הגבלת פעילות גופנית במהלך המחזור, ייתכן שזהו הזמן הנכון לחזור לפעילויות שאת אוהבת. פעילות גופנית שמביאה שמחה היא צורה של התאוששות רגשית.' }
     ],
     relaxation: [
-      { en: 'Grief after a failed or difficult cycle is real, legitimate, and deserves space. You don't need to be resilient right now. You are allowed to be exactly where you are.', he: 'האבל אחרי מחזור קשה הוא אמיתי ולגיטימי. את לא צריכה להיות חזקה עכשיו. מותר לך להיות בדיוק איפה שאת.' },
+      { en: 'Grief after a failed or difficult cycle is real, legitimate, and deserves space. You do not need to be resilient right now. You are allowed to be exactly where you are.', he: 'אבל לאחר מחזור שנכשל או היה קשה הוא אמיתי, לגיטימי וראוי לקבל מקום. את לא צריכה להיות חסינה עכשיו. מותר לך להיות בדיוק איפה שאת.' },
       { en: 'Seek out someone who understands — a counsellor, a fertility-specific support group, or someone who has shared this experience. Isolation compounds grief; connection moderates it.', he: 'חפשי מישהו שמבין — יועץ, קבוצת תמיכה ספציפית לפוריות, או מישהו שחווה חוויה דומה. בידוד מגביר אבל; קשר מאזן אותו.' },
       { en: 'Take at least 2–4 weeks before making any decisions about next steps — grief distorts planning. Give the emotional dust time to settle before committing to a path forward.', he: 'קחי לפחות 2–4 שבועות לפני קבלת כל החלטות על הצעד הבא — אבל מעוות תכנון. תני לאבק הרגשי זמן להסתדר לפני שמחויבים לדרך קדימה.' }
     ],
@@ -3039,12 +3039,12 @@ const tips = [
     lifestyle: [
       { en: 'Protect your sleep during recovery — grief and hormonal shifts disrupt sleep architecture. Consistent sleep hygiene (same bedtime, no screens before bed) supports emotional regulation.', he: 'הגיני על שנתך בתקופת ההתאוששות — אבל ושינויים הורמונליים משבשים את מבנה השינה. היגיינת שינה עקבית (שעת שינה קבועה, ללא מסכים לפני השינה) תומכת בוויסות רגשי.' },
       { en: 'Use this break to reduce environmental toxins — review personal care products for parabens and phthalates, switch to cleaner options. This is productive self-care that also supports the next cycle.', he: 'השתמשי בהפסקה הזו להפחתת רעלנים סביבתיים — בדקי מוצרי טיפוח אישי לגבי פראבנים ופתלאטים, עברי לאפשרויות נקיות יותר. זוהי דאגה עצמית פרודוקטיבית שגם תומכת במחזור הבא.' },
-      { en: 'Avoid major life decisions — moving, career changes, relationship choices — in the immediate aftermath of a difficult cycle. Give yourself time to recover perspective before making large commitments.', he: 'הימנעי מהחלטות חיים גדולות — מעבר דירה, שינויי קריירה, בחירות זוגיות — בתקופה שמיד לאחר מחזור קשה. תני לעצמך זמן להתאושש ולראות את הדברים בפרופורציה לפני שמחליטים החלטות גדולות.' }
+      { en: 'Avoid major life decisions — moving, career changes, relationship choices — in the immediate aftermath of a difficult cycle. Give yourself time to recover perspective before making large commitments.', he: 'הימנעי מהחלטות חיים גדולות — מעבר דירה, שינויי קריירה, בחירות זוגיות — בתקופה שמיד לאחר מחזור קשה. תני לעצמך זמן להתאושש ולהחזיר פרספקטיבה לפני קבלת התחייבויות גדולות.' }
     ],
     stress: [
-      { en: 'Grief after a failed or difficult cycle is real, legitimate, and deserves space. You don't need to be resilient right now. You are allowed to be exactly where you are.', he: 'האבל אחרי מחזור קשה הוא אמיתי ולגיטימי. את לא צריכה להיות חזקה עכשיו. מותר לך להיות בדיוק איפה שאת.' },
+      { en: 'Grief after a failed or difficult cycle is real, legitimate, and deserves space. You do not need to be resilient right now. You are allowed to be exactly where you are.', he: 'אבל לאחר מחזור שנכשל או היה קשה הוא אמיתי, לגיטימי וראוי לקבל מקום. את לא צריכה להיות חסינה עכשיו. מותר לך להיות בדיוק איפה שאת.' },
       { en: 'If people around you are pushing you to "try again soon" or "stay positive", it is completely appropriate to set a boundary — you decide the timeline and the emotional pace.', he: 'אם אנשים סביבך דוחפים אותך "לנסות שוב בקרוב" או "לשמור על חשיבה חיובית", לגמרי מתאים להציב גבול — את קובעת את לוח הזמנים ואת הקצב הרגשי.' },
-      { en: 'Consider speaking with a therapist who specialises in reproductive grief — this is a specific, real kind of loss. It deserves proper, informed support — not just generic counselling.', he: 'שקלי לדבר עם מטפל המתמחה באבל רבייה — זוהי צורה ספציפית ומוכרת של אובדן הראויה לתמיכה ייעודית ומעודכנת, ולא ייעוץ כללי.' }
+      { en: 'Consider speaking with a therapist who specialises in reproductive grief — this is a specific, recognised form of loss that deserves dedicated and informed support, not generic counselling.', he: 'שקלי לדבר עם מטפל המתמחה באבל רבייה — זוהי צורה ספציפית ומוכרת של אובדן הראויה לתמיכה ייעודית ומעודכנת, ולא ייעוץ כללי.' }
     ]
   }
 ];
