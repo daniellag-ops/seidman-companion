@@ -4,6 +4,7 @@
     { "source": "/dashboard", "destination": "/dashboard.html" },
     { "source": "/share/:id", "destination": "/share.html?id=:id" },
     { "source": "/start", "destination": "/start.html" },
-    { "source": "/staff", "destination": "/staff-guide.html" }
+    { "source": "/staff", "destination": "/staff-guide.html" },
+    { "source": "/education/follicle-viewer", "destination": "/follicle-viewer.html" }
   ]
 }

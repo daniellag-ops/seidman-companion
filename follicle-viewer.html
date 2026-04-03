@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FOLLICLE SCAN · 3D Viewer</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#050e15;color:rgba(0,212,255,0.9);font-family:'Share Tech Mono',monospace;overflow:hidden;height:100vh}
+body::after{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,10,15,0.06) 2px,rgba(0,10,15,0.06) 4px)}
+canvas{display:block}
+#tc{position:fixed;inset:0;z-index:0}
+/* HUD */
+#ht{position:fixed;top:0;left:0;right:0;z-index:10;padding:14px 22px;display:flex;justify-content:space-between;background:linear-gradient(to bottom,rgba(5,14,21,0.8),transparent)}
+#ht .tl{font-family:'Orbitron',sans-serif;font-size:11px;font-weight:700;letter-spacing:4px;color:#00d4ff;text-transform:uppercase}
+#ht .sub{font-size:9px;color:rgba(0,212,255,0.35);letter-spacing:2px;margin-top:2px}
+#hb{position:fixed;bottom:0;left:0;right:0;z-index:10;padding:10px 22px;display:flex;justify-content:space-between;align-items:flex-end;background:linear-gradient(to top,rgba(5,14,21,0.8),transparent)}
+#hb .st{font-size:9px;color:rgba(0,212,255,0.35);line-height:1.7}
+#hb .st .v{color:#00ffe5}
+.ct{display:flex;gap:5px;flex-wrap:wrap}
+.cb{background:rgba(0,212,255,0.06);border:1px solid rgba(0,212,255,0.15);color:rgba(0,212,255,0.6);font-family:'Share Tech Mono',monospace;font-size:9px;padding:5px 11px;border-radius:2px;cursor:pointer;letter-spacing:1px;transition:all .3s;text-transform:uppercase}
+.cb:hover{background:rgba(0,212,255,0.15);color:rgba(0,212,255,0.9)}
+.cb.on{background:rgba(0,212,255,0.12);border-color:rgba(0,212,255,0.4);color:#00d4ff}
+.sp{position:fixed;z-index:10}
+.pn{background:rgba(5,14,21,0.92);border:1px solid rgba(0,212,255,0.15);border-radius:3px;padding:12px 14px;margin-bottom:6px;backdrop-filter:blur(8px)}
+.ph{font-family:'Orbitron',sans-serif;font-size:8px;font-weight:500;letter-spacing:3px;color:rgba(0,212,255,0.35);margin-bottom:8px;text-transform:uppercase;border-bottom:1px solid rgba(0,212,255,0.15);padding-bottom:5px}
+#ip{left:14px;top:50%;transform:translateY(-50%);width:220px}
+#ip label{display:block;font-size:9px;color:rgba(0,212,255,0.35);margin-bottom:3px;letter-spacing:1px}
+#ip select,#ip input{width:100%;background:rgba(0,212,255,0.04);border:1px solid rgba(0,212,255,0.15);color:#00ffe5;font-family:'Share Tech Mono',monospace;font-size:11px;padding:6px 8px;border-radius:2px;margin-bottom:7px;outline:none}
+#ip select{cursor:pointer;appearance:none}
+#ip input::placeholder{color:rgba(0,212,255,0.2)}
+.ir{display:flex;gap:5px}.ir>div{flex:1}
+.bt{width:100%;background:rgba(0,212,255,0.08);border:1px solid rgba(0,212,255,0.15);color:rgba(0,212,255,0.6);font-family:'Share Tech Mono',monospace;font-size:10px;padding:6px;border-radius:2px;cursor:pointer;transition:all .3s;text-transform:uppercase;margin-bottom:4px}
+.bt:hover{background:rgba(0,212,255,0.18);color:#00ffe5}
+.bt.dl{border-color:rgba(255,60,60,0.15);color:rgba(255,100,100,0.4)}
+#rp{right:14px;top:50%;transform:translateY(-50%);width:190px;font-size:9px;line-height:1.5}
+#fl{max-height:200px;overflow-y:auto}
+#fl::-webkit-scrollbar{width:2px}
+#fl::-webkit-scrollbar-thumb{background:rgba(0,212,255,0.15)}
+.fi{display:flex;justify-content:space-between;align-items:center;padding:2px 0;border-bottom:1px solid rgba(0,212,255,0.05);color:rgba(0,212,255,0.6);cursor:pointer;font-size:9px}
+.fi:hover{color:#00ffe5}
+.fi .d{width:5px;height:5px;border-radius:50%;background:#00d4ff;margin-right:4px}
+.fi.mt .d{background:#00ffe5;box-shadow:0 0 5px #00ffe5}
+#si{position:fixed;left:50%;bottom:48px;transform:translateX(-50%);z-index:10;font-size:10px;color:#00ffe5;background:rgba(5,14,21,0.92);border:1px solid rgba(0,255,229,0.12);border-radius:3px;padding:6px 14px;display:none;text-align:center}
+#ov-size{position:fixed;right:14px;top:100px;z-index:10;font-size:9px;color:rgba(0,212,255,0.35)}
+</style>
+</head>
+<body>
+<div id="tc"></div>
+<div id="ht"><div><div class="tl">Follicle Scan</div><div class="sub" id="ml">3D OVARY MODEL</div></div><div style="text-align:right;font-size:9px;color:rgba(0,212,255,0.35)"><div id="clk"></div></div></div>
+<div id="hb">
+  <div class="st" id="stats-bar">FOLLICLES: <span class="v">0</span></div>
+  <div class="ct" id="ctrls">
+    <button class="cb on" id="bw" onclick="sV('wire')">WIRE</button>
+    <button class="cb" id="bs" onclick="sV('solid')">SOLID</button>
+    <button class="cb" id="bx" onclick="sV('xray')">X-RAY</button>
+    <button class="cb on" id="brot" onclick="tR()">ROT</button>
+  </div>
+</div>
+<div id="ip" class="sp"><div class="pn"><div class="ph">Examples</div>
+  <div style="font-size:8px;color:rgba(0,212,255,0.5);margin-bottom:6px;letter-spacing:1px">▼ SEE EXAMPLE SCANS</div>
+  <select id="preset-sel" onchange="loadPreset(this.value)" style="width:100%;background:rgba(0,212,255,0.06);border:2px solid rgba(0,212,255,0.3);color:#00ffe5;font-family:'Share Tech Mono',monospace;font-size:10px;padding:7px 10px;border-radius:3px;margin-bottom:8px;outline:none;cursor:pointer;appearance:none;background-image:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%228%22><path d=%22M0 0 L6 8 L12 0%22 fill=%22%2300d4ff%22 opacity=%220.5%22/></svg>');background-repeat:no-repeat;background-position:right 10px center;padding-right:28px">
+    <option value="">— SELECT —</option>
+    <option value="normal">🔵 Normal Cycle</option>
+    <option value="ivf">🟢 IVF Stimulation</option>
+    <option value="pcos">🟡 PCOS</option>
+    <option value="dor">🔴 Diminished Reserve</option>
+    <option value="cyst">⚪ Follicular Cyst</option>
+    <option value="ohss">🟠 OHSS</option>
+  </select>
+  <div id="preset-desc" style="font-size:8px;color:rgba(0,212,255,0.3);line-height:1.4;margin-bottom:4px;min-height:20px"></div>
+  </div><div class="pn"><div class="ph">Enter Your Scan</div>
+  <div style="font-size:8px;color:rgba(0,212,255,0.4);line-height:1.5;margin-bottom:10px">
+    Enter your follicle sizes from your<br>ultrasound report — one at a time.<br>
+    <span style="color:rgba(0,255,229,0.4)">Type the size → press Enter → repeat</span>
+  </div>
+  <label style="display:block;font-size:9px;color:rgba(0,212,255,0.35);margin-bottom:5px">FOLLICLE SIZE (mm)</label>
+  <div style="display:grid;grid-template-columns:1fr 38px;border:1px solid rgba(0,212,255,0.15);border-radius:2px;overflow:hidden">
+    <input type="number" id="fs" placeholder="e.g. 18" min="2" max="50" step="0.5" style="background:rgba(0,212,255,0.04);border:none;color:#00ffe5;font-family:'Share Tech Mono',monospace;font-size:13px;padding:9px 10px;outline:none;text-align:center">
+    <button onclick="aF()" style="background:rgba(0,212,255,0.1);border:none;border-left:1px solid rgba(0,212,255,0.15);color:#00ffe5;font-size:18px;cursor:pointer;padding:0">+</button>
+  </div>
+  <input type="number" id="f2" value="" style="display:none">
+  <div id="added-feedback" style="font-size:9px;color:rgba(0,255,229,0.4);margin-top:6px;min-height:16px;text-align:center"></div>
+  <div style="display:flex;gap:5px;margin-top:6px">
+    <button class="bt" onclick="quickAdd()" style="flex:1;font-size:8px;padding:5px">QUICK ADD MULTIPLE</button>
+    <button class="bt dl" onclick="cA()" style="flex:1;font-size:8px;padding:5px">CLEAR ALL</button>
+  </div>
+</div></div>
+<div id="rp" class="sp"><div class="pn"><div class="ph">Follicles</div><div id="fl"></div></div></div>
+<div id="ov-size"></div>
+<div id="si"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+// ═══════════════════════════════════════════════════════════
+//  FOLLICLE SCAN v2 — Prof Seidman corrections
+//  1. Follicles INSIDE the ovarian capsule (embedded in cortex)
+//  2. Ovary size scales with follicle load:
+//     Baseline: 2-4cm, Stimulated: 5-7cm, OHSS: 10-12cm
+// ═══════════════════════════════════════════════════════════
+
+let fols=[], f3d=[], selIdx=null, autoR=true, vw='wire';
+let scene, cam, ren, clock, ovG;
+let ovCortex, ovFresnel, ovWire, ovMedulla, ovGlow;
+let rotY=0, tRX=0, tRY=0;
+
+// Ovary base dimensions — SMALLER so ratios are visible
+// Normal ovary appears modest on screen; OHSS grows dramatically
+const OV_BASE = { rx: 0.72, ry: 0.48, rz: 0.36 }; // baseline ~3cm long
+let OV = { ...OV_BASE }; // current scaled dimensions
+
+const LD = new THREE.Vector3(0.5, 0.8, 0.6).normalize();
+
+// ── Shaders ──
+const VS=`varying vec3 vN,vP,vW;void main(){vN=normalize(normalMatrix*normal);vP=(modelViewMatrix*vec4(position,1.0)).xyz;vW=position;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}`;
+
+const tissueFrag=`uniform vec3 color,lightDir;uniform float opacity;varying vec3 vN,vP,vW;void main(){
+  vec3 N=normalize(vN),V=normalize(-vP),L=normalize(lightDir);
+  float diff=max(dot(N,L),0.0)*0.6+0.4;
+  float sss=pow(max(dot(V,-L),0.0),2.0)*0.15;
+  float rim=pow(1.0-max(dot(V,N),0.0),3.0)*0.3;
+  float tex=0.9+sin(vW.x*10.0+vW.y*8.0)*sin(vW.y*12.0+vW.z*9.0)*0.08;
+  vec3 fc=color*(diff+sss)*tex+vec3(1.0)*rim*0.5;
+  fc+=vec3(0.2,0.8,0.7)*smoothstep(0.08,0.0,abs(mod(vP.y*0.5+1.5,3.0)-1.5))*0.1;
+  gl_FragColor=vec4(fc,opacity);}`;
+
+const fresnelFrag=`uniform vec3 color;uniform float opacity;varying vec3 vN,vP;void main(){float f=pow(1.0-abs(dot(normalize(-vP),normalize(vN))),3.0);gl_FragColor=vec4(color,f*opacity);}`;
+
+const follFrag=`uniform vec3 color,lightDir;uniform float opacity,selected,maturity,time;varying vec3 vN,vP,vW;void main(){
+  vec3 N=normalize(vN),V=normalize(-vP),L=normalize(lightDir);
+  float f=pow(1.0-abs(dot(V,N)),2.0);
+  float diff=max(dot(N,L),0.0)*0.4+0.6;
+  float pulse=0.9+sin(time*1.5+vW.y*4.0)*0.1;
+  // Fluid interior — brighter center for mature follicles
+  float interior=(1.0-f)*maturity*0.25;
+  float sel=selected*(0.5+sin(time*4.0)*0.3);
+  float a=(f*0.3+0.35+interior)*opacity*pulse+sel;
+  vec3 fc=color*diff*pulse+vec3(0.3,0.6,0.5)*sel;
+  // Slight specular on the fluid surface
+  float spec=pow(max(dot(reflect(-L,N),V),0.0),16.0)*0.3;
+  fc+=vec3(1.0)*spec;
+  gl_FragColor=vec4(fc,a);}`;
+
+const tubeFrag=`uniform vec3 color,lightDir;uniform float opacity;varying vec3 vN,vP;void main(){vec3 N=normalize(vN),L=normalize(lightDir);float d=max(dot(N,L),0.0)*0.5+0.5;float r=pow(1.0-abs(dot(normalize(-vP),N)),2.5)*0.3;gl_FragColor=vec4(color*d+vec3(1.0)*r*0.3,(0.3+r)*opacity);}`;
+
+function makeTissueMat(c,o){return new THREE.ShaderMaterial({transparent:true,depthWrite:true,side:0,uniforms:{color:{value:new THREE.Color(c[0]*1.3,c[1]*1.3,c[2]*1.3)},lightDir:{value:LD},opacity:{value:o}},vertexShader:VS,fragmentShader:tissueFrag});}
+function makeFresnelMat(c,o){return new THREE.ShaderMaterial({transparent:true,depthWrite:false,side:0,uniforms:{color:{value:new THREE.Color(c)},opacity:{value:o}},vertexShader:VS,fragmentShader:fresnelFrag});}
+function makeTubeMat(c,o){return new THREE.ShaderMaterial({transparent:true,depthWrite:false,side:2,uniforms:{color:{value:new THREE.Color(c)},lightDir:{value:LD},opacity:{value:o}},vertexShader:VS,fragmentShader:tubeFrag});}
+
+// ═══════════════════════════════════════
+//  DYNAMIC OVARY SIZING
+//  Computes ovary dimensions from follicle data
+// ═══════════════════════════════════════
+
+function calcOvarySize(folList) {
+  if (!folList || folList.length === 0) return { ...OV_BASE };
+
+  // Total follicle volume in cm³
+  let totalVol = 0;
+  let maxFol = 0;
+  folList.forEach(f => {
+    const r_cm = (f.size / 2) / 10; // mm to cm radius
+    totalVol += (4/3) * Math.PI * r_cm * r_cm * r_cm;
+    if (f.size > maxFol) maxFol = f.size;
+  });
+
+  // Baseline ovary volume ≈ 6 cm³ (roughly 3.5 x 2.5 x 1.5 cm ellipsoid)
+  const baseVol = (4/3) * Math.PI * 1.75 * 1.25 * 0.75; // ≈ 6.9 cm³
+
+  // Total ovary volume = stroma + follicle volumes
+  // Stroma shrinks relatively as follicles grow but maintains some minimum
+  const stromaVol = Math.max(baseVol * 0.4, baseVol - totalVol * 0.3);
+  const totalOvVol = stromaVol + totalVol * 1.2; // follicles take space + some edema
+
+  // Convert back to ellipsoid radii maintaining proportions
+  // V = (4/3)π * rx * ry * rz, with ratio rx:ry:rz ≈ 1.5:1:0.75
+  const volFactor = totalOvVol / baseVol;
+  const scaleFactor = Math.pow(volFactor, 1/3);
+
+  // Clamp: min 2cm long axis, max ~12cm for severe OHSS
+  const sf = Math.max(0.7, Math.min(scaleFactor, 2.8));
+
+  const result = {
+    rx: OV_BASE.rx * sf,
+    ry: OV_BASE.ry * sf,
+    rz: OV_BASE.rz * sf,
+  };
+
+  // Update size display — convert scene units back to real cm
+  // OV_BASE.rx = 0.72 represents ~1.8cm (half of 3.6cm baseline)
+  // So conversion: scene_unit * (1.8/0.72) = cm for half-axis, *2 for full axis
+  const cmPerUnit = 1.8 / 0.72; // 2.5 cm per scene unit
+  const sizeEl = document.getElementById('ov-size');
+  const longAxis = (result.rx * 2 * cmPerUnit).toFixed(1);
+  const shortAxis = (result.ry * 2 * cmPerUnit).toFixed(1);
+  const vol = ((4/3) * Math.PI * (result.rx*cmPerUnit) * (result.ry*cmPerUnit) * (result.rz*cmPerUnit)).toFixed(1);
+  if (sizeEl) sizeEl.innerHTML = `<div style="font-family:Orbitron;font-size:8px;letter-spacing:2px;color:rgba(0,212,255,0.35);margin-bottom:4px">OVARY SIZE</div>`
+    + `<div style="color:#00ffe5;font-size:14px;margin-bottom:2px">${longAxis} × ${shortAxis} cm</div>`
+    + `<div style="font-size:9px;color:rgba(0,212,255,0.4)">${folList.length} follicles</div>`
+    + `<div style="font-size:9px;color:rgba(0,212,255,0.3)">Vol: ${vol} cm³</div>`;
+
+  return result;
+}
+
+// ═══════════════════════════════════════
+//  SCENE SETUP
+// ═══════════════════════════════════════
+
+function init() {
+  scene = new THREE.Scene(); clock = new THREE.Clock();
+  cam = new THREE.PerspectiveCamera(32, innerWidth/innerHeight, 0.1, 100);
+  cam.position.set(0, 1.2, 4.5); cam.lookAt(0,0,0);
+  ren = new THREE.WebGLRenderer({antialias:true});
+  ren.setSize(innerWidth,innerHeight); ren.setPixelRatio(Math.min(devicePixelRatio,2));
+  ren.setClearColor(0x050e15,1);
+  document.getElementById('tc').appendChild(ren.domElement);
+
+  // Floor grid
+  const fm = new THREE.Mesh(new THREE.PlaneGeometry(16,16,32,32), new THREE.ShaderMaterial({transparent:true,
+    vertexShader:`varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}`,
+    fragmentShader:`varying vec2 vUv;void main(){vec2 g=abs(fract(vUv*32.0-0.5)-0.5)/fwidth(vUv*32.0);float l=min(g.x,g.y);float v=1.0-min(l,1.0);float f=1.0-length(vUv-0.5)*1.6;gl_FragColor=vec4(0.0,0.1,0.15,v*0.08*max(f,0.0));}`,
+  })); fm.rotation.x=-Math.PI/2; fm.position.y=-1.8; scene.add(fm);
+
+  // Lights
+  scene.add(new THREE.AmbientLight(0x556677,0.8));
+  const dl=new THREE.DirectionalLight(0xccddee,0.6); dl.position.set(3,5,4); scene.add(dl);
+  const dl2=new THREE.DirectionalLight(0x8899aa,0.3); dl2.position.set(-3,3,-2); scene.add(dl2);
+  scene.add(new THREE.PointLight(0x88bbdd,0.4,18));scene.children[scene.children.length-1].position.set(-3,4,3);
+
+  ovG = new THREE.Group(); scene.add(ovG);
+  buildOvary();
+
+  // Interactions
+  ren.domElement.addEventListener('mousemove', e => {
+    if (!autoR) { tRY=((e.clientX/innerWidth)*2-1)*0.4; tRX=(-(e.clientY/innerHeight)*2+1)*0.2; }
+  });
+  ren.domElement.addEventListener('click', e => {
+    const v=new THREE.Vector2((e.clientX/innerWidth)*2-1,-(e.clientY/innerHeight)*2+1);
+    const r=new THREE.Raycaster(); r.setFromCamera(v,cam);
+    const h=r.intersectObjects(f3d.map(o=>o.mesh));
+    if(h.length) selFol(h[0].object.userData.idx);
+  });
+  addEventListener('resize',()=>{cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix();ren.setSize(innerWidth,innerHeight);});
+  document.getElementById('fs').addEventListener('keydown',e=>{if(e.key==='Enter')aF();});
+  document.getElementById('f2').addEventListener('keydown',e=>{if(e.key==='Enter')aF();});
+}
+
+// ═══════════════════════════════════════
+//  BUILD OVARY (with dynamic sizing)
+// ═══════════════════════════════════════
+
+function makeOvaryGeo(ov) {
+  const g = new THREE.SphereGeometry(1, 72, 56);
+  const p = g.attributes.position;
+  for (let i=0; i<p.count; i++) {
+    let x=p.getX(i)*ov.rx, y=p.getY(i)*ov.ry, z=p.getZ(i)*ov.rz;
+    // Organic surface deformation
+    const bump = Math.sin(x*2.5+y*1.8)*Math.sin(y*3.5+z*2.8)*0.04
+               + Math.sin(x*6+z*5)*0.015;
+    const l = Math.sqrt(x*x+y*y+z*z) || 1;
+    x+=x/l*bump; y+=y/l*bump; z+=z/l*bump;
+    p.setXYZ(i,x,y,z);
+  }
+  g.computeVertexNormals();
+  return g;
+}
+
+function buildOvary() {
+  while (ovG.children.length) ovG.remove(ovG.children[0]);
+  const geo = makeOvaryGeo(OV);
+
+  // Solid tissue body
+  ovCortex = new THREE.Mesh(geo, new THREE.ShaderMaterial({
+    transparent:true, depthWrite:true, side:0,
+    uniforms:{color:{value:new THREE.Color(0.58,0.36,0.33)},lightDir:{value:LD},opacity:{value:0.88}},
+    vertexShader:VS, fragmentShader:tissueFrag}));
+  ovG.add(ovCortex);
+
+  // Fresnel hologram glow
+  ovFresnel = new THREE.Mesh(geo.clone(), makeFresnelMat(0x00aacc, 0.35));
+  ovG.add(ovFresnel);
+
+  // Wireframe
+  ovWire = new THREE.Mesh(geo.clone(), new THREE.MeshBasicMaterial({color:0x00aacc,wireframe:true,transparent:true,opacity:0.04}));
+  ovG.add(ovWire);
+
+  // Medulla (inner core)
+  const mg = makeOvaryGeo({rx:OV.rx*0.55, ry:OV.ry*0.55, rz:OV.rz*0.55});
+  ovMedulla = new THREE.Mesh(mg, new THREE.ShaderMaterial({
+    transparent:true,depthWrite:false,side:2,
+    uniforms:{color:{value:new THREE.Color(0.65,0.42,0.38)},lightDir:{value:LD},opacity:{value:0.4}},
+    vertexShader:VS, fragmentShader:tissueFrag}));
+  ovG.add(ovMedulla);
+
+  // Outer glow
+  const gg = makeOvaryGeo({rx:OV.rx*1.04, ry:OV.ry*1.04, rz:OV.rz*1.04});
+  ovGlow = new THREE.Mesh(gg, makeFresnelMat(0x005566, 0.12));
+  ovGlow.material.side = THREE.BackSide;
+  ovG.add(ovGlow);
+
+  // Tube stub (scaled to ovary size)
+  const tubeR = Math.max(0.025, OV.rx * 0.04);
+  const tM = makeTubeMat(0x668888, 0.5);
+  const tp = new THREE.CatmullRomCurve3([
+    new THREE.Vector3(OV.rx*0.95,0.04,0), new THREE.Vector3(OV.rx*1.15,0.12,0.03),
+    new THREE.Vector3(OV.rx*1.4,0.25,0.08), new THREE.Vector3(OV.rx*1.65,0.45,0.05),
+    new THREE.Vector3(OV.rx*1.55,0.6,-0.04)]);
+  ovG.add(new THREE.Mesh(new THREE.TubeGeometry(tp,36,tubeR,10,false),tM));
+  // Fimbriae
+  for(let i=0;i<8;i++){
+    const a=((i/8)*Math.PI*1.3)-Math.PI*0.65;
+    const ep=tp.getPoint(1);
+    const fl=0.12+Math.random()*0.1;
+    const fp=new THREE.CatmullRomCurve3([ep,
+      new THREE.Vector3(ep.x+Math.cos(a)*fl,ep.y+0.06+Math.sin(a)*fl*0.7,ep.z+Math.sin(a+1)*fl*0.5),
+      new THREE.Vector3(ep.x+Math.cos(a)*fl*1.8,ep.y+0.08+Math.sin(a)*fl*1.2,ep.z+Math.sin(a+1)*fl*0.8)]);
+    ovG.add(new THREE.Mesh(new THREE.TubeGeometry(fp,12,tubeR*0.35+Math.random()*tubeR*0.2,6,false),tM.clone()));
+  }
+  // Hilum
+  const hM = makeTubeMat(0x885544, 0.45);
+  ovG.add(new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3([
+    new THREE.Vector3(-OV.rx*0.9,0,0), new THREE.Vector3(-OV.rx*1.1,-0.05,0.02),
+    new THREE.Vector3(-OV.rx*1.3,-0.15,0)]),16,tubeR*0.8,8,false),hM));
+
+  // ── SCALE BAR (1cm reference) ──
+  // 1cm in scene units: OV_BASE.rx = 0.72 represents 1.8cm, so 1cm = 0.72/1.8 = 0.4 units
+  const oneScm = 0.4;
+  const barY = -OV.ry - 0.35; // below the ovary
+  // Scale bar line
+  const barGeo = new THREE.BufferGeometry().setFromPoints([
+    new THREE.Vector3(-oneScm/2, barY, 0),
+    new THREE.Vector3(oneScm/2, barY, 0)
+  ]);
+  const barMat = new THREE.LineBasicMaterial({color:0x00d4ff, transparent:true, opacity:0.4});
+  ovG.add(new THREE.Line(barGeo, barMat));
+  // End ticks
+  [-1,1].forEach(s => {
+    const tickGeo = new THREE.BufferGeometry().setFromPoints([
+      new THREE.Vector3(s*oneScm/2, barY-0.04, 0),
+      new THREE.Vector3(s*oneScm/2, barY+0.04, 0)
+    ]);
+    ovG.add(new THREE.Line(tickGeo, barMat.clone()));
+  });
+  // "1 cm" label
+  const scC = document.createElement('canvas'); scC.width=80; scC.height=24;
+  const scX = scC.getContext('2d');
+  scX.font = 'bold 14px Share Tech Mono';
+  scX.fillStyle = 'rgba(0,212,255,0.35)';
+  scX.textAlign = 'center';
+  scX.fillText('1 cm', 40, 16);
+  const scLbl = new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(scC),transparent:true,depthWrite:false}));
+  scLbl.position.set(0, barY-0.12, 0);
+  scLbl.scale.set(0.3, 0.09, 1);
+  ovG.add(scLbl);
+}
+
+// ═══════════════════════════════════════
+//  FOLLICLES — INSIDE THE CORTEX
+//  Embedded within the ovary wall,
+//  pushing the surface outward from within
+// ═══════════════════════════════════════
+
+function rebuildF() {
+  // Remove old follicle meshes
+  f3d.forEach(o => { ovG.remove(o.mesh); ovG.remove(o.wire); if(o.lbl)ovG.remove(o.lbl); });
+  f3d = [];
+
+  // Recalculate ovary size from follicle data
+  OV = calcOvarySize(fols);
+
+  // Rebuild ovary geometry at new size
+  buildOvary();
+
+  const n = fols.length;
+  if (n === 0) { uS(); uFL(); return; }
+
+  const sorted = fols.map((f,i) => ({...f, oi:i})).sort((a,b) => b.size-a.size);
+
+  sorted.forEach((f, i) => {
+    // Golden angle distribution for positions ON a unit sphere
+    const phi = Math.acos(1 - 2*(i+0.5)/Math.max(n,1));
+    const theta = Math.PI * (1+Math.sqrt(5)) * (i+1);
+    // Direction on unit sphere
+    const dx = Math.sin(phi)*Math.cos(theta);
+    const dy = Math.sin(phi)*Math.sin(theta);
+    const dz = Math.cos(phi);
+
+    // Point on ellipsoid surface
+    const sx = dx * OV.rx;
+    const sy = dy * OV.ry;
+    const sz = dz * OV.rz;
+
+    // Surface normal of ellipsoid
+    const nx = 2*sx/(OV.rx*OV.rx), ny = 2*sy/(OV.ry*OV.ry), nz = 2*sz/(OV.rz*OV.rz);
+    const nl = Math.sqrt(nx*nx+ny*ny+nz*nz);
+    const nnx=nx/nl, nny=ny/nl, nnz=nz/nl;
+
+    // Follicle radius in scene units (scaled to match smaller ovary)
+    const fR = (f.size/2) * 0.021;
+    const maturity = Math.min(f.size/22, 1);
+
+    // ── KEY ANATOMICAL FIX: follicle center is INSIDE the cortex ──
+    // Place center so the follicle is embedded in the wall,
+    // with only the top portion bulging the surface outward.
+    // Deeper embedding for small follicles, more protrusion for large ones.
+    //
+    // embedDepth: how far inside the surface the center sits
+    //   small follicle (5mm): center at surface - 80% of radius (mostly hidden)
+    //   mature follicle (20mm): center at surface - 30% of radius (prominent bulge)
+    const embedFraction = 0.8 - maturity * 0.5; // 0.8 for small, 0.3 for mature
+    const cx = sx - nnx * fR * embedFraction;
+    const cy = sy - nny * fR * embedFraction;
+    const cz = sz - nnz * fR * embedFraction;
+
+    // Color by maturity
+    let hC;
+    if (f.size >= 18) hC = new THREE.Color(0x00ffe5);
+    else if (f.size >= 12) hC = new THREE.Color(0x00aadd);
+    else hC = new THREE.Color(0x006688);
+
+    // Follicle sphere (fluid-filled)
+    const geo = new THREE.SphereGeometry(fR, 28, 20);
+    const mat = new THREE.ShaderMaterial({
+      transparent:true, depthWrite:true,
+      uniforms:{
+        color:{value:hC}, lightDir:{value:LD},
+        opacity:{value:0.8}, selected:{value:0},
+        maturity:{value:maturity}, time:{value:0}
+      },
+      vertexShader:VS, fragmentShader:follFrag
+    });
+    const mesh = new THREE.Mesh(geo, mat);
+    mesh.position.set(cx, cy, cz);
+    mesh.userData = {idx: f.oi};
+    ovG.add(mesh);
+
+    // Wireframe
+    const wire = new THREE.Mesh(geo.clone(),
+      new THREE.MeshBasicMaterial({color:hC,wireframe:true,transparent:true,opacity:0.06}));
+    wire.position.copy(mesh.position);
+    ovG.add(wire);
+
+    // Size label floating outside — only show for follicles ≥10mm to avoid clutter
+    let lbl = null;
+    if (f.size >= 10) {
+      const lc = document.createElement('canvas'); lc.width=80; lc.height=28;
+      const lx = lc.getContext('2d');
+      lx.font = 'bold 16px Share Tech Mono';
+      lx.fillStyle = f.size>=18?'rgba(0,255,229,0.6)':'rgba(0,180,220,0.4)';
+      lx.textAlign = 'center';
+      lx.fillText(f.size+'mm', 40, 20);
+      lbl = new THREE.Sprite(new THREE.SpriteMaterial({
+        map:new THREE.CanvasTexture(lc), transparent:true, depthWrite:false}));
+      lbl.position.set(sx+nnx*(fR+0.06), sy+nny*(fR+0.06), sz+nnz*(fR+0.06));
+      lbl.scale.set(0.22, 0.07, 1);
+      ovG.add(lbl);
+    }
+
+    f3d.push({mesh, wire, lbl, data:f});
+  });
+
+  uS(); uFL();
+}
+
+// ═══════════════════════════════════════
+//  PRESETS
+// ═══════════════════════════════════════
+
+const PRESETS = {
+  normal: {
+    name:'Normal Cycle',
+    desc:'One dominant follicle ~20mm. Ovary 3-4cm.',
+    fols:[{size:20},{size:10},{size:8},{size:6},{size:5}]
+  },
+  ivf: {
+    name:'IVF Stimulation',
+    desc:'Multiple follicles recruited. Ovary enlarges to 5-7cm.',
+    fols:[{size:22},{size:20},{size:19},{size:18},{size:17},{size:16},{size:15},{size:14},{size:13},{size:12},{size:10},{size:9},{size:8}]
+  },
+  pcos: {
+    name:'PCOS',
+    desc:'≥12 small follicles 2-9mm peripherally. Ovary volume >10mL.',
+    fols:[{size:8},{size:7},{size:7},{size:6},{size:6},{size:6},{size:5},{size:5},{size:5},{size:5},{size:4},{size:4},{size:4},{size:4},{size:3},{size:3},{size:3},{size:3},{size:3},{size:2},{size:2},{size:2}]
+  },
+  dor: {
+    name:'Diminished Reserve',
+    desc:'Low AFC. Small ovary 2-2.5cm.',
+    fols:[{size:9},{size:6},{size:4}]
+  },
+  cyst: {
+    name:'Follicular Cyst',
+    desc:'Large unruptured follicle >25mm. Ovary moderately enlarged.',
+    fols:[{size:38},{size:8},{size:6},{size:5},{size:4}]
+  },
+  ohss: {
+    name:'OHSS',
+    desc:'Massive enlargement 8-12cm. Multiple large luteinized follicles.',
+    fols:[{size:32},{size:30},{size:28},{size:27},{size:26},{size:25},{size:24},{size:23},{size:22},{size:21},{size:20},{size:19},{size:18},{size:18},{size:17},{size:16},{size:15}]
+  },
+};
+
+function loadPreset(key) {
+  if(!key || !PRESETS[key]) return;
+  const p = PRESETS[key];
+  fols = p.fols.map(f => ({...f}));
+  document.getElementById('ml').textContent = p.name.toUpperCase();
+  const pd = document.getElementById('preset-desc');
+  if(pd) pd.textContent = p.desc;
+  rebuildF();
+}
+
+// ── Input ──
+function aF(){
+  const inp=document.getElementById('fs');
+  const s=parseFloat(inp.value);
+  if(!s||s<2){inp.style.borderColor='rgba(255,60,60,0.5)';setTimeout(()=>inp.style.borderColor='',800);return;}
+  fols.push({size:s});
+  inp.value='';
+  inp.focus();
+  // Clear preset selection since this is now custom data
+  document.getElementById('preset-sel').value='';
+  document.getElementById('ml').textContent='YOUR SCAN';
+  // Feedback
+  const fb=document.getElementById('added-feedback');
+  if(fb){fb.textContent=`✓ Added ${s}mm follicle (${fols.length} total)`;setTimeout(()=>fb.textContent='',2000);}
+  rebuildF();
+}
+function quickAdd(){
+  const sizes=prompt('Enter all follicle sizes separated by commas:\ne.g. 18, 16, 15, 14, 12, 10, 9');
+  if(!sizes)return;
+  const nums=sizes.split(/[,\s]+/).map(Number).filter(n=>n>=2&&n<=50);
+  if(nums.length===0){alert('No valid sizes found. Enter numbers like: 18, 16, 14');return;}
+  fols=nums.map(size=>({size}));
+  document.getElementById('preset-sel').value='';
+  document.getElementById('ml').textContent='YOUR SCAN';
+  const fb=document.getElementById('added-feedback');
+  if(fb){fb.textContent=`✓ Added ${nums.length} follicles`;setTimeout(()=>fb.textContent='',3000);}
+  rebuildF();
+}
+function cA(){ fols=[]; document.getElementById('si').style.display='none'; selIdx=null; document.getElementById('ml').textContent='3D OVARY MODEL'; rebuildF(); }
+
+function uS(){
+  const n=fols.length, m=fols.filter(f=>f.size>=18).length;
+  const avg=n?(fols.reduce((s,f)=>s+f.size,0)/n).toFixed(1):'0';
+  const sb=document.getElementById('stats-bar');
+  if(sb) sb.innerHTML=`FOLLICLES: <span class="v">${n}</span> | MATURE: <span class="v">${m}</span> | AVG: <span class="v">${avg}</span>mm`;
+}
+function uFL(){
+  const l=document.getElementById('fl'); l.innerHTML='';
+  fols.forEach((f,i)=>{
+    const d=document.createElement('div');
+    d.className='fi '+(f.size>=18?'mt':'');
+    d.innerHTML=`<span><span class="d"></span>F${String(i+1).padStart(2,'0')}</span><span>${f.size}mm</span><span style="opacity:0.4">${f.size>=18?'MAT':f.size>=12?'GRW':'SML'}</span>`;
+    d.onclick=()=>selFol(i); l.appendChild(d);
+  });
+}
+function selFol(i){
+  selIdx=i; const f=fols[i]; if(!f)return;
+  document.getElementById('si').style.display='block';
+  document.getElementById('si').textContent=`F${String(i+1).padStart(2,'0')} · ${f.size}mm · ${f.size>=18?'MATURE':f.size>=12?'GROWING':'SMALL'}`;
+  f3d.forEach(o=>{o.mesh.material.uniforms.selected.value=0;});
+  const mt=f3d.find(o=>o.data.oi===i); if(mt)mt.mesh.material.uniforms.selected.value=1;
+}
+
+// ── View modes ──
+function sV(m){
+  vw=m;['bw','bs','bx'].forEach(b=>document.getElementById(b).classList.remove('on'));
+  ({wire:'bw',solid:'bs',xray:'bx'})[m]&&document.getElementById(({wire:'bw',solid:'bs',xray:'bx'})[m]).classList.add('on');
+  if(!ovCortex)return;
+  switch(m){
+    case'wire':ovCortex.material.uniforms.opacity.value=0.75;ovWire.visible=true;ovFresnel.visible=true;f3d.forEach(o=>o.wire.visible=true);break;
+    case'solid':ovCortex.material.uniforms.opacity.value=0.9;ovWire.visible=false;ovFresnel.visible=false;f3d.forEach(o=>o.wire.visible=false);break;
+    case'xray':ovCortex.material.uniforms.opacity.value=0.15;ovWire.visible=true;ovWire.material.opacity=0.08;ovFresnel.visible=true;f3d.forEach(o=>o.wire.visible=true);break;
+  }
+}
+function tR(){autoR=!autoR;document.getElementById('brot').classList.toggle('on',autoR);}
+
+setInterval(()=>{const d=new Date();const el=document.getElementById('clk');if(el)el.textContent=[d.getHours(),d.getMinutes(),d.getSeconds()].map(v=>String(v).padStart(2,'0')).join(':');},1000);
+
+// ── Animate ──
+function animate(){
+  requestAnimationFrame(animate);
+  const t=clock.getElapsedTime();
+  if(autoR){rotY+=0.003;tRX=Math.sin(t*0.08)*0.12;}
+  const cd=4.5, cr=rotY+(autoR?0:tRY);
+  cam.position.x+=(Math.sin(cr)*cd-cam.position.x)*0.04;
+  cam.position.z+=(Math.cos(cr)*cd-cam.position.z)*0.04;
+  cam.position.y+=(1.2+tRX*1.5-cam.position.y)*0.04;
+  cam.lookAt(0,0,0);
+  f3d.forEach(o=>{o.mesh.material.uniforms.time.value=t;});
+  ren.render(scene,cam);
+}
+
+// ── Start ──
+init();
+document.getElementById('preset-sel').value='ivf';
+loadPreset('ivf');
+animate();
+</script>
+</body>
+</html>
