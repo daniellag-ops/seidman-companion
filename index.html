@@ -1170,6 +1170,75 @@
     line-height: 1.65;
     color: var(--text);
   }
+
+  /* ── Tab bar ── */
+  .tab-bar {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+
+  .tab-btn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: 10px 4px 8px;
+    border: none;
+    border-bottom: 2px solid transparent;
+    background: transparent;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text-light);
+    transition: color 0.15s, border-color 0.15s;
+  }
+
+  .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .tab-btn:hover:not(.active) { color: var(--text-mid); }
+  .tab-emoji { font-size: 17px; line-height: 1; }
+  .tab-label { font-size: 11px; font-weight: 500; letter-spacing: 0.2px; }
+
+  /* ── Tab panels ── */
+  .tab-panel { display: none; }
+  .tab-panel.active { display: flex; flex-direction: column; gap: 22px; }
+
+  /* ── Embryology cards ── */
+  .embryo-card {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    cursor: pointer;
+    transition: border-color 0.15s;
+  }
+  .embryo-card:hover { border-color: var(--accent); }
+  .embryo-card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+  .embryo-card-left { flex: 1; }
+  .embryo-card-icon { font-size: 22px; margin-bottom: 8px; line-height: 1; }
+  .embryo-card-title { font-family: 'DM Serif Display', serif; font-size: 17px; font-weight: 400; color: var(--text); margin-bottom: 4px; }
+  .embryo-card-desc { font-size: 13px; color: var(--text-mid); line-height: 1.6; }
+  .embryo-card-chevron { font-size: 18px; color: var(--text-light); flex-shrink: 0; margin-top: 2px; transition: transform 0.2s; }
+  .embryo-card.open .embryo-card-chevron { transform: rotate(90deg); }
+  .embryo-card-body {
+    display: none;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.75;
+  }
+  .embryo-card.open .embryo-card-body { display: block; }
+  .embryo-card-body p { margin-bottom: 10px; }
+  .embryo-card-body p:last-child { margin-bottom: 0; }
+  .embryo-card-body ul { margin: 8px 0 10px 18px; }
+  .embryo-card-body li { margin-bottom: 5px; }
+  .embryo-card-body strong { color: var(--accent); font-weight: 600; }
 </style>
 </head>
 <body>
@@ -1216,254 +1285,411 @@
   <div id="headerTagline" style="display:none">A personal guide to understanding your fertility journey</div>
 </header>
 
+<nav class="tab-bar">
+  <button class="tab-btn active" data-tab="ask" onclick="switchTab('ask')">
+    <span class="tab-emoji">💬</span>
+    <span class="tab-label" id="tabLabelAsk">Ask</span>
+  </button>
+  <button class="tab-btn" data-tab="journey" onclick="switchTab('journey')">
+    <span class="tab-emoji">📅</span>
+    <span class="tab-label" id="tabLabelJourney">Journey</span>
+  </button>
+  <button class="tab-btn" data-tab="wellness" onclick="switchTab('wellness')">
+    <span class="tab-emoji">🌿</span>
+    <span class="tab-label" id="tabLabelWellness">Wellness</span>
+  </button>
+  <button class="tab-btn" data-tab="embryology" onclick="switchTab('embryology')">
+    <span class="tab-emoji">🔬</span>
+    <span class="tab-label" id="tabLabelEmbryology">Embryology</span>
+  </button>
+</nav>
+
 <main>
 
-  <div class="intro-card">
-    <div class="doctor-badge">
-      <div class="badge-dot">DS</div>
-      <span class="badge-text" id="badgeText">Prof. Seidman's Patient Resource</span>
+  <!-- ══ TAB: ASK ══ -->
+  <div class="tab-panel active" data-tab="ask">
+
+    <div class="intro-card">
+      <div class="doctor-badge">
+        <div class="badge-dot">DS</div>
+        <span class="badge-text" id="badgeText">Prof. Seidman's Patient Resource</span>
+      </div>
+      <h1 id="introTitle">What did we discuss at your appointment today?</h1>
+      <p id="introDesc">Enter your results or questions here — hormone levels, follicle counts, embryo updates — and receive a clear, expert explanation of what they mean and what comes next.</p>
     </div>
-    <h1 id="introTitle">What did we discuss at your appointment today?</h1>
-    <p id="introDesc">Enter your results or questions here — hormone levels, follicle counts, embryo updates — and receive a clear, expert explanation of what they mean and what comes next.</p>
-  </div>
 
-  <div class="disclaimer-banner" id="disclaimerBanner"></div>
+    <div class="disclaimer-banner" id="disclaimerBanner"></div>
 
-  <!-- Wellness Tips -->
-  <div class="wellness-section" id="wellnessSection">
-    <span class="wellness-title" id="wellnessTitle">Wellness tips</span>
-    <div class="wellness-cats" id="wellnessCats"></div>
-    <div class="wellness-cards" id="wellnessCards"></div>
-  </div>
-
-  <!-- Follicle 3D Viewer button -->
-  <button onclick="document.getElementById('fvOverlay').style.display='flex'" style="display:flex;align-items:center;gap:10px;width:100%;background:var(--accent);color:white;border:none;border-radius:var(--radius);padding:16px 20px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;opacity:1;transition:opacity 0.15s;text-align:left;" onmouseover="this.style.opacity='0.88'" onmouseout="this.style.opacity='1'">
-    <div style="width:36px;height:36px;background:rgba(255,255,255,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">🔬</div>
-    <div style="flex:1">
-      <div style="font-size:10px;opacity:0.65;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:2px" id="fvBtnLabel">Interactive tool</div>
-      <div style="font-size:15px;font-weight:500" id="fvBtnTitle">Follicle 3D Viewer</div>
-    </div>
-    <div style="font-size:18px;opacity:0.6">›</div>
-  </button>
-
-  <!-- Clinic reminder banner -->
-  <div class="clinic-reminder" id="clinicReminder">
-    <div class="clinic-reminder-icon" id="clinicReminderIcon">📅</div>
-    <div class="clinic-reminder-content">
-      <div class="clinic-reminder-label" id="clinicReminderLabel">הודעה מהמרפאה</div>
-      <div class="clinic-reminder-msg" id="clinicReminderMsg"></div>
-      <button class="clinic-reminder-confirm" id="clinicReminderBtn" onclick="acknowledgeReminder()">קיבלתי ✓</button>
-    </div>
-  </div>
-
-  <!-- Proactive message banner -->
-  <div class="proactive-banner" id="proactiveBanner" style="display:none">
-    <div class="proactive-icon" id="proactiveIcon">🌟</div>
-    <div class="proactive-content">
-      <div class="proactive-title" id="proactiveTitle"></div>
-      <div class="proactive-body" id="proactiveBody"></div>
-    </div>
-  </div>
-
-  <!-- Memory card — notes only, AI facts work silently in background -->
-  <div class="memory-card" id="memoryCard" style="display:none">
-    <div class="memory-header">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z" fill="currentColor"/></svg>
-      <span id="memoryTitle">Your journey so far</span>
-    </div>
-    <div class="memory-facts" id="memoryFacts"></div>
-  </div>
-
-  <div>
-    <span class="section-label" id="phaseLabel">Your current phase</span>
-    <div class="phase-pills" id="phasePills"></div>
-  </div>
-
-  <!-- Key dates card -->
-  <div class="dates-card" id="datesCard">
-    <div class="dates-header" onclick="toggleDates()">
-      <span class="section-label" style="margin:0" id="datesLabel">My key dates</span>
-      <span class="dates-toggle" id="datesToggle">＋</span>
-    </div>
-    <div class="dates-body" id="datesBody" style="display:none">
-      <div class="dates-grid">
-        <div class="date-field">
-          <label id="labelStimStart">Stimulation start</label>
-          <input type="date" id="dateStimStart" onchange="saveDates()" />
-        </div>
-        <div class="date-field">
-          <label id="labelRetrieval">Egg retrieval</label>
-          <input type="date" id="dateRetrieval" onchange="saveDates()" />
-        </div>
-        <div class="date-field">
-          <label id="labelTransfer">Embryo transfer</label>
-          <input type="date" id="dateTransfer" onchange="saveDates()" />
-        </div>
-        <div class="date-field">
-          <label id="labelBeta">Beta test</label>
-          <input type="date" id="dateBeta" onchange="saveDates()" />
-        </div>
+    <!-- Clinic reminder banner -->
+    <div class="clinic-reminder" id="clinicReminder">
+      <div class="clinic-reminder-icon" id="clinicReminderIcon">📅</div>
+      <div class="clinic-reminder-content">
+        <div class="clinic-reminder-label" id="clinicReminderLabel">הודעה מהמרפאה</div>
+        <div class="clinic-reminder-msg" id="clinicReminderMsg"></div>
+        <button class="clinic-reminder-confirm" id="clinicReminderBtn" onclick="acknowledgeReminder()">קיבלתי ✓</button>
       </div>
     </div>
-  </div>
 
-  <input type="file" id="fileInput" accept=".pdf,image/*" style="display:none" onchange="handleFileSelect(event)">
-
-  <div class="input-card">
-    <div class="input-label" id="inputLabel">Your results or question</div>
-    <textarea id="userInput" rows="4"></textarea>
-    <div class="file-preview" id="filePreview">
-      <span class="file-preview-icon">📎</span>
-      <span class="file-preview-name" id="filePreviewName"></span>
-      <button class="file-remove" onclick="removeAttachment()">×</button>
-    </div>
-    <div class="input-footer">
-      <button class="upload-btn" id="uploadBtn" onclick="document.getElementById('fileInput').click()" title="Attach a result">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
-      </button>
-      <span class="input-hint" id="inputHint">Private & confidential — nothing is stored.</span>
-      <button class="send-btn" id="sendBtn" onclick="sendMessage()">
-        <span id="sendBtnText">Explain this</span>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </button>
-    </div>
-  </div>
-
-  <div>
-    <div class="section-label" id="quickLabel">Frequently asked questions</div>
-    <div class="quick-prompts" id="quickPrompts"></div>
-  </div>
-
-  <div class="response-card" id="responseCard">
-    <div class="response-header">
-      <div class="response-dot"></div>
-      <span class="response-title" id="responseTitle">Clinical explanation</span>
-    </div>
-    <div class="loading" id="loadingIndicator">
-      <div class="dots">
-        <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+    <!-- Proactive message banner -->
+    <div class="proactive-banner" id="proactiveBanner" style="display:none">
+      <div class="proactive-icon" id="proactiveIcon">🌟</div>
+      <div class="proactive-content">
+        <div class="proactive-title" id="proactiveTitle"></div>
+        <div class="proactive-body" id="proactiveBody"></div>
       </div>
-      <span id="loadingText">Preparing your explanation…</span>
     </div>
-    <div class="error-msg" id="errorMsg"></div>
-    <div class="response-body" id="responseBody"></div>
-    <div class="share-section" id="shareSection">
-      <span class="share-label" id="shareLabel">Share</span>
-      <div class="share-platform-btns">
-        <button class="share-platform-btn wa" onclick="shareResponseWhatsApp()" title="WhatsApp">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-        </button>
-        <button class="share-platform-btn fb" onclick="shareResponseFacebook()" title="Facebook">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-        </button>
-        <button class="share-platform-btn ig" onclick="shareResponseNative()" title="Instagram">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-        </button>
-        <button class="share-platform-btn tt" onclick="shareResponseNative()" title="TikTok">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.27 8.27 0 004.83 1.55V6.79a4.85 4.85 0 01-1.06-.1z"/></svg>
-        </button>
+
+    <div>
+      <span class="section-label" id="phaseLabel">Your current phase</span>
+      <div class="phase-pills" id="phasePills"></div>
+    </div>
+
+    <input type="file" id="fileInput" accept=".pdf,image/*" style="display:none" onchange="handleFileSelect(event)">
+
+    <div class="input-card">
+      <div class="input-label" id="inputLabel">Your results or question</div>
+      <textarea id="userInput" rows="4"></textarea>
+      <div class="file-preview" id="filePreview">
+        <span class="file-preview-icon">📎</span>
+        <span class="file-preview-name" id="filePreviewName"></span>
+        <button class="file-remove" onclick="removeAttachment()">×</button>
       </div>
-      <button class="milestone-card-btn" id="milestoneCardBtn" onclick="openMilestoneModal()">🎴 Milestone card</button>
-    </div>
-    <div class="save-note-section" id="saveNoteSection" style="display:none">
-      <div class="save-note-inner">
-        <input type="text" id="noteInput" class="note-input" />
-        <button class="save-note-btn" id="saveNoteBtn" onclick="saveNote()">
-          <span id="saveNoteBtnText">Save</span>
+      <div class="input-footer">
+        <button class="upload-btn" id="uploadBtn" onclick="document.getElementById('fileInput').click()" title="Attach a result">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+        </button>
+        <span class="input-hint" id="inputHint">Private & confidential — nothing is stored.</span>
+        <button class="send-btn" id="sendBtn" onclick="sendMessage()">
+          <span id="sendBtnText">Explain this</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
       </div>
     </div>
-  </div>
 
-  <!-- Medication tracker -->
-  <div class="meds-card" id="medsCard">
-    <div class="meds-header" onclick="toggleMeds()">
-      <div style="display:flex;align-items:center;gap:8px">
-        <span style="font-size:16px">💊</span>
-        <span class="section-label" style="margin:0" id="medsLabel">My medications</span>
-      </div>
-      <span class="dates-toggle" id="medsToggle">＋</span>
+    <div>
+      <div class="section-label" id="quickLabel">Frequently asked questions</div>
+      <div class="quick-prompts" id="quickPrompts"></div>
     </div>
-    <div class="meds-body" id="medsBody" style="display:none">
-      <!-- Today's checklist -->
-      <div class="meds-today" id="medsToday"></div>
-      <!-- Add medication -->
-      <div class="meds-add">
-        <div class="meds-add-row">
-          <select id="medName" class="med-select med-select-name" onchange="onMedNameChange()" onclick="onMedNameChange()">
-            <option value="">— Select medication —</option>
-            <optgroup id="grpStim" label="💉 Stimulation (FSH/LH)">
-              <option value="Gonal-F">Gonal-F</option>
-              <option value="Menopur">Menopur</option>
-              <option value="Puregon">Puregon</option>
-              <option value="Bemfola">Bemfola</option>
-              <option value="Elonva">Elonva</option>
-              <option value="Rekovelle">Rekovelle</option>
-              <option value="Pergoveris">Pergoveris</option>
-              <option value="Luveris">Luveris</option>
-            </optgroup>
-            <optgroup id="grpSuppress" label="🛑 Suppression">
-              <option value="Decapeptyl">Decapeptyl</option>
-              <option value="Cetrotide">Cetrotide</option>
-              <option value="Orgalutran">Orgalutran</option>
-              <option value="Synarel">Synarel (Nasal spray)</option>
-              <option value="Suprefact">Suprefact</option>
-            </optgroup>
-            <optgroup id="grpTrigger" label="💊 Trigger">
-              <option value="Ovitrelle">Ovitrelle</option>
-              <option value="Pregnyl">Pregnyl</option>
-              <option value="Decapeptyl trigger">Decapeptyl (Trigger)</option>
-            </optgroup>
-            <optgroup id="grpLuteal" label="🌸 Luteal Support">
-              <option value="Utrogestan">Utrogestan</option>
-              <option value="Crinone">Crinone</option>
-              <option value="Endometrin">Endometrin</option>
-              <option value="Prontogest">Prontogest</option>
-              <option value="Gestone">Gestone</option>
-              <option value="Cyclogest">Cyclogest</option>
-            </optgroup>
-            <optgroup id="grpEstrogen" label="💛 Estrogen">
-              <option value="Estrofem">Estrofem</option>
-              <option value="Progynova">Progynova</option>
-              <option value="Divigel">Divigel</option>
-              <option value="Evorel patch">Evorel (Patch)</option>
-              <option value="Estraderm patch">Estraderm (Patch)</option>
-            </optgroup>
-            <optgroup id="grpAdjuncts" label="➕ Adjuncts">
-              <option value="Aspirin">Aspirin</option>
-              <option value="Clexane">Clexane / Enoxaparin</option>
-              <option value="Prednisone">Prednisone</option>
-              <option value="Dostinex">Dostinex (Cabergoline)</option>
-              <option value="Letrozole">Letrozole (Femara)</option>
-              <option value="Folic acid">Folic acid</option>
-              <option value="DHEA">DHEA</option>
-            </optgroup>
-            <optgroup id="grpOther" label="✏️ Other">
-              <option value="__custom__">Other — type my own</option>
-            </optgroup>
-          </select>
-          <input type="text" id="medNameCustom" class="med-input" placeholder="Type medication name" style="display:none" />
+
+    <div class="response-card" id="responseCard">
+      <div class="response-header">
+        <div class="response-dot"></div>
+        <span class="response-title" id="responseTitle">Clinical explanation</span>
+      </div>
+      <div class="loading" id="loadingIndicator">
+        <div class="dots">
+          <div class="dot"></div><div class="dot"></div><div class="dot"></div>
         </div>
-        <div class="meds-add-row" style="margin-top:8px">
-          <select id="medDose" class="med-select med-dose-select">
-          </select>
-          <input type="text" id="medDoseCustom" class="med-input med-dose" placeholder="or type dose" />
-          <select id="medTime" class="med-select">
-            <option value="morning">🌅 Morning</option>
-            <option value="midday">☀️ Midday</option>
-            <option value="evening">🌙 Evening</option>
-            <option value="bedtime">😴 Bedtime</option>
-          </select>
-          <button class="add-med-btn" onclick="addMedication()">+</button>
+        <span id="loadingText">Preparing your explanation…</span>
+      </div>
+      <div class="error-msg" id="errorMsg"></div>
+      <div class="response-body" id="responseBody"></div>
+      <div class="share-section" id="shareSection">
+        <span class="share-label" id="shareLabel">Share</span>
+        <div class="share-platform-btns">
+          <button class="share-platform-btn wa" onclick="shareResponseWhatsApp()" title="WhatsApp">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          </button>
+          <button class="share-platform-btn fb" onclick="shareResponseFacebook()" title="Facebook">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          </button>
+          <button class="share-platform-btn ig" onclick="shareResponseNative()" title="Instagram">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+          </button>
+          <button class="share-platform-btn tt" onclick="shareResponseNative()" title="TikTok">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.27 8.27 0 004.83 1.55V6.79a4.85 4.85 0 01-1.06-.1z"/></svg>
+          </button>
+        </div>
+        <button class="milestone-card-btn" id="milestoneCardBtn" onclick="openMilestoneModal()">🎴 Milestone card</button>
+      </div>
+      <div class="save-note-section" id="saveNoteSection" style="display:none">
+        <div class="save-note-inner">
+          <input type="text" id="noteInput" class="note-input" />
+          <button class="save-note-btn" id="saveNoteBtn" onclick="saveNote()">
+            <span id="saveNoteBtnText">Save</span>
+          </button>
         </div>
       </div>
     </div>
-  </div>
 
-  <div class="footer-note" id="footerNote">
-    This resource was created by Prof. Daniel Seidman to help his patients better understand their fertility journey.
-  </div>
+    <div class="footer-note" id="footerNote">
+      Prof. Daniel Seidman · ALMA Clinic
+    </div>
 
+  </div><!-- /tab ask -->
+
+  <!-- ══ TAB: JOURNEY ══ -->
+  <div class="tab-panel" data-tab="journey">
+
+    <!-- Memory card -->
+    <div class="memory-card" id="memoryCard" style="display:none">
+      <div class="memory-header">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z" fill="currentColor"/></svg>
+        <span id="memoryTitle">Your journey so far</span>
+      </div>
+      <div class="memory-facts" id="memoryFacts"></div>
+    </div>
+
+    <!-- Key dates card -->
+    <div class="dates-card" id="datesCard">
+      <div class="dates-header" onclick="toggleDates()">
+        <span class="section-label" style="margin:0" id="datesLabel">My key dates</span>
+        <span class="dates-toggle" id="datesToggle">＋</span>
+      </div>
+      <div class="dates-body" id="datesBody" style="display:none">
+        <div class="dates-grid">
+          <div class="date-field">
+            <label id="labelStimStart">Stimulation start</label>
+            <input type="date" id="dateStimStart" onchange="saveDates()" />
+          </div>
+          <div class="date-field">
+            <label id="labelRetrieval">Egg retrieval</label>
+            <input type="date" id="dateRetrieval" onchange="saveDates()" />
+          </div>
+          <div class="date-field">
+            <label id="labelTransfer">Embryo transfer</label>
+            <input type="date" id="dateTransfer" onchange="saveDates()" />
+          </div>
+          <div class="date-field">
+            <label id="labelBeta">Beta test</label>
+            <input type="date" id="dateBeta" onchange="saveDates()" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Medication tracker -->
+    <div class="meds-card" id="medsCard">
+      <div class="meds-header" onclick="toggleMeds()">
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="font-size:16px">💊</span>
+          <span class="section-label" style="margin:0" id="medsLabel">My medications</span>
+        </div>
+        <span class="dates-toggle" id="medsToggle">＋</span>
+      </div>
+      <div class="meds-body" id="medsBody" style="display:none">
+        <div class="meds-today" id="medsToday"></div>
+        <div class="meds-add">
+          <div class="meds-add-row">
+            <select id="medName" class="med-select med-select-name" onchange="onMedNameChange()" onclick="onMedNameChange()">
+              <option value="">— Select medication —</option>
+              <optgroup id="grpStim" label="💉 Stimulation (FSH/LH)">
+                <option value="Gonal-F">Gonal-F</option>
+                <option value="Menopur">Menopur</option>
+                <option value="Puregon">Puregon</option>
+                <option value="Bemfola">Bemfola</option>
+                <option value="Elonva">Elonva</option>
+                <option value="Rekovelle">Rekovelle</option>
+                <option value="Pergoveris">Pergoveris</option>
+                <option value="Luveris">Luveris</option>
+              </optgroup>
+              <optgroup id="grpSuppress" label="🛑 Suppression">
+                <option value="Decapeptyl">Decapeptyl</option>
+                <option value="Cetrotide">Cetrotide</option>
+                <option value="Orgalutran">Orgalutran</option>
+                <option value="Synarel">Synarel (Nasal spray)</option>
+                <option value="Suprefact">Suprefact</option>
+              </optgroup>
+              <optgroup id="grpTrigger" label="💊 Trigger">
+                <option value="Ovitrelle">Ovitrelle</option>
+                <option value="Pregnyl">Pregnyl</option>
+                <option value="Decapeptyl trigger">Decapeptyl (Trigger)</option>
+              </optgroup>
+              <optgroup id="grpLuteal" label="🌸 Luteal Support">
+                <option value="Utrogestan">Utrogestan</option>
+                <option value="Crinone">Crinone</option>
+                <option value="Endometrin">Endometrin</option>
+                <option value="Prontogest">Prontogest</option>
+                <option value="Gestone">Gestone</option>
+                <option value="Cyclogest">Cyclogest</option>
+              </optgroup>
+              <optgroup id="grpEstrogen" label="💛 Estrogen">
+                <option value="Estrofem">Estrofem</option>
+                <option value="Progynova">Progynova</option>
+                <option value="Divigel">Divigel</option>
+                <option value="Evorel patch">Evorel (Patch)</option>
+                <option value="Estraderm patch">Estraderm (Patch)</option>
+              </optgroup>
+              <optgroup id="grpAdjuncts" label="➕ Adjuncts">
+                <option value="Aspirin">Aspirin</option>
+                <option value="Clexane">Clexane / Enoxaparin</option>
+                <option value="Prednisone">Prednisone</option>
+                <option value="Dostinex">Dostinex (Cabergoline)</option>
+                <option value="Letrozole">Letrozole (Femara)</option>
+                <option value="Folic acid">Folic acid</option>
+                <option value="DHEA">DHEA</option>
+              </optgroup>
+              <optgroup id="grpOther" label="✏️ Other">
+                <option value="__custom__">Other — type my own</option>
+              </optgroup>
+            </select>
+            <input type="text" id="medNameCustom" class="med-input" placeholder="Type medication name" style="display:none" />
+          </div>
+          <div class="meds-add-row" style="margin-top:8px">
+            <select id="medDose" class="med-select med-dose-select"></select>
+            <input type="text" id="medDoseCustom" class="med-input med-dose" placeholder="or type dose" />
+            <select id="medTime" class="med-select">
+              <option value="morning">🌅 Morning</option>
+              <option value="midday">☀️ Midday</option>
+              <option value="evening">🌙 Evening</option>
+              <option value="bedtime">😴 Bedtime</option>
+            </select>
+            <button class="add-med-btn" onclick="addMedication()">+</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /tab journey -->
+
+  <!-- ══ TAB: WELLNESS ══ -->
+  <div class="tab-panel" data-tab="wellness">
+
+    <div class="wellness-section" id="wellnessSection">
+      <span class="wellness-title" id="wellnessTitle">Wellness tips</span>
+      <div class="wellness-cats" id="wellnessCats"></div>
+      <div class="wellness-cards" id="wellnessCards"></div>
+    </div>
+
+  </div><!-- /tab wellness -->
+
+  <!-- ══ TAB: EMBRYOLOGY ══ -->
+  <div class="tab-panel" data-tab="embryology">
+
+    <!-- Follicle 3D Viewer -->
+    <button onclick="document.getElementById('fvOverlay').style.display='flex'" style="display:flex;align-items:center;gap:10px;width:100%;background:var(--accent);color:white;border:none;border-radius:var(--radius);padding:16px 20px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;opacity:1;transition:opacity 0.15s;text-align:left;" onmouseover="this.style.opacity='0.88'" onmouseout="this.style.opacity='1'">
+      <div style="width:36px;height:36px;background:rgba(255,255,255,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">🔬</div>
+      <div style="flex:1">
+        <div style="font-size:10px;opacity:0.65;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:2px" id="fvBtnLabel">Interactive tool</div>
+        <div style="font-size:15px;font-weight:500" id="fvBtnTitle">Follicle 3D Viewer</div>
+      </div>
+      <div style="font-size:18px;opacity:0.6">›</div>
+    </button>
+
+    <!-- Embryology educational cards -->
+    <span class="section-label" id="embryoSectionLabel">Understanding your embryology</span>
+
+    <div class="embryo-card" onclick="this.classList.toggle('open')">
+      <div class="embryo-card-top">
+        <div class="embryo-card-left">
+          <div class="embryo-card-icon">🥚</div>
+          <div class="embryo-card-title" id="embryoCard1Title">Egg Maturity</div>
+          <div class="embryo-card-desc" id="embryoCard1Desc">MII, MI, and GV — what the maturity stages mean for your cycle</div>
+        </div>
+        <div class="embryo-card-chevron">›</div>
+      </div>
+      <div class="embryo-card-body" id="embryoCard1Body">
+        <p>When eggs are retrieved, not all are equally mature. The lab classifies them into three stages:</p>
+        <ul>
+          <li><strong>MII (Metaphase II)</strong> — fully mature and ready for fertilization. These are the eggs that can be fertilized by sperm (or ICSI).</li>
+          <li><strong>MI (Metaphase I)</strong> — partially mature. These may continue maturing in the lab over a few hours, but success rates are lower than MII eggs.</li>
+          <li><strong>GV (Germinal Vesicle)</strong> — immature. Rarely fertilizable in the same cycle; sometimes used in research protocols.</li>
+        </ul>
+        <p>A typical mature rate is 70–85% of retrieved eggs. If you retrieved 10 eggs and 7 were MII, that is a very good result.</p>
+      </div>
+    </div>
+
+    <div class="embryo-card" onclick="this.classList.toggle('open')">
+      <div class="embryo-card-top">
+        <div class="embryo-card-left">
+          <div class="embryo-card-icon">🧬</div>
+          <div class="embryo-card-title" id="embryoCard2Title">Fertilization</div>
+          <div class="embryo-card-desc" id="embryoCard2Desc">Normal fertilization (2PN), ICSI, and what happens in the first 24 hours</div>
+        </div>
+        <div class="embryo-card-chevron">›</div>
+      </div>
+      <div class="embryo-card-body" id="embryoCard2Body">
+        <p>After retrieval, mature eggs are either inseminated with sperm (standard IVF) or injected directly with a single sperm (ICSI). Fertilization is confirmed the next morning.</p>
+        <ul>
+          <li><strong>2PN (two pronuclei)</strong> — normal fertilization. The egg has two visible nuclei: one from the sperm, one from the egg. These are your fertilized embryos.</li>
+          <li><strong>1PN / 3PN</strong> — abnormal fertilization. Embryos with one or three pronuclei are not transferred, as they carry chromosomal errors.</li>
+          <li><strong>0PN</strong> — no fertilization occurred with that egg.</li>
+        </ul>
+        <p>A typical fertilization rate is 60–75% of mature eggs. From 7 mature eggs, getting 4–5 fertilized (2PN) is a solid result.</p>
+      </div>
+    </div>
+
+    <div class="embryo-card" onclick="this.classList.toggle('open')">
+      <div class="embryo-card-top">
+        <div class="embryo-card-left">
+          <div class="embryo-card-icon">🔬</div>
+          <div class="embryo-card-title" id="embryoCard3Title">Embryo Grading</div>
+          <div class="embryo-card-desc" id="embryoCard3Desc">Day 3 cell counts and the Gardner blastocyst grading system explained</div>
+        </div>
+        <div class="embryo-card-chevron">›</div>
+      </div>
+      <div class="embryo-card-body" id="embryoCard3Body">
+        <p>Blastocysts are graded using the <strong>Gardner system</strong>, which gives three pieces of information:</p>
+        <ul>
+          <li><strong>Expansion (1–6)</strong> — how expanded the blastocyst cavity is. Grade 3 is a full blastocyst; grade 4 is expanded; grades 5–6 are hatching/hatched.</li>
+          <li><strong>ICM (Inner Cell Mass) — A, B, or C</strong> — A is tightly packed (will become the baby); B is loosely grouped; C is very few cells.</li>
+          <li><strong>TE (Trophectoderm) — A, B, or C</strong> — A is many cohesive cells (will become the placenta); B is few cells; C is very few large cells.</li>
+        </ul>
+        <p>A <strong>4AA</strong> is the highest possible grade — expanded with excellent ICM and trophectoderm. A <strong>3BB</strong> is a good, commonly transferred embryo. Grading has limits: even lower-grade embryos can lead to healthy pregnancies.</p>
+      </div>
+    </div>
+
+    <div class="embryo-card" onclick="this.classList.toggle('open')">
+      <div class="embryo-card-top">
+        <div class="embryo-card-left">
+          <div class="embryo-card-icon">🌱</div>
+          <div class="embryo-card-title" id="embryoCard4Title">Blastocyst Development</div>
+          <div class="embryo-card-desc" id="embryoCard4Desc">Day 5 vs Day 6 blastocysts — timing, quality, and what to expect</div>
+        </div>
+        <div class="embryo-card-chevron">›</div>
+      </div>
+      <div class="embryo-card-body" id="embryoCard4Body">
+        <p>After fertilization, embryos are cultured for 5–6 days. The goal is reaching the <strong>blastocyst stage</strong>, which has two distinct cell types: the inner cell mass (ICM) and the trophectoderm (TE).</p>
+        <ul>
+          <li><strong>Day 5 blastocysts</strong> are generally considered the strongest performers — they reached the blastocyst stage on schedule.</li>
+          <li><strong>Day 6 blastocysts</strong> are slightly slower-developing but still excellent — many result in healthy pregnancies.</li>
+          <li><strong>Day 7</strong> — most labs do not extend culture beyond day 6, but some day 7 blastocysts are cryopreserved in research settings.</li>
+        </ul>
+        <p>If an embryo has not reached blastocyst by day 6, it is typically not suitable for transfer or freezing. This is a natural selection process — it does not reflect a problem with your treatment.</p>
+      </div>
+    </div>
+
+    <div class="embryo-card" onclick="this.classList.toggle('open')">
+      <div class="embryo-card-top">
+        <div class="embryo-card-left">
+          <div class="embryo-card-icon">🧪</div>
+          <div class="embryo-card-title" id="embryoCard5Title">PGT-A Testing</div>
+          <div class="embryo-card-desc" id="embryoCard5Desc">Chromosome screening — euploid, aneuploid, mosaic results explained</div>
+        </div>
+        <div class="embryo-card-chevron">›</div>
+      </div>
+      <div class="embryo-card-body" id="embryoCard5Body">
+        <p>Preimplantation Genetic Testing for Aneuploidies (PGT-A) screens embryos for the correct number of chromosomes (23 pairs = 46 total) before transfer.</p>
+        <ul>
+          <li><strong>Euploid</strong> — normal chromosome count. These embryos have the highest implantation potential and lowest miscarriage risk.</li>
+          <li><strong>Aneuploid</strong> — abnormal chromosome count (extra or missing). These embryos are not transferred, as they rarely lead to a healthy pregnancy.</li>
+          <li><strong>Mosaic</strong> — a mixture of normal and abnormal cells. These can sometimes be transferred after careful counselling, with slightly lower success rates than euploid embryos.</li>
+        </ul>
+        <p>The proportion of euploid embryos decreases with age. At 35, roughly 40–50% of blastocysts may be euploid; at 42, it may be 10–15%. This is why age is such an important factor in IVF outcomes.</p>
+      </div>
+    </div>
+
+    <div class="embryo-card" onclick="this.classList.toggle('open')">
+      <div class="embryo-card-top">
+        <div class="embryo-card-left">
+          <div class="embryo-card-icon">❄️</div>
+          <div class="embryo-card-title" id="embryoCard6Title">Vitrification (Freezing)</div>
+          <div class="embryo-card-desc" id="embryoCard6Desc">How embryos and eggs are cryopreserved and what survival rates look like</div>
+        </div>
+        <div class="embryo-card-chevron">›</div>
+      </div>
+      <div class="embryo-card-body" id="embryoCard6Body">
+        <p><strong>Vitrification</strong> is an ultra-rapid freezing technique that prevents ice crystals from forming inside cells — the main cause of damage with older slow-freeze methods.</p>
+        <ul>
+          <li><strong>Survival rates</strong> for vitrified blastocysts are typically 95–98% — meaning nearly all frozen embryos survive the thaw intact.</li>
+          <li><strong>Frozen embryo transfers (FET)</strong> often have success rates equal to or slightly better than fresh transfers, because the uterus has had time to recover from stimulation.</li>
+          <li><strong>Egg freezing</strong> (oocyte cryopreservation) uses the same technique. Survival rates are slightly lower than for embryos (85–90%), reflecting the egg's larger size and water content.</li>
+        </ul>
+        <p>Once frozen, embryos can remain viable for many years — evidence suggests no meaningful decline in success rates over a decade of storage.</p>
+      </div>
+    </div>
+
+  </div><!-- /tab embryology -->
 
 </main>
 
@@ -1566,6 +1792,8 @@ const content = {
     errorText: 'Something went wrong. Please try again.',
     footerNote: 'Prof. Daniel Seidman · ALMA Clinic',
     disclaimer: 'This tool is for educational purposes only. It helps you understand your results and prepare for your conversations with Prof. Seidman. Any clinical questions or concerns will be addressed directly by Prof. Seidman and his team.',
+    tabAsk: 'Ask', tabJourney: 'Journey', tabWellness: 'Wellness', tabEmbryology: 'Embryology',
+    embryoSectionLabel: 'Understanding your embryology',
     phases: [
       { label: '💉 IVF Stimulation', value: 'IVF stimulation', sample: 'Day 6 of stims. Estradiol: 1,240 pg/mL. Ultrasound: 5 follicles at 16mm, 3 at 14mm, 2 at 12mm. Is my response on track?' },
       { label: '🥚 Retrieval & Recovery', value: 'egg retrieval and recovery', sample: 'They retrieved 9 eggs, 7 were mature. I\'m feeling bloated and crampy. Is this normal, and what happens to my eggs now?' },
@@ -1642,6 +1870,8 @@ Patient's current treatment phase: ${phase}`
     errorText: 'משהו השתבש. אנא נסי שוב.',
     footerNote: 'פרופ׳ דניאל זיידמן',
     disclaimer: 'כלי זה נועד למטרות מידע בלבד. הוא נועד לסייע לך להבין את תוצאות הבדיקה ולהיערך לשיחה עם פרופ׳ זיידמן. מענה על שאלות רפואיות או בירור חששות קליניים יינתנו ישירות על ידי פרופ׳ זיידמן וצוותו.',
+    tabAsk: 'שאלי', tabJourney: 'מסע', tabWellness: 'בריאות', tabEmbryology: 'עוברים',
+    embryoSectionLabel: 'הבנת תהליך ההפריה',
     phases: [
       { label: '💉 סיטומלציה הורמונלית (IVF)', value: 'סיטומלציה הורמונלית לטיפול IVF', sample: 'יום 6 של סיטומלציה הורמונלית. אסטרדיול: 1,240. אולטרסאונד: 5 זקיקים של 16 מ"מ, 3 של 14 מ"מ, 2 של 12 מ"מ. האם התגובה שלי תקינה?' },
       { label: '🥚 שאיבה והתאוששות', value: 'שאיבת ביציות והתאוששות', sample: 'שאבו 9 ביציות, 7 היו בשלות. אני מרגישה נפיחות וכאבים. האם זה תקין ומה קורה לביציות עכשיו?' },
@@ -1679,6 +1909,12 @@ Patient's current treatment phase: ${phase}`
 };
 
 let currentDates = {};
+
+function switchTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('active', p.dataset.tab === tab));
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
 
 function setLang(lang) {
   currentLang = lang;
@@ -1760,6 +1996,11 @@ function renderUI() {
   document.getElementById('loadingText').textContent = c.loadingText;
   document.getElementById('footerNote').textContent = c.footerNote;
   document.getElementById('disclaimerBanner').textContent = c.disclaimer;
+  document.getElementById('tabLabelAsk').textContent = c.tabAsk;
+  document.getElementById('tabLabelJourney').textContent = c.tabJourney;
+  document.getElementById('tabLabelWellness').textContent = c.tabWellness;
+  document.getElementById('tabLabelEmbryology').textContent = c.tabEmbryology;
+  document.getElementById('embryoSectionLabel').textContent = c.embryoSectionLabel;
 
   const pillsContainer = document.getElementById('phasePills');
   pillsContainer.innerHTML = '';
