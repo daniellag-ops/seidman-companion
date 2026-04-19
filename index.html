@@ -221,17 +221,17 @@
   .phase-pill {
     padding: 8px 16px;
     border-radius: 100px;
-    border: 1.5px solid var(--border);
-    background: var(--surface);
+    border: 1px solid rgba(14,107,107,0.3);
+    background: rgba(14,107,107,0.06);
     font-size: 13px;
-    color: var(--text-mid);
+    color: #0e6b6b;
     cursor: pointer;
     transition: all 0.15s ease;
     font-family: 'DM Sans', sans-serif;
   }
 
-  .phase-pill:hover { border-color: var(--accent); color: var(--accent); }
-  .phase-pill.active { background: var(--accent); border-color: var(--accent); color: white; }
+  .phase-pill:hover { background: rgba(14,107,107,0.12); }
+  .phase-pill.active { background: #0e6b6b; border-color: #0e6b6b; color: white; }
 
   /* ── Input ── */
   .input-card {
@@ -1312,7 +1312,7 @@
   </button>
   <button class="tab-btn" data-tab="embryology" onclick="switchTab('embryology')">
     <span class="tab-emoji">🔬</span>
-    <span class="tab-label" id="tabLabelEmbryology">Science</span>
+    <span class="tab-label" id="tabLabelEmbryology">Embryology</span>
   </button>
 </nav>
 
@@ -1804,7 +1804,7 @@ const content = {
     errorText: 'Something went wrong. Please try again.',
     footerNote: 'Prof. Daniel Seidman · ALMA Clinic',
     disclaimer: 'This tool is for educational purposes only. It helps you understand your results and prepare for your conversations with Prof. Seidman. Any clinical questions or concerns will be addressed directly by Prof. Seidman and his team.',
-    tabAsk: 'Ask', tabJourney: 'Journey', tabWellness: 'Wellness', tabEmbryology: 'Science',
+    tabAsk: 'Ask', tabJourney: 'Journey', tabWellness: 'Wellness', tabEmbryology: 'Embryology',
     embryoSectionLabel: 'Understanding your embryology',
     embryoCards: [
       { title: 'Egg Maturity', desc: 'MII, MI, and GV — what the maturity stages mean for your cycle' },
@@ -1892,7 +1892,7 @@ Patient's current treatment phase: ${phase}`
     errorText: 'משהו השתבש. אנא נסי שוב.',
     footerNote: 'פרופ׳ דניאל זיידמן',
     disclaimer: 'כלי זה נועד למטרות מידע בלבד. הוא נועד לסייע לך להבין את תוצאות הבדיקה ולהיערך לשיחה עם פרופ׳ זיידמן. מענה על שאלות רפואיות או בירור חששות קליניים יינתנו ישירות על ידי פרופ׳ זיידמן וצוותו.',
-    tabAsk: 'שאלי', tabJourney: 'מסע', tabWellness: 'בריאות', tabEmbryology: 'עוברים',
+    tabAsk: 'שאלי', tabJourney: 'מסע', tabWellness: 'בריאות', tabEmbryology: 'אמבריולוגיה',
     embryoSectionLabel: 'הבנת תהליך ההפריה',
     embryoCards: [
       { title: 'בשלות הביציות', desc: 'MII, MI ו-GV — שלבי הבשלות ומשמעותם במחזור הטיפול' },
