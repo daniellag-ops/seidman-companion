@@ -1173,13 +1173,12 @@
 
   /* ── Tab bar ── */
   .tab-bar {
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
+    background: #0e6b6b;
     display: flex;
     position: sticky;
     top: 0;
     z-index: 50;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
   }
 
   .tab-btn {
@@ -1190,16 +1189,16 @@
     gap: 2px;
     padding: 10px 4px 8px;
     border: none;
-    border-bottom: 2px solid transparent;
+    border-bottom: 2.5px solid transparent;
     background: transparent;
     cursor: pointer;
     font-family: 'DM Sans', sans-serif;
-    color: var(--text-light);
+    color: rgba(255,255,255,0.5);
     transition: color 0.15s, border-color 0.15s;
   }
 
-  .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
-  .tab-btn:hover:not(.active) { color: var(--text-mid); }
+  .tab-btn.active { color: white; border-bottom-color: #c9a84c; }
+  .tab-btn:hover:not(.active) { color: rgba(255,255,255,0.75); }
   .tab-emoji { font-size: 17px; line-height: 1; }
   .tab-label { font-size: 11px; font-weight: 500; letter-spacing: 0.2px; }
 
@@ -1211,19 +1210,31 @@
   .embryo-card {
     background: var(--surface);
     border: 1.5px solid var(--border);
+    border-left: 4px solid #0e6b6b;
     border-radius: var(--radius);
     padding: 18px 20px;
     cursor: pointer;
-    transition: border-color 0.15s;
+    transition: border-color 0.15s, box-shadow 0.15s;
   }
-  .embryo-card:hover { border-color: var(--accent); }
-  .embryo-card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
-  .embryo-card-left { flex: 1; }
-  .embryo-card-icon { font-size: 22px; margin-bottom: 8px; line-height: 1; }
-  .embryo-card-title { font-family: 'DM Serif Display', serif; font-size: 17px; font-weight: 400; color: var(--text); margin-bottom: 4px; }
-  .embryo-card-desc { font-size: 13px; color: var(--text-mid); line-height: 1.6; }
-  .embryo-card-chevron { font-size: 18px; color: var(--text-light); flex-shrink: 0; margin-top: 2px; transition: transform 0.2s; }
+  .embryo-card:hover { box-shadow: 0 2px 10px rgba(14,107,107,0.1); }
+  .embryo-card-top { display: flex; align-items: center; gap: 14px; }
+  .embryo-card-icon-wrap {
+    width: 42px; height: 42px;
+    border-radius: 50%;
+    background: #0e6b6b;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+    line-height: 1;
+  }
+  .embryo-card-middle { flex: 1; min-width: 0; }
+  .embryo-card-title { font-size: 15px; font-weight: 700; color: #0a1a1a; margin-bottom: 3px; line-height: 1.3; }
+  .embryo-card-desc { font-size: 13px; color: #7a9e9e; line-height: 1.5; }
+  .embryo-card-chevron { font-size: 20px; color: var(--text-light); flex-shrink: 0; transition: transform 0.2s; }
   .embryo-card.open .embryo-card-chevron { transform: rotate(90deg); }
+  body.rtl .embryo-card { border-left: 1.5px solid var(--border); border-right: 4px solid #0e6b6b; }
+  body.rtl .embryo-card-chevron { transform: rotate(180deg); }
+  body.rtl .embryo-card.open .embryo-card-chevron { transform: rotate(90deg); }
   .embryo-card-body {
     display: none;
     margin-top: 14px;
@@ -1237,6 +1248,7 @@
   .embryo-card-body p { margin-bottom: 10px; }
   .embryo-card-body p:last-child { margin-bottom: 0; }
   .embryo-card-body ul { margin: 8px 0 10px 18px; }
+  body.rtl .embryo-card-body ul { margin: 8px 18px 10px 0; }
   .embryo-card-body li { margin-bottom: 5px; }
   .embryo-card-body strong { color: var(--accent); font-weight: 600; }
 </style>
@@ -1300,7 +1312,7 @@
   </button>
   <button class="tab-btn" data-tab="embryology" onclick="switchTab('embryology')">
     <span class="tab-emoji">🔬</span>
-    <span class="tab-label" id="tabLabelEmbryology">Embryology</span>
+    <span class="tab-label" id="tabLabelEmbryology">Science</span>
   </button>
 </nav>
 
@@ -1571,8 +1583,8 @@
 
     <div class="embryo-card" onclick="this.classList.toggle('open')">
       <div class="embryo-card-top">
-        <div class="embryo-card-left">
-          <div class="embryo-card-icon">🥚</div>
+        <div class="embryo-card-icon-wrap">🥚</div>
+        <div class="embryo-card-middle">
           <div class="embryo-card-title" id="embryoCard1Title">Egg Maturity</div>
           <div class="embryo-card-desc" id="embryoCard1Desc">MII, MI, and GV — what the maturity stages mean for your cycle</div>
         </div>
@@ -1591,8 +1603,8 @@
 
     <div class="embryo-card" onclick="this.classList.toggle('open')">
       <div class="embryo-card-top">
-        <div class="embryo-card-left">
-          <div class="embryo-card-icon">🧬</div>
+        <div class="embryo-card-icon-wrap">🧬</div>
+        <div class="embryo-card-middle">
           <div class="embryo-card-title" id="embryoCard2Title">Fertilization</div>
           <div class="embryo-card-desc" id="embryoCard2Desc">Normal fertilization (2PN), ICSI, and what happens in the first 24 hours</div>
         </div>
@@ -1611,8 +1623,8 @@
 
     <div class="embryo-card" onclick="this.classList.toggle('open')">
       <div class="embryo-card-top">
-        <div class="embryo-card-left">
-          <div class="embryo-card-icon">🔬</div>
+        <div class="embryo-card-icon-wrap">🔬</div>
+        <div class="embryo-card-middle">
           <div class="embryo-card-title" id="embryoCard3Title">Embryo Grading</div>
           <div class="embryo-card-desc" id="embryoCard3Desc">Day 3 cell counts and the Gardner blastocyst grading system explained</div>
         </div>
@@ -1631,8 +1643,8 @@
 
     <div class="embryo-card" onclick="this.classList.toggle('open')">
       <div class="embryo-card-top">
-        <div class="embryo-card-left">
-          <div class="embryo-card-icon">🌱</div>
+        <div class="embryo-card-icon-wrap">🌱</div>
+        <div class="embryo-card-middle">
           <div class="embryo-card-title" id="embryoCard4Title">Blastocyst Development</div>
           <div class="embryo-card-desc" id="embryoCard4Desc">Day 5 vs Day 6 blastocysts — timing, quality, and what to expect</div>
         </div>
@@ -1651,8 +1663,8 @@
 
     <div class="embryo-card" onclick="this.classList.toggle('open')">
       <div class="embryo-card-top">
-        <div class="embryo-card-left">
-          <div class="embryo-card-icon">🧪</div>
+        <div class="embryo-card-icon-wrap">🧪</div>
+        <div class="embryo-card-middle">
           <div class="embryo-card-title" id="embryoCard5Title">PGT-A Testing</div>
           <div class="embryo-card-desc" id="embryoCard5Desc">Chromosome screening — euploid, aneuploid, mosaic results explained</div>
         </div>
@@ -1671,8 +1683,8 @@
 
     <div class="embryo-card" onclick="this.classList.toggle('open')">
       <div class="embryo-card-top">
-        <div class="embryo-card-left">
-          <div class="embryo-card-icon">❄️</div>
+        <div class="embryo-card-icon-wrap">❄️</div>
+        <div class="embryo-card-middle">
           <div class="embryo-card-title" id="embryoCard6Title">Vitrification (Freezing)</div>
           <div class="embryo-card-desc" id="embryoCard6Desc">How embryos and eggs are cryopreserved and what survival rates look like</div>
         </div>
@@ -1792,8 +1804,18 @@ const content = {
     errorText: 'Something went wrong. Please try again.',
     footerNote: 'Prof. Daniel Seidman · ALMA Clinic',
     disclaimer: 'This tool is for educational purposes only. It helps you understand your results and prepare for your conversations with Prof. Seidman. Any clinical questions or concerns will be addressed directly by Prof. Seidman and his team.',
-    tabAsk: 'Ask', tabJourney: 'Journey', tabWellness: 'Wellness', tabEmbryology: 'Embryology',
+    tabAsk: 'Ask', tabJourney: 'Journey', tabWellness: 'Wellness', tabEmbryology: 'Science',
     embryoSectionLabel: 'Understanding your embryology',
+    embryoCards: [
+      { title: 'Egg Maturity', desc: 'MII, MI, and GV — what the maturity stages mean for your cycle' },
+      { title: 'Fertilization', desc: 'Normal fertilization (2PN), ICSI, and what happens in the first 24 hours' },
+      { title: 'Embryo Grading', desc: 'Day 3 cell counts and the Gardner blastocyst grading system explained' },
+      { title: 'Blastocyst Development', desc: 'Day 5 vs Day 6 blastocysts — timing, quality, and what to expect' },
+      { title: 'PGT-A Testing', desc: 'Chromosome screening — euploid, aneuploid, mosaic results explained' },
+      { title: 'Vitrification (Freezing)', desc: 'How embryos and eggs are cryopreserved and what survival rates look like' },
+    ],
+    fvBtnLabel: 'Interactive tool',
+    fvBtnTitle: 'Follicle Scan',
     phases: [
       { label: '💉 IVF Stimulation', value: 'IVF stimulation', sample: 'Day 6 of stims. Estradiol: 1,240 pg/mL. Ultrasound: 5 follicles at 16mm, 3 at 14mm, 2 at 12mm. Is my response on track?' },
       { label: '🥚 Retrieval & Recovery', value: 'egg retrieval and recovery', sample: 'They retrieved 9 eggs, 7 were mature. I\'m feeling bloated and crampy. Is this normal, and what happens to my eggs now?' },
@@ -1872,6 +1894,16 @@ Patient's current treatment phase: ${phase}`
     disclaimer: 'כלי זה נועד למטרות מידע בלבד. הוא נועד לסייע לך להבין את תוצאות הבדיקה ולהיערך לשיחה עם פרופ׳ זיידמן. מענה על שאלות רפואיות או בירור חששות קליניים יינתנו ישירות על ידי פרופ׳ זיידמן וצוותו.',
     tabAsk: 'שאלי', tabJourney: 'מסע', tabWellness: 'בריאות', tabEmbryology: 'עוברים',
     embryoSectionLabel: 'הבנת תהליך ההפריה',
+    embryoCards: [
+      { title: 'בשלות הביציות', desc: 'MII, MI ו-GV — שלבי הבשלות ומשמעותם במחזור הטיפול' },
+      { title: 'הפריה', desc: 'הפריה תקינה (2PN), ICSI, ומה קורה ב-24 השעות הראשונות' },
+      { title: 'ציון עוברים', desc: 'מערכת ציון Gardner לבלסטוציסטים — הרחבה, ICM ו-TE' },
+      { title: 'התפתחות בלסטוציסט', desc: 'בלסטוציסט יום 5 לעומת יום 6 — תזמון, איכות וציפיות' },
+      { title: 'בדיקת PGT-A', desc: 'סריקת כרומוזומים — תוצאות euploid, aneuploid ו-mosaic' },
+      { title: 'הקפאה (ויטריפיקציה)', desc: 'כיצד מוקפאים עוברים וביציות ומה שיעורי ההישרדות' },
+    ],
+    fvBtnLabel: 'כלי אינטראקטיבי',
+    fvBtnTitle: 'סריקת זקיקים',
     phases: [
       { label: '💉 סיטומלציה הורמונלית (IVF)', value: 'סיטומלציה הורמונלית לטיפול IVF', sample: 'יום 6 של סיטומלציה הורמונלית. אסטרדיול: 1,240. אולטרסאונד: 5 זקיקים של 16 מ"מ, 3 של 14 מ"מ, 2 של 12 מ"מ. האם התגובה שלי תקינה?' },
       { label: '🥚 שאיבה והתאוששות', value: 'שאיבת ביציות והתאוששות', sample: 'שאבו 9 ביציות, 7 היו בשלות. אני מרגישה נפיחות וכאבים. האם זה תקין ומה קורה לביציות עכשיו?' },
@@ -2001,6 +2033,17 @@ function renderUI() {
   document.getElementById('tabLabelWellness').textContent = c.tabWellness;
   document.getElementById('tabLabelEmbryology').textContent = c.tabEmbryology;
   document.getElementById('embryoSectionLabel').textContent = c.embryoSectionLabel;
+  if (c.embryoCards) {
+    c.embryoCards.forEach((card, i) => {
+      const n = i + 1;
+      const titleEl = document.getElementById('embryoCard' + n + 'Title');
+      const descEl  = document.getElementById('embryoCard' + n + 'Desc');
+      if (titleEl) titleEl.textContent = card.title;
+      if (descEl)  descEl.textContent  = card.desc;
+    });
+  }
+  if (document.getElementById('fvBtnLabel')) document.getElementById('fvBtnLabel').textContent = c.fvBtnLabel || 'Interactive tool';
+  if (document.getElementById('fvBtnTitle')) document.getElementById('fvBtnTitle').textContent = c.fvBtnTitle || 'Follicle Scan';
 
   const pillsContainer = document.getElementById('phasePills');
   pillsContainer.innerHTML = '';
