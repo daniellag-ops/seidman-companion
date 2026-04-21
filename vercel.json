@@ -5,6 +5,7 @@
     { "source": "/share/:id", "destination": "/share.html?id=:id" },
     { "source": "/start", "destination": "/start.html" },
     { "source": "/staff", "destination": "/staff-guide.html" },
-    { "source": "/education/follicle-viewer", "destination": "/follicle-viewer.html" }
+    { "source": "/education/follicle-viewer", "destination": "/follicle-viewer.html" },
+    { "source": "/academy", "destination": "/academy.html" }
   ]
 }
