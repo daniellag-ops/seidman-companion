@@ -1648,6 +1648,80 @@ body.rtl .emb-deep-card.open .emb-deep-chevron { transform: rotate(90deg); }
 .emb-deep-card.open .emb-deep-body { display: block; }
 .emb-deep-body strong { color: #c9a84c; font-weight: 600; }
 
+
+/* ── Academy entry card ── */
+.acad-entry-card {
+  background: #0a1a1a;
+  border-radius: 20px;
+  padding: 40px 28px 36px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  text-align: center;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.18);
+}
+.acad-entry-logo {
+  width: 64px;
+  height: 64px;
+  background: rgba(14,107,107,0.25);
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 22px;
+}
+.acad-entry-logo svg {
+  width: 36px;
+  height: 44px;
+}
+.acad-entry-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 26px;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.25;
+  margin-bottom: 14px;
+}
+.acad-entry-sub {
+  font-size: 14px;
+  color: rgba(255,255,255,0.6);
+  line-height: 1.65;
+  max-width: 300px;
+  margin-bottom: 28px;
+}
+.acad-entry-btn {
+  display: inline-block;
+  background: #0e6b6b;
+  color: #fff;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 14px 32px;
+  border-radius: 100px;
+  text-decoration: none;
+  transition: background 0.15s, transform 0.1s;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 16px rgba(14,107,107,0.35);
+}
+.acad-entry-btn:hover { background: #0b5555; transform: translateY(-1px); }
+.acad-entry-btn:active { transform: translateY(0); }
+.acad-entry-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+.acad-entry-pill {
+  padding: 6px 14px;
+  border-radius: 100px;
+  border: 1px solid rgba(201,168,76,0.35);
+  background: rgba(201,168,76,0.08);
+  font-size: 12px;
+  color: rgba(201,168,76,0.9);
+  font-family: 'DM Sans', sans-serif;
+}
+
 </style>
 </head>
 <body>
@@ -1964,59 +2038,36 @@ body.rtl .emb-deep-card.open .emb-deep-chevron { transform: rotate(90deg); }
 
   <!-- ══ TAB: EMBRYOLOGY ══ -->
   <div class="tab-panel" data-tab="embryology">
-
-  <!-- Hero -->
-  <div class="emb-hero">
-    <div class="emb-hero-text">
-      <h2 class="emb-hero-title" id="embHeroTitle">From egg to blastocyst</h2>
-      <p class="emb-hero-sub" id="embHeroSub">What happens in the IVF lab — day by day</p>
+  <div class="acad-entry-card">
+    <div class="acad-entry-logo">
+      <svg width="24" height="30" viewBox="0 0 28 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="10" cy="25" r="7" fill="#0e6b6b" stroke="rgba(255,255,255,0.7)" stroke-width="1.3"/>
+        <circle cx="7.5" cy="21.5" r="2.6" fill="rgba(255,255,255,0.12)" stroke="rgba(255,255,255,0.6)" stroke-width="0.85"/>
+        <circle cx="7.5" cy="21.5" r="1.05" stroke="#c9a84c" stroke-width="0.55" fill="none"/>
+        <circle cx="7.8" cy="21.2" r="0.32" fill="#c9a84c"/>
+        <circle cx="13" cy="23" r="2.6" fill="rgba(255,255,255,0.12)" stroke="rgba(255,255,255,0.6)" stroke-width="0.85"/>
+        <circle cx="13" cy="23" r="1.05" stroke="#c9a84c" stroke-width="0.55" fill="none"/>
+        <circle cx="13.3" cy="22.7" r="0.32" fill="#c9a84c"/>
+        <circle cx="7" cy="27.5" r="2.6" fill="rgba(255,255,255,0.12)" stroke="rgba(255,255,255,0.6)" stroke-width="0.85"/>
+        <circle cx="7" cy="27.5" r="1.05" stroke="#c9a84c" stroke-width="0.55" fill="none"/>
+        <circle cx="7.3" cy="27.2" r="0.32" fill="#c9a84c"/>
+        <circle cx="12.5" cy="28.5" r="2.6" fill="rgba(255,255,255,0.12)" stroke="rgba(255,255,255,0.6)" stroke-width="0.85"/>
+        <circle cx="12.5" cy="28.5" r="1.05" stroke="#c9a84c" stroke-width="0.55" fill="none"/>
+        <circle cx="12.8" cy="28.2" r="0.32" fill="#c9a84c"/>
+        <circle cx="10" cy="25" r="0.5" fill="#c9a84c"/>
+        <line x1="17" y1="25" x2="17" y2="4" stroke="rgba(255,255,255,0.8)" stroke-width="1.5" stroke-linecap="round"/>
+        <path d="M17,4 C22,5 23.5,10 18,16" stroke="rgba(255,255,255,0.8)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      </svg>
     </div>
-    <img src="/embryo-development.png" class="emb-hero-img" alt="Embryo development" />
-    <p class="emb-hero-caption" id="embHeroCaption">From egg to hatching blastocyst — what happens in the lab during your IVF cycle</p>
-  </div>
-
-  <!-- Day Slider -->
-  <div class="emb-days-wrap">
-    <h3 class="emb-section-title" id="embDaysTitle">Day by day</h3>
-    <div class="emb-day-pills" id="embDayPills"></div>
-    <div class="emb-day-content">
-      <div class="emb-day-img-wrap">
-        <img id="embDayImg" src="/embryo-day1.png" alt="" />
-      </div>
-      <div class="emb-day-info">
-        <h4 class="emb-day-name" id="embDayName"></h4>
-        <p class="emb-day-desc" id="embDayDesc"></p>
-        <div class="emb-day-fact">
-          <span class="emb-day-fact-label" id="embDayFactLabel">Key fact</span>
-          <span class="emb-day-fact-text" id="embDayFactText"></span>
-        </div>
-      </div>
+    <h2 class="acad-entry-title" id="acadEntryTitle">Embryo Academy</h2>
+    <p class="acad-entry-sub" id="acadEntrySub">Everything you wanted to know about your embryos — explained simply and scientifically</p>
+    <a class="acad-entry-btn" href="/academy" id="acadEntryBtn">Enter the Academy</a>
+    <div class="acad-entry-pills">
+      <span class="acad-entry-pill" id="acadPill1">Development timeline</span>
+      <span class="acad-entry-pill" id="acadPill2">Grade decoder</span>
+      <span class="acad-entry-pill" id="acadPill3">Your numbers</span>
     </div>
   </div>
-
-  <!-- Attrition Funnel -->
-  <div class="emb-funnel-wrap">
-    <h3 class="emb-section-title emb-section-title--dark" id="embFunnelTitle">Your numbers</h3>
-    <p class="emb-funnel-sub" id="embFunnelSub">Enter your cycle results to see your attrition funnel</p>
-    <div class="emb-funnel-inputs" id="embFunnelInputs"></div>
-    <div class="emb-funnel-chart" id="embFunnelChart"></div>
-    <div class="emb-funnel-summary" id="embFunnelSummary"></div>
-  </div>
-
-  <!-- Grade Decoder -->
-  <div class="emb-grade-wrap">
-    <h3 class="emb-section-title emb-section-title--dark" id="embGradeTitle">Grade decoder</h3>
-    <p class="emb-grade-sub" id="embGradeSub">Decode your blastocyst grade</p>
-    <div class="emb-grade-dropdowns" id="embGradeDropdowns"></div>
-    <div class="emb-grade-result" id="embGradeResult"></div>
-  </div>
-
-  <!-- Deep Dive -->
-  <div class="emb-deep-wrap">
-    <h3 class="emb-section-title" id="embDeepTitle">Deep dive</h3>
-    <div class="emb-deep-list" id="embDeepList"></div>
-  </div>
-
 </div><!-- /tab embryology -->
 
 </main>
@@ -2279,7 +2330,6 @@ function setLang(lang) {
   document.getElementById('proactiveBanner').style.display = 'none';
   renderUI();
   renderMedications();
-  if (typeof initEmbryoTab === 'function') initEmbryoTab();
   if (Object.keys(currentDates).length) checkProactiveMessage(currentDates);
   if (activeReminderData) showClinicReminder(activeReminderData);
 }
@@ -2353,8 +2403,29 @@ function renderUI() {
   document.getElementById('tabLabelJourney').textContent = c.tabJourney;
   document.getElementById('tabLabelWellness').textContent = c.tabWellness;
   document.getElementById('tabLabelEmbryology').textContent = c.tabEmbryology;
-  // Embryology tab — rebuilt dynamically
-  if (typeof _refreshEmbryoI18n === 'function') _refreshEmbryoI18n();
+  // Embryology entry card i18n
+  (function() {
+    const acad = {
+      en: {
+        title: 'Embryo Academy',
+        sub: 'Everything you wanted to know about your embryos — explained simply and scientifically',
+        btn: 'Enter the Academy',
+        pills: ['Development timeline', 'Grade decoder', 'Your numbers']
+      },
+      he: {
+        title: '\u05d0\u05e7\u05d3\u05de\u05d9\u05d9\u05ea \u05d4\u05e2\u05d5\u05d1\u05e8\u05d9\u05dd',
+        sub: '\u05db\u05dc \u05de\u05d4 \u05e9\u05e8\u05e6\u05d9\u05ea \u05dc\u05d3\u05e2\u05ea \u05e2\u05dc \u05d4\u05e2\u05d5\u05d1\u05e8\u05d9\u05dd \u05e9\u05dc\u05da \u2014 \u05d1\u05e9\u05e4\u05d4 \u05e4\u05e9\u05d5\u05d8\u05d4 \u05d5\u05de\u05d3\u05e2\u05d9\u05ea',
+        btn: '\u05db\u05e0\u05d9\u05e1\u05d4 \u05dc\u05d0\u05e7\u05d3\u05de\u05d9\u05d4',
+        pills: ['\u05e6\u05d9\u05e8 \u05d4\u05ea\u05e4\u05ea\u05d7\u05d5\u05ea', '\u05e4\u05e2\u05e0\u05d5\u05d7 \u05d4\u05e6\u05d9\u05d5\u05df', '\u05d4\u05de\u05e1\u05e4\u05e8\u05d9\u05dd \u05e9\u05dc\u05da']
+      }
+    };
+    const t = acad[currentLang] || acad.en;
+    const setT = (id, txt) => { const el = document.getElementById(id); if (el) el.textContent = txt; };
+    setT('acadEntryTitle', t.title);
+    setT('acadEntrySub', t.sub);
+    setT('acadEntryBtn', t.btn);
+    if (t.pills) { setT('acadPill1', t.pills[0]); setT('acadPill2', t.pills[1]); setT('acadPill3', t.pills[2]); }
+  })();
 
   const pillsContainer = document.getElementById('phasePills');
   pillsContainer.innerHTML = '';
