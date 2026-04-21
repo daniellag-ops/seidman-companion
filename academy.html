@@ -3,978 +3,384 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>Embryo Academy — Melody</title>
+  <title>Embryo Academy · Melody</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=DM+Serif+Display&display=swap" rel="stylesheet" />
   <style>
+    /* ── Reset & base ─────────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --teal:   #0e6b6b;
+      --gold:   #c9a84c;
+      --cream:  #fdfbf7;
+      --brown:  #4a3728;
+      --brown2: rgba(74,55,40,0.55);
+      --border: rgba(74,55,40,0.18);
+      --radius: 14px;
+    }
+
     html, body {
       min-height: 100%;
-      font-family: 'DM Sans', sans-serif;
-      background: #f5f8f8;
-      color: #0a1a1a;
+      font-family: 'Nunito', sans-serif;
+      background: var(--cream);
+      color: var(--brown);
       -webkit-font-smoothing: antialiased;
     }
 
-    /* Header */
+    /* ── Header ───────────────────────────────────────────── */
     .acad-header {
-      background: #0e6b6b;
+      background: var(--teal);
       display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 14px 20px;
+      flex-direction: column;
       position: sticky;
       top: 0;
       z-index: 50;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
     }
-    .acad-back {
-      background: none;
-      border: none;
-      color: rgba(255,255,255,0.8);
-      font-size: 22px;
-      cursor: pointer;
-      padding: 2px 6px;
-      line-height: 1;
-      border-radius: 6px;
-      transition: color 0.15s;
-      text-decoration: none;
+
+    .acad-header-top {
+      padding: 13px 20px;
       display: flex;
       align-items: center;
+      gap: 12px;
     }
-    html[dir="ltr"] .acad-back { transform: none; }
-    html[dir="rtl"] .acad-back { transform: rotate(180deg); }
-    .acad-back:hover { color: #fff; }
-    .acad-header-title {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: 17px;
-      font-weight: 700;
-      color: #fff;
-      flex: 1;
-    }
-    .acad-lang-btn {
-      background: rgba(255,255,255,0.15);
-      border: 1px solid rgba(255,255,255,0.25);
-      border-radius: 20px;
-      color: #fff;
-      font-size: 12px;
-      font-weight: 600;
-      padding: 5px 12px;
+
+    .acad-back {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.1);
+      border: none;
+      color: rgba(255,255,255,0.85);
       cursor: pointer;
-      font-family: 'DM Sans', sans-serif;
+      flex-shrink: 0;
+      text-decoration: none;
+      font-size: 18px;
+      line-height: 1;
       transition: background 0.15s;
     }
-    .acad-lang-btn:hover { background: rgba(255,255,255,0.25); }
+    .acad-back:hover { background: rgba(255,255,255,0.18); }
+    html[dir="rtl"] .acad-back { transform: scaleX(-1); }
 
-    /* Main layout */
+    .acad-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex: 1;
+    }
+    .acad-wordmark {
+      font-family: 'DM Serif Display', serif;
+      font-size: 20px;
+      color: #fff;
+      letter-spacing: -0.2px;
+      line-height: 1;
+    }
+
+    .acad-lang-toggle {
+      display: flex;
+      gap: 3px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 100px;
+      padding: 4px;
+      flex-shrink: 0;
+    }
+    .acad-lang-btn {
+      padding: 5px 13px;
+      border-radius: 100px;
+      border: none;
+      font-family: 'Nunito', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      color: rgba(255,255,255,0.5);
+      background: transparent;
+    }
+    .acad-lang-btn.active { background: var(--gold); color: #0a1a1a; }
+
+    .acad-doctor-row {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 9px 20px 13px;
+      border-top: 1px solid rgba(255,255,255,0.07);
+    }
+    .acad-avatar {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      background: rgba(201,168,76,0.18);
+      border: 1.5px solid rgba(201,168,76,0.35);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'DM Serif Display', serif;
+      font-size: 12px; color: var(--gold);
+      flex-shrink: 0; letter-spacing: 0.3px;
+    }
+    .acad-doctor-name {
+      font-size: 12px; font-weight: 600;
+      color: rgba(255,255,255,0.85); line-height: 1.2;
+    }
+    .acad-doctor-sub {
+      font-size: 11px; color: rgba(255,255,255,0.35); margin-top: 1px;
+    }
+
+    /* ── Layout ───────────────────────────────────────────── */
     .acad-main {
-      max-width: 780px;
+      max-width: 680px;
       margin: 0 auto;
       padding: 28px 20px 80px;
       display: flex;
       flex-direction: column;
-      gap: 22px;
+      gap: 20px;
     }
 
-/* ── Embryology redesign ── */
-.emb-hero {
-  background: #0a1a1a;
-  border-radius: 16px;
-  padding: 28px 24px 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-.emb-hero-title {
-  font-family: 'Playfair Display', Georgia, serif;
-  font-size: 22px;
-  font-weight: 700;
-  color: #fff;
-  margin: 0;
-  line-height: 1.3;
-}
-.emb-hero-sub {
-  font-size: 14px;
-  color: rgba(255,255,255,0.65);
-  margin: 4px 0 0;
-  line-height: 1.5;
-}
-.emb-hero-text { display: flex; flex-direction: column; }
-.emb-hero-img {
-  width: 100%;
-  border-radius: 12px;
-  display: block;
-  touch-action: manipulation;
-}
-.emb-hero-caption {
-  font-size: 12px;
-  color: rgba(255,255,255,0.45);
-  text-align: center;
-  margin: 0;
-  line-height: 1.5;
-}
-
-.emb-days-wrap, .emb-deep-wrap {
-  background: #0a1a1a;
-  border-radius: 16px;
-  padding: 24px 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-.emb-funnel-wrap {
-  background: #fff;
-  border-radius: 16px;
-  padding: 24px 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  border: 1.5px solid #e8f0f0;
-}
-.emb-grade-wrap {
-  background: #f4f8f8;
-  border-radius: 16px;
-  padding: 24px 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-
-.emb-section-title {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 16px;
-  font-weight: 700;
-  color: #c9a84c;
-  margin: 0;
-}
-.emb-section-title--dark {
-  color: #0e6b6b;
-}
-
-/* Day pills */
-.emb-day-pills {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-.emb-day-pill {
-  padding: 7px 13px;
-  border-radius: 100px;
-  border: 1px solid rgba(201,168,76,0.35);
-  background: rgba(201,168,76,0.08);
-  font-size: 12px;
-  color: #c9a84c;
-  cursor: pointer;
-  transition: all 0.15s ease;
-  font-family: 'DM Sans', sans-serif;
-  white-space: nowrap;
-}
-.emb-day-pill:hover { background: rgba(201,168,76,0.15); }
-.emb-day-pill.active { background: #c9a84c; border-color: #c9a84c; color: #0a1a1a; font-weight: 600; }
-
-/* Day content */
-.emb-day-content {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-.emb-day-img-wrap {
-  position: relative;
-  border-radius: 12px;
-  overflow: hidden;
-  background: #111f1f;
-  min-height: 160px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.emb-day-img-wrap img {
-  width: 100%;
-  border-radius: 12px;
-  display: block;
-  transition: opacity 0.35s ease;
-}
-.emb-day-img-wrap img.fade-out { opacity: 0; }
-.emb-day-name {
-  font-size: 15px;
-  font-weight: 700;
-  color: #fff;
-  margin: 0;
-  font-family: 'DM Sans', sans-serif;
-}
-.emb-day-desc {
-  font-size: 13px;
-  color: rgba(255,255,255,0.7);
-  margin: 0;
-  line-height: 1.6;
-}
-.emb-day-fact {
-  background: rgba(201,168,76,0.12);
-  border-left: 3px solid #c9a84c;
-  border-radius: 0 8px 8px 0;
-  padding: 10px 14px;
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-}
-body.rtl .emb-day-fact {
-  border-left: none;
-  border-right: 3px solid #c9a84c;
-  border-radius: 8px 0 0 8px;
-}
-.emb-day-fact-label {
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: #c9a84c;
-  font-weight: 700;
-  font-family: 'DM Sans', sans-serif;
-}
-.emb-day-fact-text {
-  font-size: 13px;
-  color: rgba(255,255,255,0.85);
-  line-height: 1.5;
-}
-
-/* Funnel */
-.emb-funnel-sub, .emb-grade-sub {
-  font-size: 13px;
-  color: #7a9e9e;
-  margin: 0;
-  line-height: 1.5;
-}
-.emb-funnel-inputs {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-}
-.emb-funnel-field {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-.emb-funnel-field label {
-  font-size: 11px;
-  font-weight: 600;
-  color: #0e6b6b;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  font-family: 'DM Sans', sans-serif;
-}
-.emb-funnel-field input {
-  border: 1.5px solid #d0e8e8;
-  border-radius: 10px;
-  padding: 10px 12px;
-  font-size: 20px;
-  font-weight: 700;
-  color: #0a1a1a;
-  font-family: 'DM Sans', sans-serif;
-  width: 100%;
-  box-sizing: border-box;
-  text-align: center;
-  background: #fff;
-  transition: border-color 0.15s;
-}
-.emb-funnel-field input:focus {
-  outline: none;
-  border-color: #0e6b6b;
-}
-
-/* Funnel chart */
-.emb-funnel-chart {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.emb-funnel-bar-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.emb-funnel-bar-label {
-  font-size: 11px;
-  color: #7a9e9e;
-  width: 72px;
-  flex-shrink: 0;
-  font-family: 'DM Sans', sans-serif;
-  text-align: end;
-}
-body.rtl .emb-funnel-bar-label { text-align: start; }
-.emb-funnel-bar-track {
-  flex: 1;
-  height: 22px;
-  background: #f0f8f8;
-  border-radius: 100px;
-  overflow: hidden;
-}
-.emb-funnel-bar-fill {
-  height: 100%;
-  background: linear-gradient(90deg, #0e6b6b, #1a9090);
-  border-radius: 100px;
-  transition: width 0.4s ease;
-  min-width: 0;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  padding-right: 6px;
-  box-sizing: border-box;
-}
-body.rtl .emb-funnel-bar-fill {
-  padding-right: 0;
-  padding-left: 6px;
-}
-.emb-funnel-bar-val {
-  font-size: 11px;
-  font-weight: 700;
-  color: #fff;
-  font-family: 'DM Sans', sans-serif;
-}
-.emb-funnel-summary {
-  background: #0a1a1a;
-  border-radius: 12px;
-  padding: 16px;
-  font-size: 13px;
-  color: rgba(255,255,255,0.85);
-  line-height: 1.6;
-  min-height: 48px;
-}
-
-/* Grade decoder */
-.emb-grade-dropdowns {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-.emb-grade-field {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-.emb-grade-field label {
-  font-size: 11px;
-  font-weight: 600;
-  color: #0e6b6b;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  font-family: 'DM Sans', sans-serif;
-}
-.emb-grade-field select {
-  border: 1.5px solid #d0e8e8;
-  border-radius: 10px;
-  padding: 10px 12px;
-  font-size: 14px;
-  font-family: 'DM Sans', sans-serif;
-  color: #0a1a1a;
-  background: #fff;
-  width: 100%;
-  box-sizing: border-box;
-  appearance: none;
-  -webkit-appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L6 7L11 1' stroke='%230e6b6b' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 12px center;
-}
-body.rtl .emb-grade-field select { background-position: left 12px center; }
-.emb-grade-field select:focus { outline: none; border-color: #0e6b6b; }
-
-.emb-grade-result {
-  background: #0e6b6b;
-  border-radius: 14px;
-  padding: 20px;
-  color: #fff;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  min-height: 80px;
-}
-.emb-grade-badge {
-  font-family: 'Playfair Display', Georgia, serif;
-  font-size: 28px;
-  font-weight: 700;
-  color: #c9a84c;
-}
-.emb-grade-quality {
-  font-size: 14px;
-  font-weight: 600;
-  color: #fff;
-}
-.emb-grade-explain {
-  font-size: 13px;
-  color: rgba(255,255,255,0.75);
-  line-height: 1.6;
-}
-
-/* Deep dive */
-.emb-deep-list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-.emb-deep-card {
-  background: #111f1f;
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 12px;
-  overflow: hidden;
-  cursor: pointer;
-  transition: border-color 0.15s;
-}
-.emb-deep-card:hover { border-color: rgba(201,168,76,0.3); }
-.emb-deep-card.open { border-color: rgba(201,168,76,0.45); }
-.emb-deep-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16px 18px;
-  gap: 12px;
-}
-.emb-deep-header-left {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.emb-deep-icon {
-  font-size: 20px;
-  width: 36px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 8px;
-  background: rgba(201,168,76,0.12);
-  flex-shrink: 0;
-}
-.emb-deep-card-title {
-  font-size: 14px;
-  font-weight: 700;
-  color: #fff;
-  font-family: 'DM Sans', sans-serif;
-}
-.emb-deep-card-sub {
-  font-size: 12px;
-  color: rgba(255,255,255,0.5);
-}
-.emb-deep-chevron {
-  color: rgba(255,255,255,0.4);
-  font-size: 18px;
-  transition: transform 0.2s ease;
-  flex-shrink: 0;
-}
-.emb-deep-card.open .emb-deep-chevron { transform: rotate(90deg); }
-body.rtl .emb-deep-chevron { transform: rotate(180deg); }
-body.rtl .emb-deep-card.open .emb-deep-chevron { transform: rotate(90deg); }
-.emb-deep-body {
-  display: none;
-  padding: 0 18px 18px;
-  font-size: 13px;
-  color: rgba(255,255,255,0.75);
-  line-height: 1.7;
-}
-.emb-deep-card.open .emb-deep-body { display: block; }
-.emb-deep-body strong { color: #c9a84c; font-weight: 600; }
-
-    /* Override panel backgrounds for standalone page */
-    .emb-days-wrap, .emb-deep-wrap {
-      background: #0a1a1a;
+    /* ── Simple / Science toggle ──────────────────────────── */
+    .acad-mode-wrap {
+      display: flex;
+      justify-content: center;
+      padding: 4px 0 8px;
     }
+    .acad-mode-track {
+      display: flex;
+      background: rgba(74,55,40,0.07);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 4px;
+      gap: 2px;
+    }
+    .acad-mode-btn {
+      padding: 8px 24px;
+      border-radius: 100px;
+      border: none;
+      font-family: 'Nunito', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      background: transparent;
+      color: var(--brown2);
+    }
+    .acad-mode-btn.active {
+      background: var(--teal);
+      color: #fff;
+      box-shadow: 0 2px 10px rgba(14,107,107,0.22);
+    }
+    .acad-mode-btn:not(.active):hover {
+      color: var(--brown);
+      background: rgba(74,55,40,0.06);
+    }
+
+    /* ── Section cards ────────────────────────────────────── */
+    .acad-section {
+      background: #fff;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .acad-section-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 20px 22px;
+      border-bottom: 1.5px solid var(--border);
+    }
+    .acad-section-num {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      border: 1.5px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 800;
+      color: var(--brown2);
+      flex-shrink: 0;
+      background: var(--cream);
+    }
+    .acad-section-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--brown);
+      line-height: 1.3;
+    }
+    .acad-section-body {
+      padding: 36px 22px;
+      min-height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .acad-empty-hint {
+      font-size: 13px;
+      color: var(--brown2);
+      font-style: italic;
+      opacity: 0.6;
+    }
+
+    /* ── Footer ───────────────────────────────────────────── */
+    .acad-footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 12px;
+      color: var(--brown2);
+      letter-spacing: 0.2px;
+      border-top: 1px solid var(--border);
+    }
+    .acad-footer strong { font-weight: 700; color: var(--brown); }
   </style>
 </head>
 <body>
+
+  <!-- ── Header ──────────────────────────────────────────── -->
   <header class="acad-header">
-    <a class="acad-back" href="/" aria-label="Back">‹</a>
-    <span class="acad-header-title" id="acadHeaderTitle">Embryo Academy</span>
-    <button class="acad-lang-btn" id="acadLangBtn" onclick="toggleLang()">EN</button>
+    <div class="acad-header-top">
+
+      <a class="acad-back" href="/" aria-label="Back to Melody">&#8592;</a>
+
+      <div class="acad-logo">
+        <svg width="22" height="27" viewBox="0 0 28 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="10" cy="25" r="7" fill="#0e6b6b" stroke="rgba(255,255,255,0.7)" stroke-width="1.3"/>
+          <circle cx="7.5" cy="21.5" r="2.6" fill="rgba(255,255,255,0.12)" stroke="rgba(255,255,255,0.6)" stroke-width="0.85"/>
+          <circle cx="7.5" cy="21.5" r="1.05" stroke="#c9a84c" stroke-width="0.55" fill="none"/>
+          <circle cx="7.8" cy="21.2" r="0.32" fill="#c9a84c"/>
+          <circle cx="13" cy="23" r="2.6" fill="rgba(255,255,255,0.12)" stroke="rgba(255,255,255,0.6)" stroke-width="0.85"/>
+          <circle cx="13" cy="23" r="1.05" stroke="#c9a84c" stroke-width="0.55" fill="none"/>
+          <circle cx="13.3" cy="22.7" r="0.32" fill="#c9a84c"/>
+          <circle cx="7" cy="27.5" r="2.6" fill="rgba(255,255,255,0.12)" stroke="rgba(255,255,255,0.6)" stroke-width="0.85"/>
+          <circle cx="7" cy="27.5" r="1.05" stroke="#c9a84c" stroke-width="0.55" fill="none"/>
+          <circle cx="7.3" cy="27.2" r="0.32" fill="#c9a84c"/>
+          <circle cx="12.5" cy="28.5" r="2.6" fill="rgba(255,255,255,0.12)" stroke="rgba(255,255,255,0.6)" stroke-width="0.85"/>
+          <circle cx="12.5" cy="28.5" r="1.05" stroke="#c9a84c" stroke-width="0.55" fill="none"/>
+          <circle cx="12.8" cy="28.2" r="0.32" fill="#c9a84c"/>
+          <circle cx="10" cy="25" r="0.5" fill="#c9a84c"/>
+          <line x1="17" y1="25" x2="17" y2="4" stroke="rgba(255,255,255,0.8)" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M17,4 C22,5 23.5,10 18,16" stroke="rgba(255,255,255,0.8)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        </svg>
+        <span class="acad-wordmark">melody</span>
+      </div>
+
+      <div class="acad-lang-toggle">
+        <button class="acad-lang-btn" onclick="setLang('en')">EN</button>
+        <button class="acad-lang-btn active" onclick="setLang('he')">&#1506;&#1489;</button>
+      </div>
+
+    </div>
+
+    <div class="acad-doctor-row">
+      <div class="acad-avatar">DS</div>
+      <div>
+        <div class="acad-doctor-name">Prof. Daniel Seidman</div>
+        <div class="acad-doctor-sub">ALMA Clinic &middot; Reproductive Medicine</div>
+      </div>
+    </div>
   </header>
 
+  <!-- ── Main ────────────────────────────────────────────── -->
   <main class="acad-main">
 
-    <!-- Hero -->
-    <div class="emb-hero">
-      <div class="emb-hero-text">
-        <h2 class="emb-hero-title" id="embHeroTitle">From egg to blastocyst</h2>
-        <p class="emb-hero-sub" id="embHeroSub">What happens in the IVF lab — day by day</p>
-      </div>
-      <img src="/embryo-development.png" class="emb-hero-img" alt="Embryo development" />
-      <p class="emb-hero-caption" id="embHeroCaption">From egg to hatching blastocyst — what happens in the lab during your IVF cycle</p>
-    </div>
-
-    <!-- Day Slider -->
-    <div class="emb-days-wrap">
-      <h3 class="emb-section-title" id="embDaysTitle">Day by day</h3>
-      <div class="emb-day-pills" id="embDayPills"></div>
-      <div class="emb-day-content">
-        <div class="emb-day-img-wrap">
-          <img id="embDayImg" src="/embryo-day1.png" alt="" />
-        </div>
-        <div class="emb-day-info">
-          <h4 class="emb-day-name" id="embDayName"></h4>
-          <p class="emb-day-desc" id="embDayDesc"></p>
-          <div class="emb-day-fact">
-            <span class="emb-day-fact-label" id="embDayFactLabel">Key fact</span>
-            <span class="emb-day-fact-text" id="embDayFactText"></span>
-          </div>
-        </div>
+    <!-- Simple / Science toggle -->
+    <div class="acad-mode-wrap">
+      <div class="acad-mode-track" role="group">
+        <button class="acad-mode-btn active" id="modeSimple"  onclick="setMode('simple')" >Simple</button>
+        <button class="acad-mode-btn"        id="modeScience" onclick="setMode('science')">Science</button>
       </div>
     </div>
 
-    <!-- Attrition Funnel -->
-    <div class="emb-funnel-wrap">
-      <h3 class="emb-section-title emb-section-title--dark" id="embFunnelTitle">Your numbers</h3>
-      <p class="emb-funnel-sub" id="embFunnelSub">Enter your cycle results to see your attrition funnel</p>
-      <div class="emb-funnel-inputs" id="embFunnelInputs"></div>
-      <div class="emb-funnel-chart" id="embFunnelChart"></div>
-      <div class="emb-funnel-summary" id="embFunnelSummary"></div>
-    </div>
+    <!-- Section 1 -->
+    <section class="acad-section" id="sectionJourney">
+      <div class="acad-section-header">
+        <div class="acad-section-num">1</div>
+        <h2 class="acad-section-title" id="titleJourney">The development journey</h2>
+      </div>
+      <div class="acad-section-body">
+        <p class="acad-empty-hint">Content coming soon</p>
+      </div>
+    </section>
 
-    <!-- Grade Decoder -->
-    <div class="emb-grade-wrap">
-      <h3 class="emb-section-title emb-section-title--dark" id="embGradeTitle">Grade decoder</h3>
-      <p class="emb-grade-sub" id="embGradeSub">Decode your blastocyst grade</p>
-      <div class="emb-grade-dropdowns" id="embGradeDropdowns"></div>
-      <div class="emb-grade-result" id="embGradeResult"></div>
-    </div>
+    <!-- Section 2 -->
+    <section class="acad-section" id="sectionEggs">
+      <div class="acad-section-header">
+        <div class="acad-section-num">2</div>
+        <h2 class="acad-section-title" id="titleEggs">Where did my eggs go?</h2>
+      </div>
+      <div class="acad-section-body">
+        <p class="acad-empty-hint">Content coming soon</p>
+      </div>
+    </section>
 
-    <!-- Deep Dive -->
-    <div class="emb-deep-wrap">
-      <h3 class="emb-section-title" id="embDeepTitle">Deep dive</h3>
-      <div class="emb-deep-list" id="embDeepList"></div>
-    </div>
+    <!-- Section 3 -->
+    <section class="acad-section" id="sectionGrade">
+      <div class="acad-section-header">
+        <div class="acad-section-num">3</div>
+        <h2 class="acad-section-title" id="titleGrade">What does my grade mean?</h2>
+      </div>
+      <div class="acad-section-body">
+        <p class="acad-empty-hint">Content coming soon</p>
+      </div>
+    </section>
 
   </main>
 
+  <!-- ── Footer ──────────────────────────────────────────── -->
+  <footer class="acad-footer">
+    <strong>Embryo Academy</strong> &middot; Powered by Melody
+  </footer>
+
   <script>
-/* ══════════════════════════════════════════════════════
-   EMBRYOLOGY TAB — data & logic
-   ══════════════════════════════════════════════════════ */
+    // ── i18n ─────────────────────────────────────────────────
+    let currentLang = 'he';
 
-const EMB_I18N = {
-  en: {
-    heroTitle:   'From egg to blastocyst',
-    heroSub:     'What happens in the IVF lab \u2014 day by day',
-    heroCaption: 'From egg to hatching blastocyst \u2014 what happens in the lab during your IVF cycle',
-    daysTitle:   'Day by day',
-    factLabel:   'Key fact',
-    funnelTitle: 'Your numbers',
-    funnelSub:   'Enter your cycle results to see your attrition funnel',
-    funnelLabels: ['Eggs retrieved', 'Mature (MII)', 'Fertilized (2PN)', 'Blastocysts'],
-    funnelSummaryDefault: 'Enter your numbers above to see a personalised summary.',
-    gradeTitle:  'Grade decoder',
-    gradeSub:    'Decode your blastocyst grade',
-    gradeLabels: ['Expansion (1\u20136)', 'ICM quality (A / B / C)', 'Trophectoderm (A / B / C)'],
-    gradeExpOpts: [
-      {v:'',t:'\u2014 select \u2014'},{v:'1',t:'1 \u2014 Early blastocyst'},{v:'2',t:'2 \u2014 Blastocyst'},
-      {v:'3',t:'3 \u2014 Full blastocyst'},{v:'4',t:'4 \u2014 Expanded blastocyst'},
-      {v:'5',t:'5 \u2014 Hatching blastocyst'},{v:'6',t:'6 \u2014 Hatched blastocyst'}
-    ],
-    gradeICMOpts: [
-      {v:'',t:'\u2014 select \u2014'},{v:'A',t:'A \u2014 Many tightly packed cells'},
-      {v:'B',t:'B \u2014 Several loosely grouped cells'},{v:'C',t:'C \u2014 Very few cells'}
-    ],
-    gradeTEOpts: [
-      {v:'',t:'\u2014 select \u2014'},{v:'A',t:'A \u2014 Many cells, cohesive'},
-      {v:'B',t:'B \u2014 Few cells, loose epithelium'},{v:'C',t:'C \u2014 Very few large cells'}
-    ],
-    gradeResultDefault: 'Select all three values above to decode your grade.',
-    gradeQualities: {AA:'Excellent',AB:'Very good',BA:'Very good',BB:'Good',AC:'Good',CA:'Good',BC:'Fair',CB:'Fair',CC:'Poor'},
-    gradeExplains: {
-      AA: 'Top-grade blastocyst. Highest implantation potential.',
-      AB: 'High-quality embryo. Strong implantation potential.',
-      BA: 'High-quality embryo. Strong implantation potential.',
-      BB: 'Good quality embryo. Solid implantation potential.',
-      AC: 'Good expansion with weaker cell mass. Reasonable potential.',
-      CA: 'Good ICM but fewer trophectoderm cells. Reasonable potential.',
-      BC: 'Moderate quality. Still capable of implantation.',
-      CB: 'Moderate quality. Still capable of implantation.',
-      CC: 'Lower quality. Transfer possible \u2014 ask your embryologist.'
-    },
-    deepTitle: 'Deep dive',
-    deepCards: [
-      { icon:'\u{1F52C}', title:'Meiosis & egg maturity', sub:'Why maturity matters',
-        body:'<strong>Meiosis</strong> is the cell division that creates eggs with half the normal chromosome number. An egg must complete meiosis I before ovulation and arrest in meiosis II \u2014 this is the <strong>MII (metaphase II)</strong> stage, the only stage that can be fertilized.<br><br><strong>MI eggs</strong> (metaphase I) have not yet completed the first division and cannot be fertilized yet. <strong>GV eggs</strong> (germinal vesicle) are even less mature. In some labs, immature eggs are cultured to maturity (IVM), but success rates are lower.<br><br>Your embryologist counts mature (MII) eggs separately \u2014 this is your true starting number.' },
-      { icon:'\u{1F9EC}', title:'Pronuclei & fertilization check', sub:'The 2PN check at day 1',
-        body:'About <strong>16\u201318 hours after insemination</strong>, embryologists check for two pronuclei (2PN) \u2014 one from the egg, one from the sperm. This confirms normal fertilization.<br><br>An embryo with <strong>1PN or 3PN</strong> is abnormally fertilized and not used. After the pronuclei fade, the embryo enters its first cleavage.<br><br><strong>Fertilization rate</strong> is typically 60\u201380% of mature eggs with ICSI. Lower rates may reflect egg or sperm quality issues.' },
-      { icon:'\u{1F9E9}', title:'PGT-A (preimplantation genetic testing)', sub:'Chromosome screening',
-        body:'<strong>PGT-A</strong> screens blastocysts for the correct number of chromosomes (euploid = 46). Aneuploid embryos \u2014 those with missing or extra chromosomes \u2014 are the main cause of failed implantation and miscarriage.<br><br>A small biopsy of <strong>5\u201310 trophectoderm cells</strong> is taken from the outer layer of the blastocyst, then the embryo is vitrified while awaiting results (7\u201314 days).<br><br>Euploidy rates fall with age: ~60\u201365% at 35, ~40\u201345% at 38, ~20\u201325% at 42. PGT-A does not improve pregnancy rates for younger patients with good prognosis.' },
-      { icon:'\u2744\uFE0F', title:'Vitrification (flash freezing)', sub:'How embryos are preserved',
-        body:'<strong>Vitrification</strong> is ultra-rapid cooling (\u2212196\u00a0\u00b0C in liquid nitrogen) that turns the embryo into a glass-like state with no ice crystal formation. Survival rates exceed 95% for blastocysts.<br><br>Before cooling, embryos are loaded with <strong>cryoprotectants</strong> that replace cellular water and prevent damage. On thaw day, the process is reversed in a stepwise wash.<br><br>Frozen-thawed cycles often have <strong>equal or better outcomes</strong> than fresh transfers \u2014 the uterus can be fully prepared without the hormonal stress of a stimulated cycle.' }
-    ]
-  },
-  he: {
-    heroTitle:   '\u05de\u05d4\u05d1\u05d9\u05e6\u05d9\u05ea \u05dc\u05d1\u05dc\u05e1\u05d8\u05d5\u05e6\u05d9\u05e1\u05d8',
-    heroSub:     '\u05de\u05d4 \u05e7\u05d5\u05e8\u05d4 \u05d1\u05de\u05e2\u05d1\u05d3\u05d4 \u05d1\u05de\u05d4\u05dc\u05da \u05d4\u05d8\u05d9\u05e4\u05d5\u05dc \u05e9\u05dc\u05da',
-    heroCaption: '\u05de\u05d4\u05d1\u05d9\u05e6\u05d9\u05ea \u05dc\u05d1\u05dc\u05e1\u05d8\u05d5\u05e6\u05d9\u05e1\u05d8 \u2014 \u05de\u05d4 \u05e7\u05d5\u05e8\u05d4 \u05d1\u05de\u05e2\u05d1\u05d3\u05d4 \u05d1\u05de\u05d4\u05dc\u05da \u05de\u05d7\u05d6\u05d5\u05e8 \u05d4-IVF',
-    daysTitle:   '\u05d9\u05d5\u05dd \u05d0\u05d7\u05e8 \u05d9\u05d5\u05dd',
-    factLabel:   '\u05e2\u05d5\u05d1\u05d3\u05d4 \u05de\u05e4\u05ea\u05d7',
-    funnelTitle: '\u05d4\u05de\u05e1\u05e4\u05e8\u05d9\u05dd \u05e9\u05dc\u05da',
-    funnelSub:   '\u05d4\u05db\u05e0\u05d9\u05e1\u05d9 \u05d0\u05ea \u05ea\u05d5\u05e6\u05d0\u05d5\u05ea \u05d4\u05de\u05d7\u05d6\u05d5\u05e8 \u05e9\u05dc\u05da \u05db\u05d3\u05d9 \u05dc\u05e8\u05d0\u05d5\u05ea \u05d0\u05ea \u05de\u05e9\u05e4\u05da \u05d4-attrition',
-    funnelLabels: ['\u05d1\u05d9\u05e6\u05d9\u05d5\u05ea \u05e9\u05e0\u05e9\u05d0\u05d1\u05d5','\u05d1\u05e9\u05dc\u05d5\u05ea (MII)','\u05d4\u05d5\u05e4\u05e8\u05d5 (2PN)','\u05d1\u05dc\u05e1\u05d8\u05d5\u05e6\u05d9\u05e1\u05d8\u05d9\u05dd'],
-    funnelSummaryDefault: '\u05d4\u05db\u05e0\u05d9\u05e1\u05d9 \u05d0\u05ea \u05d4\u05de\u05e1\u05e4\u05e8\u05d9\u05dd \u05e9\u05dc\u05da \u05dc\u05de\u05e2\u05dc\u05d4 \u05db\u05d3\u05d9 \u05dc\u05e8\u05d0\u05d5\u05ea \u05e1\u05d9\u05db\u05d5\u05dd \u05d0\u05d9\u05e9\u05d9.',
-    gradeTitle:  '\u05e4\u05e2\u05e0\u05d5\u05d7 \u05d4\u05e6\u05d9\u05d5\u05df',
-    gradeSub:    '\u05e4\u05e2\u05e0\u05d7\u05d9 \u05d0\u05ea \u05e6\u05d9\u05d5\u05df \u05d4\u05d1\u05dc\u05e1\u05d8\u05d5\u05e6\u05d9\u05e1\u05d8 \u05e9\u05dc\u05da',
-    gradeLabels: ['\u05d4\u05ea\u05e8\u05d7\u05d1\u05d5\u05ea (1\u20136)','\u05d0\u05d9\u05db\u05d5\u05ea ICM (A / B / C)','\u05d8\u05e8\u05d5\u05e4\u05e7\u05d8\u05d5\u05d3\u05e8\u05dd (A / B / C)'],
-    gradeExpOpts: [
-      {v:'',t:'\u2014 \u05d1\u05d7\u05e8\u05d9 \u2014'},{v:'1',t:'1 \u2014 \u05d1\u05dc\u05e1\u05d8\u05d5\u05e6\u05d9\u05e1\u05d8 \u05de\u05d5\u05e7\u05d3\u05dd'},
-      {v:'2',t:'2 \u2014 \u05d1\u05dc\u05e1\u05d8\u05d5\u05e6\u05d9\u05e1\u05d8'},{v:'3',t:'3 \u2014 \u05d1\u05dc\u05e1\u05d8\u05d5\u05e6\u05d9\u05e1\u05d8 \u05de\u05dc\u05d0'},
-      {v:'4',t:'4 \u2014 \u05d1\u05dc\u05e1\u05d8\u05d5\u05e6\u05d9\u05e1\u05d8 \u05de\u05d5\u05e8\u05d7\u05d1'},{v:'5',t:'5 \u2014 \u05d1\u05dc\u05e1\u05d8\u05d5\u05e6\u05d9\u05e1\u05d8 \u05d9\u05d5\u05e6\u05d0 \u05de\u05d4\u05e7\u05dc\u05d9\u05e4\u05d4'},
-      {v:'6',t:'6 \u2014 \u05d1\u05dc\u05e1\u05d8\u05d5\u05e6\u05d9\u05e1\u05d8 \u05e9\u05d9\u05e6\u05d0'}
-    ],
-    gradeICMOpts: [
-      {v:'',t:'\u2014 \u05d1\u05d7\u05e8\u05d9 \u2014'},{v:'A',t:'A \u2014 \u05ea\u05d0\u05d9\u05dd \u05e8\u05d1\u05d9\u05dd \u05d5\u05e6\u05e4\u05d5\u05e4\u05d9\u05dd'},
-      {v:'B',t:'B \u2014 \u05de\u05e1\u05e4\u05e8 \u05ea\u05d0\u05d9\u05dd \u05de\u05e7\u05d5\u05d1\u05e6\u05d9\u05dd'},{v:'C',t:'C \u2014 \u05de\u05e2\u05d8 \u05de\u05d0\u05d5\u05d3 \u05ea\u05d0\u05d9\u05dd'}
-    ],
-    gradeTEOpts: [
-      {v:'',t:'\u2014 \u05d1\u05d7\u05e8\u05d9 \u2014'},{v:'A',t:'A \u2014 \u05ea\u05d0\u05d9\u05dd \u05e8\u05d1\u05d9\u05dd, \u05dc\u05db\u05d9\u05d3\u05d9\u05dd'},
-      {v:'B',t:'B \u2014 \u05de\u05e2\u05d8 \u05ea\u05d0\u05d9\u05dd, \u05d0\u05e4\u05d9\u05ea\u05dc \u05e8\u05d5\u05e4\u05e3'},{v:'C',t:'C \u2014 \u05de\u05e2\u05d8 \u05de\u05d0\u05d5\u05d3 \u05ea\u05d0\u05d9\u05dd \u05d2\u05d3\u05d5\u05dc\u05d9\u05dd'}
-    ],
-    gradeResultDefault: '\u05d1\u05d7\u05e8\u05d9 \u05d0\u05ea \u05e9\u05dc\u05d5\u05e9\u05ea \u05d4\u05e2\u05e8\u05db\u05d9\u05dd \u05dc\u05de\u05e2\u05dc\u05d4 \u05db\u05d3\u05d9 \u05dc\u05e4\u05e2\u05e0\u05d7 \u05d0\u05ea \u05d4\u05e6\u05d9\u05d5\u05df.',
-    gradeQualities: {AA:'\u05de\u05e6\u05d5\u05d9\u05df',AB:'\u05d8\u05d5\u05d1 \u05de\u05d0\u05d5\u05d3',BA:'\u05d8\u05d5\u05d1 \u05de\u05d0\u05d5\u05d3',BB:'\u05d8\u05d5\u05d1',AC:'\u05d8\u05d5\u05d1',CA:'\u05d8\u05d5\u05d1',BC:'\u05e1\u05d1\u05d9\u05e8',CB:'\u05e1\u05d1\u05d9\u05e8',CC:'\u05e0\u05de\u05d5\u05da'},
-    gradeExplains: {
-      AA:'\u05d1\u05dc\u05e1\u05d8\u05d5\u05e6\u05d9\u05e1\u05d8 \u05de\u05d3\u05e8\u05d2 \u05e2\u05dc\u05d9\u05d5\u05df. \u05d4\u05e4\u05d5\u05d8\u05e0\u05e6\u05d9\u05d0\u05dc \u05d4\u05d2\u05d1\u05d5\u05d4 \u05d1\u05d9\u05d5\u05ea\u05e8 \u05dc\u05d4\u05e9\u05ea\u05e8\u05e9\u05d5\u05ea.',
-      AB:'\u05e2\u05d5\u05d1\u05e8 \u05d1\u05d0\u05d9\u05db\u05d5\u05ea \u05d2\u05d1\u05d5\u05d4\u05d4. \u05e4\u05d5\u05d8\u05e0\u05e6\u05d9\u05d0\u05dc \u05d4\u05e9\u05ea\u05e8\u05e9\u05d5\u05ea \u05d7\u05d6\u05e7.',
-      BA:'\u05e2\u05d5\u05d1\u05e8 \u05d1\u05d0\u05d9\u05db\u05d5\u05ea \u05d2\u05d1\u05d5\u05d4\u05d4. \u05e4\u05d5\u05d8\u05e0\u05e6\u05d9\u05d0\u05dc \u05d4\u05e9\u05ea\u05e8\u05e9\u05d5\u05ea \u05d7\u05d6\u05e7.',
-      BB:'\u05e2\u05d5\u05d1\u05e8 \u05d1\u05d0\u05d9\u05db\u05d5\u05ea \u05d8\u05d5\u05d1\u05d4. \u05e4\u05d5\u05d8\u05e0\u05e6\u05d9\u05d0\u05dc \u05d4\u05e9\u05ea\u05e8\u05e9\u05d5\u05ea \u05de\u05d5\u05e6\u05e7.',
-      AC:'\u05d4\u05ea\u05e8\u05d7\u05d1\u05d5\u05ea \u05d8\u05d5\u05d1\u05d4 \u05e2\u05dd \u05de\u05e1\u05ea \u05ea\u05d0\u05d9\u05dd \u05d7\u05dc\u05e9\u05d4 \u05d9\u05d5\u05ea\u05e8. \u05e4\u05d5\u05d8\u05e0\u05e6\u05d9\u05d0\u05dc \u05e1\u05d1\u05d9\u05e8.',
-      CA:'\u05d0\u05d9\u05e1\u05d9\u05d0\u05dd \u05d8\u05d5\u05d1 \u05d0\u05da \u05e4\u05d7\u05d5\u05ea \u05ea\u05d0\u05d9 \u05d8\u05e8\u05d5\u05e4\u05e7\u05d8\u05d5\u05d3\u05e8\u05dd. \u05e4\u05d5\u05d8\u05e0\u05e6\u05d9\u05d0\u05dc \u05e1\u05d1\u05d9\u05e8.',
-      BC:'\u05d0\u05d9\u05db\u05d5\u05ea \u05d1\u05d9\u05e0\u05d5\u05e0\u05d9\u05ea. \u05d4\u05e9\u05ea\u05e8\u05e9\u05d5\u05ea \u05d0\u05e4\u05e9\u05e8\u05d9\u05ea.',
-      CB:'\u05d0\u05d9\u05db\u05d5\u05ea \u05d1\u05d9\u05e0\u05d5\u05e0\u05d9\u05ea. \u05d4\u05e9\u05ea\u05e8\u05e9\u05d5\u05ea \u05d0\u05e4\u05e9\u05e8\u05d9\u05ea.',
-      CC:'\u05d0\u05d9\u05db\u05d5\u05ea \u05e0\u05de\u05d5\u05db\u05d4 \u05d9\u05d5\u05ea\u05e8. \u05d4\u05e2\u05d1\u05e8\u05d4 \u05d0\u05e4\u05e9\u05e8\u05d9\u05ea \u2014 \u05e9\u05d0\u05dc\u05d9 \u05d0\u05ea \u05d0\u05de\u05d1\u05e8\u05d9\u05d5\u05dc\u05d5\u05d2\u05d9\u05ea.'
-    },
-    deepTitle: '\u05d4\u05e2\u05de\u05e7\u05d4',
-    deepCards: [
-      { icon:'\u{1F52C}', title:'\u05de\u05d9\u05d5\u05d6\u05d4 \u05d5\u05d1\u05e9\u05dc\u05d5\u05ea \u05d4\u05d1\u05d9\u05e6\u05d9\u05ea', sub:'\u05dc\u05de\u05d4 \u05d4\u05d1\u05e9\u05dc\u05d5\u05ea \u05d7\u05e9\u05d5\u05d1\u05d4',
-        body:'<strong>\u05de\u05d9\u05d5\u05d6\u05d4</strong> \u05d4\u05d9\u05d0 \u05d7\u05dc\u05d5\u05e7\u05ea \u05d4\u05ea\u05d0 \u05e9\u05d9\u05d5\u05e6\u05e8\u05ea \u05d1\u05d9\u05e6\u05d9\u05d5\u05ea \u05e2\u05dd \u05de\u05d7\u05e6\u05d9\u05ea \u05de\u05de\u05e1\u05e4\u05e8 \u05d4\u05db\u05e8\u05d5\u05de\u05d5\u05d6\u05d5\u05de\u05d9\u05dd \u05d4\u05e8\u05d2\u05d9\u05dc. \u05d4\u05d1\u05d9\u05e6\u05d9\u05ea \u05d7\u05d9\u05d9\u05d1\u05ea \u05dc\u05d4\u05e9\u05dc\u05d9\u05dd \u05de\u05d9\u05d5\u05d6\u05d4 I \u05dc\u05e4\u05e0\u05d9 \u05d4\u05d1\u05d9\u05d5\u05e5 \u05d5\u05dc\u05e2\u05e6\u05d5\u05e8 \u05d1\u05de\u05d9\u05d5\u05d6\u05d4 II \u2014 \u05d6\u05d4\u05d5 \u05e9\u05dc\u05d1 <strong>MII (\u05de\u05d8\u05d0\u05e4\u05d6\u05d4 II)</strong>, \u05d4\u05e9\u05dc\u05d1 \u05d4\u05d9\u05d7\u05d9\u05d3\u05d9 \u05e9\u05e0\u05d9\u05ea\u05df \u05dc\u05d4\u05e4\u05e8\u05d9\u05d9\u05d4.<br><br>\u05d4\u05d0\u05de\u05d1\u05e8\u05d9\u05d5\u05dc\u05d5\u05d2\u05d9\u05ea \u05e1\u05d5\u05e4\u05e8\u05ea \u05d1\u05d9\u05e6\u05d9\u05d5\u05ea \u05d1\u05e9\u05dc\u05d5\u05ea (MII) \u05d1\u05e0\u05e4\u05e8\u05d3 \u2014 \u05d6\u05d4\u05d5 \u05de\u05e1\u05e4\u05e8 \u05d4\u05de\u05d5\u05e6\u05d0 \u05d4\u05d0\u05de\u05d9\u05ea\u05d9 \u05e9\u05dc\u05da.' },
-      { icon:'\u{1F9EC}', title:'\u05e4\u05e8\u05d5\u05e0\u05d5\u05e7\u05dc\u05d0\u05d9 \u05d5\u05d1\u05d3\u05d9\u05e7\u05ea \u05d4\u05e4\u05e8\u05d9\u05d9\u05d4', sub:'\u05d1\u05d3\u05d9\u05e7\u05ea 2PN \u05d1\u05d9\u05d5\u05dd 1',
-        body:'\u05db<strong>-16\u201318 \u05e9\u05e2\u05d5\u05ea \u05dc\u05d0\u05d7\u05e8 \u05d4\u05d4\u05d6\u05e8\u05e2\u05d4</strong>, \u05d4\u05d0\u05de\u05d1\u05e8\u05d9\u05d5\u05dc\u05d5\u05d2\u05d9\u05dd \u05de\u05d7\u05e4\u05e9\u05d9\u05dd \u05e9\u05e0\u05d9 \u05e4\u05e8\u05d5\u05e0\u05d5\u05e7\u05dc\u05d0\u05d9 (2PN) \u2014 \u05d0\u05d7\u05d3 \u05de\u05d4\u05d1\u05d9\u05e6\u05d9\u05ea \u05d5\u05d0\u05d7\u05d3 \u05de\u05d4\u05d6\u05e8\u05e2. \u05d6\u05d4 \u05de\u05d0\u05e9\u05e8 \u05d4\u05e4\u05e8\u05d9\u05d9\u05d4 \u05ea\u05e7\u05d9\u05e0\u05d4.<br><br>\u05e2\u05d5\u05d1\u05e8 \u05e2\u05dd <strong>1PN \u05d0\u05d5 3PN</strong> \u05de\u05d5\u05e4\u05e8\u05d4 \u05d1\u05e6\u05d5\u05e8\u05d4 \u05dc\u05d0 \u05ea\u05e7\u05d9\u05e0\u05d4 \u05d5\u05dc\u05d0 \u05d9\u05e9\u05de\u05e9. \u05dc\u05d0\u05d7\u05e8 \u05e9\u05d4\u05e4\u05e8\u05d5\u05e0\u05d5\u05e7\u05dc\u05d0\u05d9 \u05e0\u05e2\u05dc\u05de\u05d9\u05dd, \u05d4\u05e2\u05d5\u05d1\u05e8 \u05e2\u05d5\u05d1\u05e8 \u05dc\u05d7\u05dc\u05d5\u05e7\u05d4 \u05d4\u05e8\u05d0\u05e9\u05d5\u05e0\u05d4 \u05e9\u05dc\u05d5.<br><br><strong>\u05e9\u05d9\u05e2\u05d5\u05e8 \u05d4\u05d4\u05e4\u05e8\u05d9\u05d9\u05d4</strong> \u05d4\u05d5\u05d0 \u05d1\u05d3\u05e8\u05da \u05db\u05dc\u05dc 60\u201380% \u05de\u05d4\u05d1\u05d9\u05e6\u05d9\u05d5\u05ea \u05d4\u05d1\u05e9\u05dc\u05d5\u05ea \u05e2\u05dd ICSI.' },
-      { icon:'\u{1F9E9}', title:'PGT-A (\u05d1\u05d3\u05d9\u05e7\u05d4 \u05d2\u05e0\u05d8\u05d9\u05ea \u05d8\u05e8\u05d5\u05dd \u05d4\u05e9\u05ea\u05e8\u05e9\u05d5\u05ea)', sub:'\u05e1\u05e7\u05d9\u05e8\u05ea \u05db\u05e8\u05d5\u05de\u05d5\u05d6\u05d5\u05de\u05d9\u05dd',
-        body:'<strong>PGT-A</strong> \u05e1\u05d5\u05e8\u05e7\u05ea \u05d1\u05dc\u05e1\u05d8\u05d5\u05e6\u05d9\u05e1\u05d8\u05d9\u05dd \u05dc\u05de\u05e1\u05e4\u05e8 \u05d4\u05db\u05e8\u05d5\u05de\u05d5\u05d6\u05d5\u05de\u05d9\u05dd \u05d4\u05e0\u05db\u05d5\u05df (euploid = 46). \u05e2\u05d5\u05d1\u05e8\u05d9\u05dd \u05d0\u05e0\u05d0\u05d5\u05e4\u05dc\u05d5\u05d0\u05d9\u05d3\u05d9\u05dd \u2014 \u05d1\u05e2\u05dc\u05d9 \u05db\u05e8\u05d5\u05de\u05d5\u05d6\u05d5\u05de\u05d9\u05dd \u05d7\u05e1\u05e8\u05d9\u05dd \u05d0\u05d5 \u05e2\u05d5\u05d3\u05e4\u05d9\u05dd \u2014 \u05d4\u05dd \u05d4\u05d2\u05d5\u05e8\u05dd \u05d4\u05e2\u05d9\u05e7\u05e8\u05d9 \u05dc\u05db\u05d9\u05e9\u05dc\u05d5\u05df \u05d4\u05e9\u05ea\u05e8\u05e9\u05d5\u05ea \u05d5\u05d4\u05e4\u05dc\u05d4.<br><br>\u05e9\u05d9\u05e2\u05d5\u05e8\u05d9 \u05d0\u05d0\u05d5\u05e4\u05dc\u05d5\u05d0\u05d9\u05d3\u05d9\u05d4 \u05d9\u05d5\u05e8\u05d3\u05d9\u05dd \u05e2\u05dd \u05d4\u05d2\u05d9\u05dc: ~60\u201365% \u05d1\u05d2\u05d9\u05dc 35, ~40\u201345% \u05d1\u05d2\u05d9\u05dc 38, ~20\u201325% \u05d1\u05d2\u05d9\u05dc 42.' },
-      { icon:'\u2744\uFE0F', title:'\u05d5\u05d9\u05d8\u05e8\u05d9\u05e4\u05d9\u05e7\u05e6\u05d9\u05d4 (\u05d4\u05e7\u05e4\u05d0\u05d4 \u05de\u05d4\u05d9\u05e8\u05d4)', sub:'\u05db\u05d9\u05e6\u05d3 \u05e2\u05d5\u05d1\u05e8\u05d9\u05dd \u05e0\u05e9\u05de\u05e8\u05d9\u05dd',
-        body:'<strong>\u05d5\u05d9\u05d8\u05e8\u05d9\u05e4\u05d9\u05e7\u05e6\u05d9\u05d4</strong> \u05d4\u05d9\u05d0 \u05e7\u05d9\u05e8\u05d5\u05e8 \u05d0\u05d5\u05dc\u05d8\u05e8\u05d0-\u05de\u05d4\u05d9\u05e8 (\u221296\u00a0\u00b0C \u05d1\u05d7\u05e0\u05e7\u05df \u05e0\u05d5\u05d6\u05dc\u05d9) \u05d4\u05d4\u05d5\u05e4\u05da \u05d0\u05ea \u05d4\u05e2\u05d5\u05d1\u05e8 \u05dc\u05de\u05e6\u05d1 \u05d6\u05db\u05d5\u05db\u05d9\u05ea\u05d9 \u05dc\u05dc\u05d0 \u05d4\u05d9\u05d5\u05d5\u05e6\u05e8\u05d5\u05ea \u05d2\u05d1\u05d9\u05e9\u05d9 \u05e7\u05e8\u05d7. \u05e9\u05d9\u05e2\u05d5\u05e8\u05d9 \u05d4\u05d4\u05d9\u05e9\u05e8\u05d3\u05d5\u05ea \u05e2\u05d5\u05dc\u05d9\u05dd \u05e2\u05dc 95% \u05dc\u05d1\u05dc\u05e1\u05d8\u05d5\u05e6\u05d9\u05e1\u05d8\u05d9\u05dd.<br><br>\u05de\u05d7\u05d6\u05d5\u05e8\u05d9 \u05d4\u05e7\u05e4\u05d0\u05d4-\u05d4\u05e4\u05e9\u05e8\u05d4 \u05dc\u05e8\u05d5\u05d1 \u05de\u05e6\u05d9\u05d2\u05d9\u05dd <strong>\u05ea\u05d5\u05e6\u05d0\u05d5\u05ea \u05e9\u05d5\u05d5\u05ea \u05d0\u05d5 \u05d8\u05d5\u05d1\u05d5\u05ea \u05d9\u05d5\u05ea\u05e8</strong> \u05de\u05d4\u05e2\u05d1\u05e8\u05d5\u05ea \u05d8\u05e8\u05d9\u05d5\u05ea \u2014 \u05d4\u05e8\u05d7\u05dd \u05d9\u05db\u05d5\u05dc \u05dc\u05d4\u05d9\u05d5\u05ea \u05de\u05d5\u05db\u05df \u05d1\u05de\u05dc\u05d5\u05d0\u05d5 \u05dc\u05dc\u05d0 \u05d4\u05dc\u05d7\u05e5 \u05d4\u05d4\u05d5\u05e8\u05de\u05d5\u05e0\u05d0\u05dc\u05d9 \u05e9\u05dc \u05de\u05d7\u05d6\u05d5\u05e8 \u05d2\u05d9\u05e8\u05d5\u05d9.' }
-    ]
-  }
-};
-
-const EMB_DAYS = {
-  en: [
-    { pill:'Day 1', img:'/embryo-day1.png', name:'Day 1 \u2014 Fertilization check',
-      desc:'About 16\u201318 hours after insemination, embryologists look for two pronuclei (2PN) \u2014 confirmation of normal fertilization. The egg and sperm DNA have not yet fused.',
-      fact:'Only eggs showing exactly 2 pronuclei are considered normally fertilized.' },
-    { pill:'Day 2 \u00b7 2-cell', img:'/embryo-day1.png', name:'Day 2 \u2014 First cleavage (2-cell)',
-      desc:'The zygote divides for the first time. Cell number doubles but total embryo size stays the same \u2014 cells get smaller with each division.',
-      fact:'Each cell (blastomere) at this stage is totipotent \u2014 capable of forming a complete embryo.' },
-    { pill:'Day 2 \u00b7 4-cell', img:'/embryo-day2.png', name:'Day 2 \u2014 4-cell embryo',
-      desc:'A second cleavage produces 4 cells. Embryos are graded on cell number, symmetry, and fragmentation at this stage.',
-      fact:'Less than 10% fragmentation at this stage is considered good quality.' },
-    { pill:'Day 3', img:'/embryo-day3.png', name:'Day 3 \u2014 8-cell embryo',
-      desc:'The embryonic genome activates for the first time (EGA). The embryo shifts from relying on maternal proteins to its own genetic program.',
-      fact:'Day 3 is the most common point for embryo grading in many IVF labs.' },
-    { pill:'Day 4', img:'/embryo-day3.png', name:'Day 4 \u2014 Morula (compaction)',
-      desc:'Cells compact tightly together and begin forming junctions. Individual cells become harder to distinguish \u2014 this is called the morula stage.',
-      fact:'Compaction is driven by E-cadherin and is an important quality marker.' },
-    { pill:'Day 5', img:'/embryo-day4.png', name:'Day 5 \u2014 Early blastocyst',
-      desc:'A fluid-filled cavity (blastocoel) forms. The inner cell mass (ICM, future baby) and trophectoderm (TE, future placenta) differentiate.',
-      fact:'Most IVF labs aim to transfer or vitrify on day 5.' },
-    { pill:'Day 5\u20136', img:'/embryo-day5.png', name:'Day 5\u20136 \u2014 Expanded blastocyst',
-      desc:'The blastocyst expands as fluid accumulates. The zona pellucida (outer shell) thins in preparation for hatching.',
-      fact:'Gardner grading (e.g. 4AA) is assigned at this stage.' },
-    { pill:'Day 6\u20137', img:'/embryo-day6.png', name:'Day 6\u20137 \u2014 Hatching blastocyst',
-      desc:'The blastocyst breaks free of the zona pellucida \u2014 "hatching." This is required before implantation in the uterus can begin.',
-      fact:'Assisted hatching (laser) can be used to help embryos that struggle to hatch.' }
-  ],
-  he: [
-    { pill:'\u05d9\u05d5\u05dd 1', img:'/embryo-day1.png', name:'\u05d9\u05d5\u05dd 1 \u2014 \u05d1\u05d3\u05d9\u05e7\u05ea \u05d4\u05e4\u05e8\u05d9\u05d9\u05d4',
-      desc:'\u05db-16\u201318 \u05e9\u05e2\u05d5\u05ea \u05dc\u05d0\u05d7\u05e8 \u05d4\u05d4\u05d6\u05e8\u05e2\u05d4, \u05d4\u05d0\u05de\u05d1\u05e8\u05d9\u05d5\u05dc\u05d5\u05d2\u05d9\u05dd \u05de\u05d7\u05e4\u05e9\u05d9\u05dd \u05e9\u05e0\u05d9 \u05e4\u05e8\u05d5\u05e0\u05d5\u05e7\u05dc\u05d0\u05d9 (2PN) \u2014 \u05d0\u05d9\u05e9\u05d5\u05e8 \u05dc\u05d4\u05e4\u05e8\u05d9\u05d9\u05d4 \u05ea\u05e7\u05d9\u05e0\u05d4.',
-      fact:'\u05e8\u05e7 \u05d1\u05d9\u05e6\u05d9\u05d5\u05ea \u05d4\u05de\u05e6\u05d9\u05d2\u05d5\u05ea \u05d1\u05d3\u05d9\u05d5\u05e7 2 \u05e4\u05e8\u05d5\u05e0\u05d5\u05e7\u05dc\u05d0\u05d9 \u05e0\u05d7\u05e9\u05d1\u05d5\u05ea \u05de\u05d5\u05e4\u05e8\u05d5\u05ea \u05db\u05e8\u05d0\u05d5\u05d9.' },
-    { pill:'\u05d9\u05d5\u05dd 2 \u00b7 2 \u05ea\u05d0\u05d9\u05dd', img:'/embryo-day1.png', name:'\u05d9\u05d5\u05dd 2 \u2014 \u05d7\u05dc\u05d5\u05e7\u05d4 \u05e8\u05d0\u05e9\u05d5\u05e0\u05d4 (2 \u05ea\u05d0\u05d9\u05dd)',
-      desc:'\u05d4\u05d6\u05d9\u05d2\u05d5\u05d8\u05d4 \u05de\u05ea\u05d7\u05dc\u05e7\u05ea \u05d1\u05e4\u05e2\u05dd \u05d4\u05e8\u05d0\u05e9\u05d5\u05e0\u05d4. \u05de\u05e1\u05e4\u05e8 \u05d4\u05ea\u05d0\u05d9\u05dd \u05de\u05d5\u05db\u05e4\u05dc \u05d0\u05da \u05d2\u05d5\u05d3\u05dc \u05d4\u05e2\u05d5\u05d1\u05e8 \u05d4\u05db\u05d5\u05dc\u05dc \u05e0\u05e9\u05d0\u05e8 \u05d6\u05d4\u05d4.',
-      fact:'\u05db\u05dc \u05ea\u05d0 (blastomere) \u05d1\u05e9\u05dc\u05d1 \u05d6\u05d4 \u05d4\u05d5\u05d0 totipotent \u2014 \u05d9\u05db\u05d5\u05dc \u05dc\u05d9\u05e6\u05d5\u05e8 \u05e2\u05d5\u05d1\u05e8 \u05e9\u05dc\u05dd.' },
-    { pill:'\u05d9\u05d5\u05dd 2 \u00b7 4 \u05ea\u05d0\u05d9\u05dd', img:'/embryo-day2.png', name:'\u05d9\u05d5\u05dd 2 \u2014 \u05e2\u05d5\u05d1\u05e8 4 \u05ea\u05d0\u05d9\u05dd',
-      desc:'\u05d7\u05dc\u05d5\u05e7\u05d4 \u05e9\u05e0\u05d9\u05d9\u05d4 \u05de\u05d9\u05d9\u05e6\u05e8\u05ea 4 \u05ea\u05d0\u05d9\u05dd. \u05e2\u05d5\u05d1\u05e8\u05d9\u05dd \u05de\u05d3\u05d5\u05e8\u05d2\u05d9\u05dd \u05dc\u05e4\u05d9 \u05de\u05e1\u05e4\u05e8 \u05ea\u05d0\u05d9\u05dd, \u05e1\u05d9\u05de\u05d8\u05e8\u05d9\u05d4 \u05d5\u05e4\u05e8\u05d2\u05de\u05e0\u05d8\u05e6\u05d9\u05d4.',
-      fact:'\u05e4\u05d7\u05d5\u05ea \u05de-10% \u05e4\u05e8\u05d2\u05de\u05e0\u05d8\u05e6\u05d9\u05d4 \u05d1\u05e9\u05dc\u05d1 \u05d6\u05d4 \u05e0\u05d7\u05e9\u05d1\u05ea \u05dc\u05d0\u05d9\u05db\u05d5\u05ea \u05d8\u05d5\u05d1\u05d4.' },
-    { pill:'\u05d9\u05d5\u05dd 3', img:'/embryo-day3.png', name:'\u05d9\u05d5\u05dd 3 \u2014 \u05e2\u05d5\u05d1\u05e8 8 \u05ea\u05d0\u05d9\u05dd',
-      desc:'\u05d4\u05d2\u05e0\u05d5\u05dd \u05d4\u05e2\u05d5\u05d1\u05e8\u05d9 \u05de\u05d5\u05e4\u05e2\u05dc \u05dc\u05e8\u05d0\u05e9\u05d5\u05e0\u05d4 (EGA). \u05d4\u05e2\u05d5\u05d1\u05e8 \u05e2\u05d5\u05d1\u05e8 \u05de\u05d4\u05e1\u05ea\u05de\u05db\u05d5\u05ea \u05e2\u05dc \u05d7\u05dc\u05d1\u05d5\u05e0\u05d9\u05dd \u05d0\u05d9\u05de\u05d4\u05d9\u05d9\u05dd \u05dc\u05ea\u05d5\u05db\u05e0\u05d9\u05ea \u05d4\u05d2\u05e0\u05d8\u05d9\u05ea \u05e9\u05dc\u05d5.',
-      fact:'\u05d9\u05d5\u05dd 3 \u05d4\u05d5\u05d0 \u05e0\u05e7\u05d5\u05d3\u05ea \u05d4\u05d3\u05d9\u05e8\u05d5\u05d2 \u05d4\u05e0\u05e4\u05d5\u05e6\u05d4 \u05d1\u05d9\u05d5\u05ea\u05e8 \u05d1\u05de\u05e2\u05d1\u05d3\u05d5\u05ea IVF \u05e8\u05d1\u05d5\u05ea.' },
-    { pill:'\u05d9\u05d5\u05dd 4', img:'/embryo-day3.png', name:'\u05d9\u05d5\u05dd 4 \u2014 \u05de\u05d5\u05e8\u05d5\u05dc\u05d4 (\u05e7\u05d5\u05de\u05e4\u05e7\u05e6\u05d9\u05d4)',
-      desc:'\u05d4\u05ea\u05d0\u05d9\u05dd \u05de\u05ea\u05db\u05d5\u05d5\u05e6\u05d9\u05dd \u05d9\u05d7\u05d3 \u05d5\u05de\u05ea\u05d7\u05d9\u05dc\u05d9\u05dd \u05dc\u05d9\u05e6\u05d5\u05e8 \u05d7\u05d9\u05d1\u05d5\u05e8\u05d9\u05dd. \u05e7\u05e9\u05d4 \u05dc\u05d4\u05d1\u05d7\u05d9\u05df \u05d1\u05ea\u05d0\u05d9\u05dd \u05d1\u05e0\u05e4\u05e8\u05d3 \u2014 \u05d6\u05d4\u05d5 \u05e9\u05dc\u05d1 \u05d4\u05de\u05d5\u05e8\u05d5\u05dc\u05d4.',
-      fact:'\u05d4\u05e7\u05d5\u05de\u05e4\u05e7\u05e6\u05d9\u05d4 \u05de\u05d5\u05e0\u05e2\u05ea \u05e2\u05dc \u05d9\u05d3\u05d9 E-cadherin \u05d5\u05de\u05d4\u05d5\u05d5\u05d4 \u05e1\u05de\u05df \u05d0\u05d9\u05db\u05d5\u05ea \u05d7\u05e9\u05d5\u05d1.' },
-    { pill:'\u05d9\u05d5\u05dd 5', img:'/embryo-day4.png', name:'\u05d9\u05d5\u05dd 5 \u2014 \u05d1\u05dc\u05e1\u05d8\u05d5\u05e6\u05d9\u05e1\u05d8 \u05de\u05d5\u05e7\u05d3\u05dd',
-      desc:'\u05d7\u05dc\u05dc \u05de\u05dc\u05d0 \u05e0\u05d5\u05d6\u05dc (blastocoel) \u05e0\u05d5\u05e6\u05e8. \u05de\u05e1\u05ea \u05d4\u05ea\u05d0\u05d9\u05dd \u05d4\u05e4\u05e0\u05d9\u05de\u05d9\u05ea (ICM) \u05d5\u05d4\u05d8\u05e8\u05d5\u05e4\u05e7\u05d8\u05d5\u05d3\u05e8\u05dd (TE) \u05de\u05ea\u05de\u05d9\u05d9\u05e0\u05d9\u05dd.',
-      fact:'\u05e8\u05d5\u05d1 \u05de\u05e2\u05d1\u05d3\u05d5\u05ea IVF \u05de\u05db\u05d5\u05d5\u05e0\u05d5\u05ea \u05dc\u05d4\u05e2\u05d1\u05d9\u05e8 \u05d0\u05d5 \u05dc\u05d4\u05e7\u05e4\u05d9\u05d0 \u05d1\u05d9\u05d5\u05dd 5.' },
-    { pill:'\u05d9\u05d5\u05dd 5\u20136', img:'/embryo-day5.png', name:'\u05d9\u05d5\u05dd 5\u20136 \u2014 \u05d1\u05dc\u05e1\u05d8\u05d5\u05e6\u05d9\u05e1\u05d8 \u05de\u05d5\u05e8\u05d7\u05d1',
-      desc:'\u05d4\u05d1\u05dc\u05e1\u05d8\u05d5\u05e6\u05d9\u05e1\u05d8 \u05de\u05ea\u05e8\u05d7\u05d1 \u05db\u05d0\u05e9\u05e8 \u05d4\u05e0\u05d5\u05d6\u05dc \u05de\u05e6\u05d8\u05d1\u05e8. \u05d4\u05d6\u05d5\u05e0\u05d4 \u05e4\u05dc\u05d5\u05e6\u05d9\u05d3\u05d4 \u05de\u05d3\u05dc\u05d3\u05dc\u05ea \u05d1\u05d4\u05db\u05e0\u05d4 \u05dc\u05d1\u05e7\u05d9\u05e2\u05d4.',
-      fact:'\u05d3\u05d9\u05e8\u05d5\u05d2 Gardner (\u05dc\u05d3\u05d5\u05d2\u05de\u05d0 4AA) \u05de\u05d5\u05e7\u05e6\u05d4 \u05d1\u05e9\u05dc\u05d1 \u05d6\u05d4.' },
-    { pill:'\u05d9\u05d5\u05dd 6\u20137', img:'/embryo-day6.png', name:'\u05d9\u05d5\u05dd 6\u20137 \u2014 \u05d1\u05dc\u05e1\u05d8\u05d5\u05e6\u05d9\u05e1\u05d8 \u05d1\u05d5\u05e7\u05e2',
-      desc:'\u05d4\u05d1\u05dc\u05e1\u05d8\u05d5\u05e6\u05d9\u05e1\u05d8 \u05e4\u05d5\u05e8\u05e5 \u05de\u05d4\u05d6\u05d5\u05e0\u05d4 \u05e4\u05dc\u05d5\u05e6\u05d9\u05d3\u05d4 \u2014 "\u05d1\u05e7\u05d9\u05e2\u05d4." \u05d6\u05d4 \u05e0\u05d3\u05e8\u05e9 \u05dc\u05e4\u05e0\u05d9 \u05ea\u05d7\u05d9\u05dc\u05ea \u05d4\u05d4\u05e9\u05ea\u05e8\u05e9\u05d5\u05ea \u05d1\u05e8\u05d7\u05dd.',
-      fact:'\u05e1\u05d9\u05d5\u05e2 \u05d1\u05d1\u05e7\u05d9\u05e2\u05d4 (\u05dc\u05d9\u05d9\u05d6\u05e8) \u05d9\u05db\u05d5\u05dc \u05dc\u05e9\u05de\u05e9 \u05db\u05d3\u05d9 \u05dc\u05e1\u05d9\u05d9\u05e2 \u05dc\u05e2\u05d5\u05d1\u05e8\u05d9\u05dd \u05e9\u05de\u05ea\u05e7\u05e9\u05d9\u05dd \u05dc\u05d1\u05e7\u05d5\u05e2.' }
-  ]
-};
-
-function initEmbryoTab() {
-  _buildEmbryoDayPills();
-  _buildFunnelInputs();
-  _buildGradeDecoder();
-  _buildDeepDive();
-  _refreshEmbryoI18n();
-}
-
-function _refreshEmbryoI18n() {
-  const t = EMB_I18N[currentLang];
-  _set('embHeroTitle', t.heroTitle);
-  _set('embHeroSub', t.heroSub);
-  _set('embHeroCaption', t.heroCaption);
-  _set('embDaysTitle', t.daysTitle);
-  _set('embFunnelTitle', t.funnelTitle);
-  _set('embFunnelSub', t.funnelSub);
-  _set('embGradeTitle', t.gradeTitle);
-  _set('embGradeSub', t.gradeSub);
-  _set('embDeepTitle', t.deepTitle);
-  _buildEmbryoDayPills();
-  const activeIdx = parseInt(document.querySelector('.emb-day-pill.active')?.dataset.idx || '0');
-  _selectEmbryoDay(activeIdx, false);
-  _updateFunnelLabels();
-  _buildGradeDecoder();
-  _buildDeepDive();
-  updateFunnel();
-  updateGradeDecoder();
-}
-
-function _set(id, text) {
-  const el = document.getElementById(id);
-  if (el) el.textContent = text;
-}
-
-function _buildEmbryoDayPills() {
-  const container = document.getElementById('embDayPills');
-  if (!container) return;
-  const days = EMB_DAYS[currentLang];
-  container.innerHTML = '';
-  days.forEach((d, i) => {
-    const btn = document.createElement('button');
-    btn.className = 'emb-day-pill' + (i === 0 ? ' active' : '');
-    btn.textContent = d.pill;
-    btn.dataset.idx = i;
-    btn.onclick = () => _selectEmbryoDay(i, true);
-    container.appendChild(btn);
-  });
-  _selectEmbryoDay(0, false);
-}
-
-function _selectEmbryoDay(idx, animate) {
-  const days = EMB_DAYS[currentLang];
-  const d = days[idx];
-  if (!d) return;
-  document.querySelectorAll('.emb-day-pill').forEach(p =>
-    p.classList.toggle('active', parseInt(p.dataset.idx) === idx)
-  );
-  const img = document.getElementById('embDayImg');
-  if (img) {
-    if (animate) {
-      img.classList.add('fade-out');
-      setTimeout(() => { img.src = d.img; img.classList.remove('fade-out'); }, 300);
-    } else {
-      img.src = d.img;
-    }
-  }
-  _set('embDayName', d.name);
-  _set('embDayDesc', d.desc);
-  _set('embDayFactLabel', EMB_I18N[currentLang].factLabel);
-  _set('embDayFactText', d.fact);
-}
-
-const EMB_FUNNEL_KEYS = ['eggs','mii','fert','blast'];
-
-function _buildFunnelInputs() {
-  const container = document.getElementById('embFunnelInputs');
-  if (!container) return;
-  container.innerHTML = '';
-  const t = EMB_I18N[currentLang];
-  EMB_FUNNEL_KEYS.forEach((key, i) => {
-    const field = document.createElement('div');
-    field.className = 'emb-funnel-field';
-    const lbl = document.createElement('label');
-    lbl.id = 'embFunnelLbl' + i;
-    lbl.textContent = t.funnelLabels[i];
-    const inp = document.createElement('input');
-    inp.type = 'number'; inp.min = '0'; inp.max = '99'; inp.placeholder = '0';
-    inp.id = 'embFunnelInp' + key; inp.oninput = updateFunnel;
-    field.appendChild(lbl); field.appendChild(inp);
-    container.appendChild(field);
-  });
-  _buildFunnelChart();
-}
-
-function _updateFunnelLabels() {
-  const t = EMB_I18N[currentLang];
-  EMB_FUNNEL_KEYS.forEach((key, i) => {
-    const lbl = document.getElementById('embFunnelLbl' + i);
-    if (lbl) lbl.textContent = t.funnelLabels[i];
-    const blbl = document.getElementById('embFunnelBarLbl' + i);
-    if (blbl) blbl.textContent = t.funnelLabels[i];
-  });
-}
-
-function _buildFunnelChart() {
-  const chart = document.getElementById('embFunnelChart');
-  if (!chart) return;
-  chart.innerHTML = '';
-  const t = EMB_I18N[currentLang];
-  EMB_FUNNEL_KEYS.forEach((key, i) => {
-    const row = document.createElement('div');
-    row.className = 'emb-funnel-bar-row';
-    row.innerHTML = '<span class="emb-funnel-bar-label" id="embFunnelBarLbl'+i+'">'+t.funnelLabels[i]+'</span>'
-      +'<div class="emb-funnel-bar-track"><div class="emb-funnel-bar-fill" id="embFunnelBar'+key+'" style="width:0%">'
-      +'<span class="emb-funnel-bar-val" id="embFunnelBarVal'+key+'"></span></div></div>';
-    chart.appendChild(row);
-  });
-}
-
-function updateFunnel() {
-  const t = EMB_I18N[currentLang];
-  const vals = EMB_FUNNEL_KEYS.map(k => {
-    const el = document.getElementById('embFunnelInp' + k);
-    return el ? (parseInt(el.value) || 0) : 0;
-  });
-  const max = Math.max(...vals, 1);
-  EMB_FUNNEL_KEYS.forEach((key, i) => {
-    const lbl = document.getElementById('embFunnelBarLbl' + i);
-    if (lbl) lbl.textContent = t.funnelLabels[i];
-    const bar = document.getElementById('embFunnelBar' + key);
-    const valEl = document.getElementById('embFunnelBarVal' + key);
-    const pct = vals[i] ? Math.max(8, Math.round((vals[i] / max) * 100)) : 0;
-    if (bar) bar.style.width = pct + '%';
-    if (valEl) valEl.textContent = vals[i] || '';
-  });
-  const sumEl = document.getElementById('embFunnelSummary');
-  if (!sumEl) return;
-  if (!vals[0]) { sumEl.textContent = t.funnelSummaryDefault; return; }
-  const [eggs, mii, fert, blast] = vals;
-  const matRate = eggs ? Math.round(mii/eggs*100) : 0;
-  const fertRate = mii ? Math.round(fert/mii*100) : 0;
-  const blastRate = fert ? Math.round(blast/fert*100) : 0;
-  if (currentLang === 'he') {
-    sumEl.innerHTML = '\u05e0\u05e9\u05d0\u05d1\u05d5 <strong style="color:#c9a84c">'+eggs+'</strong> \u05d1\u05d9\u05e6\u05d9\u05d5\u05ea \u2192 '
-      +'<strong style="color:#c9a84c">'+mii+'</strong> \u05d1\u05e9\u05dc\u05d5\u05ea ('+matRate+'%) \u2192 '
-      +'<strong style="color:#c9a84c">'+fert+'</strong> \u05d4\u05d5\u05e4\u05e8\u05d5 ('+fertRate+'%) \u2192 '
-      +'<strong style="color:#c9a84c">'+blast+'</strong> \u05d1\u05dc\u05e1\u05d8\u05d5\u05e6\u05d9\u05e1\u05d8\u05d9\u05dd ('+blastRate+'%).';
-  } else {
-    sumEl.innerHTML = '<strong style="color:#c9a84c">'+eggs+'</strong> eggs retrieved \u2192 '
-      +'<strong style="color:#c9a84c">'+mii+'</strong> mature ('+matRate+'%) \u2192 '
-      +'<strong style="color:#c9a84c">'+fert+'</strong> fertilized ('+fertRate+'%) \u2192 '
-      +'<strong style="color:#c9a84c">'+blast+'</strong> blastocysts ('+blastRate+'%).';
-  }
-}
-
-function _buildGradeDecoder() {
-  const container = document.getElementById('embGradeDropdowns');
-  if (!container) return;
-  // Save current values before rebuild
-  const expEl0 = document.getElementById('embGradeExp');
-  const icmEl0 = document.getElementById('embGradeICM');
-  const teEl0  = document.getElementById('embGradeTE');
-  const prevExp = expEl0 ? expEl0.value : '';
-  const prevICM = icmEl0 ? icmEl0.value : '';
-  const prevTE  = teEl0  ? teEl0.value  : '';
-  container.innerHTML = '';
-  const t = EMB_I18N[currentLang];
-  const optSets = [t.gradeExpOpts, t.gradeICMOpts, t.gradeTEOpts];
-  const ids = ['embGradeExp','embGradeICM','embGradeTE'];
-  const prevVals = [prevExp, prevICM, prevTE];
-  optSets.forEach((opts, i) => {
-    const field = document.createElement('div');
-    field.className = 'emb-grade-field';
-    const lbl = document.createElement('label');
-    lbl.textContent = t.gradeLabels[i];
-    const sel = document.createElement('select');
-    sel.id = ids[i];
-    sel.onchange = updateGradeDecoder;
-    opts.forEach(o => {
-      const opt = document.createElement('option');
-      opt.value = o.v; opt.textContent = o.t;
-      if (o.v === prevVals[i]) opt.selected = true;
-      sel.appendChild(opt);
-    });
-    field.appendChild(lbl); field.appendChild(sel);
-    container.appendChild(field);
-  });
-  updateGradeDecoder();
-}
-
-function updateGradeDecoder() {
-  const t = EMB_I18N[currentLang];
-  const result = document.getElementById('embGradeResult');
-  if (!result) return;
-  const expEl = document.getElementById('embGradeExp');
-  const icmEl = document.getElementById('embGradeICM');
-  const teEl  = document.getElementById('embGradeTE');
-  if (!expEl || !icmEl || !teEl) return;
-  const exp = expEl.value, icm = icmEl.value, te = teEl.value;
-  if (!exp || !icm || !te) {
-    result.innerHTML = '<span class="emb-grade-explain">' + t.gradeResultDefault + '</span>';
-    return;
-  }
-  const key = icm + te;
-  const quality = t.gradeQualities[key] || '';
-  const explain = t.gradeExplains[key] || '';
-  result.innerHTML = '<span class="emb-grade-badge">' + exp + icm + te + '</span>'
-    + '<span class="emb-grade-quality">' + quality + '</span>'
-    + '<span class="emb-grade-explain">' + explain + '</span>';
-}
-
-function _buildDeepDive() {
-  const list = document.getElementById('embDeepList');
-  if (!list) return;
-  list.innerHTML = '';
-  const cards = EMB_I18N[currentLang].deepCards;
-  cards.forEach(c => {
-    const card = document.createElement('div');
-    card.className = 'emb-deep-card';
-    card.innerHTML = '<div class="emb-deep-header" onclick="this.parentElement.classList.toggle(\'open\')">'
-      + '<div class="emb-deep-header-left">'
-      + '<div class="emb-deep-icon">' + c.icon + '</div>'
-      + '<div><div class="emb-deep-card-title">' + c.title + '</div>'
-      + '<div class="emb-deep-card-sub">' + c.sub + '</div></div>'
-      + '</div>'
-      + '<span class="emb-deep-chevron">\u203a</span>'
-      + '</div>'
-      + '<div class="emb-deep-body">' + c.body + '</div>';
-    list.appendChild(card);
-  });
-}
-
-    // ── Academy page bootstrap ───────────────────────────────────────────────
-    // Detect lang from query param or default to Hebrew
-    let currentLang = new URLSearchParams(location.search).get('lang') || 'he';
-
-    const ACAD_HEADER = { en: 'Embryo Academy', he: '\u05d0\u05e7\u05d3\u05de\u05d9\u05d9\u05ea \u05d4\u05e2\u05d5\u05d1\u05e8\u05d9\u05dd' };
-
-    function toggleLang() {
-      currentLang = currentLang === 'he' ? 'en' : 'he';
-      document.documentElement.lang = currentLang;
-      document.documentElement.dir = currentLang === 'he' ? 'rtl' : 'ltr';
-      document.body.classList.toggle('rtl', currentLang === 'he');
-      const btn = document.getElementById('acadLangBtn');
-      if (btn) btn.textContent = currentLang === 'he' ? 'EN' : '\u05e2\u05d1';
-      const hdr = document.getElementById('acadHeaderTitle');
-      if (hdr) hdr.textContent = ACAD_HEADER[currentLang];
-      _refreshEmbryoI18n();
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      if (currentLang === 'he') {
-        document.documentElement.lang = 'he';
-        document.documentElement.dir = 'rtl';
-        document.body.classList.add('rtl');
-        const btn = document.getElementById('acadLangBtn');
-        if (btn) btn.textContent = 'EN';
-      } else {
-        document.documentElement.lang = 'en';
-        document.documentElement.dir = 'ltr';
-        const btn = document.getElementById('acadLangBtn');
-        if (btn) btn.textContent = '\u05e2\u05d1';
+    const STRINGS = {
+      en: {
+        titleJourney: 'The development journey',
+        titleEggs:    'Where did my eggs go?',
+        titleGrade:   'What does my grade mean?',
+        modeSimple:   'Simple',
+        modeScience:  'Science',
+      },
+      he: {
+        titleJourney: '\u05de\u05e1\u05e2 \u05d4\u05d4\u05ea\u05e4\u05ea\u05d7\u05d5\u05ea',
+        titleEggs:    '\u05dc\u05d0\u05df \u05d4\u05dc\u05db\u05d5 \u05d4\u05d1\u05d9\u05e6\u05d9\u05d5\u05ea \u05e9\u05dc\u05d9?',
+        titleGrade:   '\u05de\u05d4 \u05d4\u05de\u05e9\u05de\u05e2\u05d5\u05ea \u05e9\u05dc \u05d4\u05e6\u05d9\u05d5\u05df \u05e9\u05dc\u05d9?',
+        modeSimple:   '\u05e4\u05e9\u05d5\u05d8',
+        modeScience:  '\u05de\u05d3\u05e2\u05d9',
       }
-      const hdr = document.getElementById('acadHeaderTitle');
-      if (hdr) hdr.textContent = ACAD_HEADER[currentLang];
-      initEmbryoTab();
-    });
+    };
+
+    function setLang(lang) {
+      currentLang = lang;
+      document.documentElement.lang = lang;
+      document.documentElement.dir  = lang === 'he' ? 'rtl' : 'ltr';
+      document.querySelectorAll('.acad-lang-btn').forEach(b =>
+        b.classList.toggle('active',
+          (lang === 'he' && b.textContent.trim() === '\u05e2\u05d1') ||
+          (lang === 'en' && b.textContent.trim() === 'EN')
+        )
+      );
+      applyStrings();
+    }
+
+    function applyStrings() {
+      const s = STRINGS[currentLang] || STRINGS.en;
+      Object.keys(s).forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = s[id];
+      });
+    }
+
+    // ── Mode toggle ──────────────────────────────────────────
+    let currentMode = 'simple';
+
+    function setMode(mode) {
+      currentMode = mode;
+      document.getElementById('modeSimple').classList.toggle('active',  mode === 'simple');
+      document.getElementById('modeScience').classList.toggle('active', mode === 'science');
+      // Content switching wired up when sections are filled
+    }
+
+    // ── Init ─────────────────────────────────────────────────
+    setLang('he');
   </script>
+
 </body>
 </html>
