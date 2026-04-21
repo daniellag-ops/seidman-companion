@@ -293,18 +293,22 @@
       padding: 28px 0 24px;
     }
 
-    .story-embryo-circle {
+    .story-embryo-container {
       width: 200px;
       height: 200px;
       border-radius: 50%;
-      background-image: url('/embryo-stages.jpg');
-      background-size: 700% auto;
-      background-color: #fdfbf7;
-      background-position: -200px 50%;
-      transition: opacity 0.35s ease;
+      overflow: hidden;
       flex-shrink: 0;
+      background: #fdfbf7;
     }
-    .story-embryo-circle.fading { opacity: 0; }
+    .story-embryo-img {
+      width: 1400px;
+      height: auto;
+      display: block;
+      margin-top: 0;
+      transition: opacity 0.3s ease;
+    }
+    .story-embryo-img.fading { opacity: 0; }
 
     /* Day label pill — positioned top-left */
     .story-day-label {
@@ -453,7 +457,9 @@
         <div class="story-card">
           <div class="story-img-wrap">
             <span class="story-day-label" id="storyDayLabel">Day 1</span>
-            <div class="story-embryo-circle" id="storyCircle" style="background-position: -200px 50%"></div>
+            <div class="story-embryo-container">
+              <img class="story-embryo-img" id="storyImg" src="/embryo-stages.jpg" style="margin-left:-220px" data-sprite="1" />
+            </div>
           </div>
           <div class="story-text">
             <h3 class="story-title-simple" id="storyTitle">The Start of Us</h3>
@@ -753,22 +759,21 @@
       const lbl = document.getElementById('storyDayLabel');
       if (lbl) lbl.textContent = d.label[currentLang] || d.label.en;
 
-      // Sprite crop update with fade
-      const circle = document.getElementById('storyCircle');
-      if (circle) {
-        const xOffset = -(d.sprite * 200);
-        const newPos = xOffset + 'px 50%';
-        if (animate && circle.dataset.sprite !== String(d.sprite)) {
-          circle.classList.add('fading');
+      // Sprite shift with cross-fade
+      const img = document.getElementById('storyImg');
+      if (img) {
+        const ml = -(20 + d.sprite * 200);
+        if (animate && img.dataset.sprite !== String(d.sprite)) {
+          img.classList.add('fading');
           setTimeout(() => {
-            circle.style.backgroundPosition = newPos;
-            circle.dataset.sprite = d.sprite;
-            circle.classList.remove('fading');
-          }, 320);
+            img.style.marginLeft = ml + 'px';
+            img.dataset.sprite = d.sprite;
+            img.classList.remove('fading');
+          }, 280);
         } else {
-          circle.style.backgroundPosition = newPos;
-          circle.dataset.sprite = d.sprite;
-          circle.classList.remove('fading');
+          img.style.marginLeft = ml + 'px';
+          img.dataset.sprite = d.sprite;
+          img.classList.remove('fading');
         }
       }
 
