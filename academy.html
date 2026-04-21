@@ -6,7 +6,7 @@
   <title>Embryo Academy · Melody</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=DM+Serif+Display&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=DM+Serif+Display&family=Lora:ital,wght@0,600;1,400;1,600&display=swap" rel="stylesheet" />
   <style>
     /* ── Reset & base ─────────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -227,6 +227,149 @@
       border-top: 1px solid var(--border);
     }
     .acad-footer strong { font-weight: 700; color: var(--brown); }
+
+    /* ── Journey section ─────────────────────────────────── */
+    @import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400;1,600&display=swap');
+
+    .journey-body {
+      padding: 20px 20px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* Day pills row */
+    .day-pills-scroll {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .day-pills-scroll::-webkit-scrollbar { display: none; }
+
+    .day-pill {
+      flex-shrink: 0;
+      scroll-snap-align: start;
+      padding: 7px 15px;
+      border-radius: 100px;
+      border: 1.5px solid var(--border);
+      background: transparent;
+      font-family: 'Nunito', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--brown2);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+    .day-pill:hover { border-color: var(--teal); color: var(--teal); background: rgba(14,107,107,0.04); }
+    .day-pill.active {
+      background: var(--brown);
+      border-color: var(--brown);
+      color: #fff;
+    }
+
+    /* Storybook card */
+    .story-card {
+      border: 2px solid var(--brown);
+      border-radius: 28px;
+      box-shadow: 5px 5px 0px #9fb8ad;
+      background: #fff;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Image area */
+    .story-img-wrap {
+      position: relative;
+      background: #f0ece6;
+      min-height: 200px;
+      overflow: hidden;
+    }
+    .story-img {
+      width: 100%;
+      display: block;
+      transition: opacity 0.35s ease;
+    }
+    .story-img.fading { opacity: 0; }
+
+    /* Day label pill — positioned top-left */
+    .story-day-label {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      background: var(--brown);
+      color: #fff;
+      font-family: 'Nunito', sans-serif;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 5px 12px;
+      border-radius: 100px;
+      letter-spacing: 0.3px;
+      z-index: 2;
+    }
+    html[dir="rtl"] .story-day-label { left: auto; right: 14px; }
+
+    /* Text area */
+    .story-text {
+      padding: 22px 22px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .story-title-simple {
+      font-family: 'Lora', Georgia, serif;
+      font-style: italic;
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--brown);
+      line-height: 1.3;
+    }
+    .story-title-science {
+      font-family: 'Nunito', sans-serif;
+      font-style: normal;
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--teal);
+      line-height: 1.3;
+    }
+
+    .story-desc {
+      font-size: 14px;
+      color: var(--brown2);
+      line-height: 1.7;
+    }
+    .story-desc-simple { font-family: 'Lora', Georgia, serif; }
+    .story-desc-science { font-family: 'Nunito', sans-serif; }
+
+    /* Fact box */
+    .story-fact {
+      margin: 14px 22px 22px;
+      background: #ffdfd3;
+      border-radius: 14px;
+      padding: 13px 16px;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+    .story-fact-icon {
+      font-size: 16px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .story-fact-text {
+      font-size: 13px;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 600;
+      color: #7a3a2a;
+      line-height: 1.5;
+    }
+
   </style>
 </head>
 <body>
@@ -292,8 +435,27 @@
         <div class="acad-section-num">1</div>
         <h2 class="acad-section-title" id="titleJourney">The development journey</h2>
       </div>
-      <div class="acad-section-body">
-        <p class="acad-empty-hint">Content coming soon</p>
+      <div class="journey-body">
+
+        <!-- Day pills -->
+        <div class="day-pills-scroll" id="dayPillsRow" role="group" aria-label="Select day"></div>
+
+        <!-- Storybook card -->
+        <div class="story-card">
+          <div class="story-img-wrap">
+            <span class="story-day-label" id="storyDayLabel">Day 1</span>
+            <img class="story-img" id="storyImg" src="/embryo-day1.png" alt="Embryo development" />
+          </div>
+          <div class="story-text">
+            <h3 class="story-title-simple" id="storyTitle">The Start of Us</h3>
+            <p  class="story-desc story-desc-simple" id="storyDesc">Imagine a tiny seed, perfectly whole.</p>
+          </div>
+          <div class="story-fact">
+            <span class="story-fact-icon">💡</span>
+            <span class="story-fact-text" id="storyFact"></span>
+          </div>
+        </div>
+
       </div>
     </section>
 
@@ -366,6 +528,7 @@
         const el = document.getElementById(id);
         if (el) el.textContent = s[id];
       });
+      if (typeof refreshJourneyLang === 'function') refreshJourneyLang();
     }
 
     // ── Mode toggle ──────────────────────────────────────────
@@ -375,11 +538,261 @@
       currentMode = mode;
       document.getElementById('modeSimple').classList.toggle('active',  mode === 'simple');
       document.getElementById('modeScience').classList.toggle('active', mode === 'science');
-      // Content switching wired up when sections are filled
+      selectDay(currentDay, false);
+    }
+
+    // ── Journey timeline data ─────────────────────────────────
+    const DAYS = [
+      {
+        pill: { en: 'Day 1',         he: 'יום 1'          },
+        label:{ en: 'Day 1',         he: 'יום 1'          },
+        img: '/embryo-day1.png',
+        simple: {
+          en: { title: 'The Start of Us',
+                desc:  'Imagine a tiny seed, perfectly whole. Today, the instructions from egg and sperm have met and fused — quietly, invisibly, inside the lab.' },
+          he: { title: 'הראשית שלנו',
+                desc:  'דמייני זרע קטן, שלם לחלוטין. היום, ההוראות מהביצית ומהזרע נפגשו והתמזגו — בשקט, בלתי נראה, בתוך המעבדה.' }
+        },
+        science: {
+          en: { title: '2PN Zygote',
+                desc:  'Bipronuclear zygote confirming successful syngamy. Two pronuclei visible 16–18 hours post-insemination, confirming normal fertilization.' },
+          he: { title: 'זיגוטה 2PN',
+                desc:  'זיגוטה דו-פרונוקלאית המאשרת סינגמיה תקינה. שני פרונוקלאים גלויים 16–18 שעות לאחר ההזרעה, המאשרים הפרייה תקינה.' }
+        },
+        fact: {
+          en: 'Two pronuclei (2PN) confirm exactly one sperm fertilized the egg. Abnormal fertilization (1PN or 3PN) means the embryo won't be used.',
+          he: 'שני פרונוקלאים (2PN) מאשרים שזרע אחד בדיוק הפרה את הביצית. הפרייה לא תקינה (1PN או 3PN) אינה מאפשרת שימוש בעובר.'
+        }
+      },
+      {
+        pill: { en: 'Day 2 · 2-cell', he: 'יום 2 · 2 תאים' },
+        label:{ en: 'Day 2',          he: 'יום 2'           },
+        img: '/embryo-day2a.png',
+        simple: {
+          en: { title: 'First Steps',
+                desc:  'The seed has split — now there are two. Small and equal, holding the same promise. It is still barely visible to the naked eye, but something has begun.' },
+          he: { title: 'צעדים ראשונים',
+                desc:  'הזרע התפצל — עכשיו ישנם שניים. קטנים ושווים, ובכל זאת מחזיקים את אותה הבטחה. עדיין בקושי נראה לעין, אבל משהו כבר התחיל.' }
+        },
+        science: {
+          en: { title: '2-Cell Embryo',
+                desc:  'First mitotic cleavage complete. Two equal blastomeres; both totipotent at this stage. Cytoplasm divides without increase in total embryo volume.' },
+          he: { title: 'עובר 2 תאים',
+                desc:  'החלוקה המיטוטית הראשונה הושלמה. שני בלסטומרים שווים; שניהם טוטיפוטנטיים בשלב זה. הציטופלזמה מתחלקת ללא עלייה בנפח כולל.' }
+        },
+        fact: {
+          en: 'Each blastomere at this stage is totipotent — theoretically capable of developing into a complete human being.',
+          he: 'כל בלסטומר בשלב זה הוא טוטיפוטנטי — יכול תיאורטית להתפתח לאדם שלם.'
+        }
+      },
+      {
+        pill: { en: 'Day 2 · 4-cell', he: 'יום 2 · 4 תאים' },
+        label:{ en: 'Day 2',          he: 'יום 2'           },
+        img: '/embryo-day2b.png',
+        simple: {
+          en: { title: 'Growing',
+                desc:  'Four now. Still unhurried, still learning what it means to become. The lab is quiet around it, and your embryo is simply working.' },
+          he: { title: 'גדל',
+                desc:  'ארבעה עכשיו. עדיין בלא מהירות, עדיין לומד מה פירוש להפוך למשהו. המעבדה שקטה סביבו, והעובר שלך פשוט עובד.' }
+        },
+        science: {
+          en: { title: '4-Cell Embryo',
+                desc:  'Second cleavage complete. Four blastomeres graded on cell number, symmetry, and fragmentation. Less than 10% fragmentation indicates good quality.' },
+          he: { title: 'עובר 4 תאים',
+                desc:  'החלוקה השנייה הושלמה. ארבעה בלסטומרים מדורגים לפי מספר תאים, סימטריה ופרגמנטציה. פחות מ-10% פרגמנטציה מעיד על איכות טובה.' }
+        },
+        fact: {
+          en: 'Embryo grading at day 2 evaluates cell symmetry and fragmentation — two key quality indicators.',
+          he: 'דירוג העובר ביום 2 מעריך סימטריה תאית ופרגמנטציה — שני מחווני איכות מרכזיים.'
+        }
+      },
+      {
+        pill: { en: 'Day 3',     he: 'יום 3'  },
+        label:{ en: 'Day 3',     he: 'יום 3'  },
+        img: '/embryo-day3.png',
+        simple: {
+          en: { title: 'Waking Up',
+                desc:  'Something remarkable happens today — your embryo switches on its own genetic code for the very first time. It is no longer running on borrowed instructions.' },
+          he: { title: 'מתעוררת',
+                desc:  'משהו מרהיב קורה היום — העובר שלך מפעיל את הקוד הגנטי שלו לראשונה אי פעם. הוא כבר לא פועל על הוראות שאולות.' }
+        },
+        science: {
+          en: { title: '8-Cell Embryo — EGA',
+                desc:  'Embryonic genome activation (EGA) occurs at the 8-cell stage. Transition from maternal mRNA to embryonic gene expression. Critical developmental checkpoint.' },
+          he: { title: 'עובר 8 תאים — EGA',
+                desc:  'אקטיבציה של הגנום העוברי (EGA) מתרחשת בשלב 8 התאים. מעבר מ-mRNA אימהי לביטוי גנים עוברי. נקודת ביקורת התפתחותית קריטית.' }
+        },
+        fact: {
+          en: 'Day 3 is when the embryo's own DNA takes over from proteins stored in the egg — a major milestone in development.',
+          he: 'יום 3 הוא כאשר ה-DNA של העובר עצמו משתלט על חלבונים שהיו מאוחסנים בביצית — אבן דרך מרכזית בהתפתחות.'
+        }
+      },
+      {
+        pill: { en: 'Day 4',     he: 'יום 4'  },
+        label:{ en: 'Day 4',     he: 'יום 4'  },
+        img: '/embryo-day4.png',
+        simple: {
+          en: { title: 'Coming Together',
+                desc:  'The cells press close, edges blurring into each other. They are learning to cooperate — losing their individuality in service of something larger.' },
+          he: { title: 'מתאחדים',
+                desc:  'התאים מתקרבים, הגבולות ביניהם מיטשטשים. הם לומדים לשתף פעולה — מאבדים את האינדיבידואליות שלהם לטובת משהו גדול יותר.' }
+        },
+        science: {
+          en: { title: 'Morula — Compaction',
+                desc:  '16–32 cell morula undergoes E-cadherin-mediated compaction. Tight junctions form between blastomeres, sealing the embryo and initiating polarity.' },
+          he: { title: 'מורולה — קומפקציה',
+                desc:  'מורולה של 16–32 תאים עוברת קומפקציה באמצעות E-cadherin. נוצרים חיבורי tight junction בין הבלסטומרים, האוטמים את העובר ומתחילים קיטוב.' }
+        },
+        fact: {
+          en: 'Compaction is a critical quality checkpoint — poorly compacted embryos rarely progress to blastocyst.',
+          he: 'קומפקציה היא נקודת בקרת איכות קריטית — עוברים שאינם מתכווצים כראוי לעתים נדירות מגיעים לשלב הבלסטוציסט.'
+        }
+      },
+      {
+        pill: { en: 'Day 5',     he: 'יום 5'  },
+        label:{ en: 'Day 5',     he: 'יום 5'  },
+        img: '/embryo-day5a.png',
+        simple: {
+          en: { title: 'A World Inside',
+                desc:  'A hollow has opened at the centre. Two families of cells are beginning to know what they will become — one will be your baby, one will be the placenta.' },
+          he: { title: 'עולם בפנים',
+                desc:  'חלל נפתח במרכז. שתי קבוצות תאים מתחילות להבין מה הן יהפכו — אחת תהיה התינוק שלך, השנייה תהיה השליה.' }
+        },
+        science: {
+          en: { title: 'Early Blastocyst',
+                desc:  'Blastocoel cavity forms via fluid accumulation by the trophectoderm. Inner cell mass (ICM) and trophectoderm (TE) differentiate — embryonic and extra-embryonic lineages established.' },
+          he: { title: 'בלסטוציסט מוקדם',
+                desc:  'חלל הבלסטוסל נוצר באמצעות הצטברות נוזל על ידי הטרופקטודרם. מסת התאים הפנימיים (ICM) והטרופקטודרם (TE) מתמיינים — נוצרות שתי שושלות תאים נפרדות.' }
+        },
+        fact: {
+          en: 'Day 5 blastocysts have the highest implantation potential of all developmental stages.',
+          he: 'לבלסטוציסטים של יום 5 יש את פוטנציאל ההשתרשות הגבוה ביותר מכל שלבי ההתפתחות.'
+        }
+      },
+      {
+        pill: { en: 'Day 5–6',   he: 'יום 5–6' },
+        label:{ en: 'Day 5–6',   he: 'יום 5–6' },
+        img: '/embryo-day5a.png',
+        simple: {
+          en: { title: 'Ready',
+                desc:  'The embryo has grown into its full form — expanded, rounded, distinct. The shell around it is thinning, as if preparing for something important.' },
+          he: { title: 'מוכן',
+                desc:  'העובר גדל לצורתו המלאה — מורחב, עגול, ברור. הקליפה סביבו מדלדלת, כאילו מתכוננת למשהו חשוב.' }
+        },
+        science: {
+          en: { title: 'Expanded Blastocyst',
+                desc:  'Blastocoel expansion continues; zona pellucida progressively thins. Gardner grading assigned: expansion stage (3–4), ICM quality (A/B/C), trophectoderm quality (A/B/C).' },
+          he: { title: 'בלסטוציסט מורחב',
+                desc:  'הרחבת הבלסטוסל נמשכת; הזונה פלוצידה מדלדלת בהדרגה. דירוג Gardner מוקצה: שלב התרחבות (3–4), איכות ICM (A/B/C), איכות טרופקטודרם (A/B/C).' }
+        },
+        fact: {
+          en: 'A Gardner grade like "4AA" describes expansion (4), ICM quality (A), and trophectoderm quality (A).',
+          he: 'דירוג Gardner כמו "4AA" מתאר את ההתרחבות (4), איכות ICM (A) ואיכות הטרופקטודרם (A).'
+        }
+      },
+      {
+        pill: { en: 'Day 6–7',   he: 'יום 6–7' },
+        label:{ en: 'Day 6–7',   he: 'יום 6–7' },
+        img: '/embryo-day6.png',
+        simple: {
+          en: { title: 'Breaking Free',
+                desc:  'The embryo pushes gently through its shell — hatching, like all new beginnings. If transferred, this is the moment it would reach for the uterine wall.' },
+          he: { title: 'שובר חופשי',
+                desc:  'העובר דוחק בעדינות דרך קליפתו — בוקע, כמו כל התחלה חדשה. אם הועבר, זה הרגע שבו הוא היה מושיט יד אל דופן הרחם.' }
+        },
+        science: {
+          en: { title: 'Hatching Blastocyst',
+                desc:  'Zona pellucida lysis allows blastocyst herniation and hatching. Trophectoderm exposure required for trophoblast attachment and initiation of implantation. Expansion grade 5–6.' },
+          he: { title: 'בלסטוציסט בוקע',
+                desc:  'ליזה של הזונה פלוצידה מאפשרת פריצה ובקיעה של הבלסטוציסט. חשיפת הטרופקטודרם נדרשת לצמידות הטרופובלסט ותחילת ההשתרשות. שלב התרחבות 5–6.' }
+        },
+        fact: {
+          en: 'Assisted hatching using a laser beam can help embryos that show delayed or incomplete hatching.',
+          he: 'סיוע בבקיעה באמצעות קרן לייזר יכול לעזור לעוברים המציגים בקיעה מאוחרת או חלקית.'
+        }
+      }
+    ];
+
+    // ── Journey timeline logic ────────────────────────────────
+    let currentDay = 0;
+
+    function buildDayPills() {
+      const row = document.getElementById('dayPillsRow');
+      if (!row) return;
+      row.innerHTML = '';
+      DAYS.forEach((d, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'day-pill' + (i === 0 ? ' active' : '');
+        btn.textContent = d.pill[currentLang] || d.pill.en;
+        btn.dataset.idx = i;
+        btn.onclick = () => selectDay(i, true);
+        row.appendChild(btn);
+      });
+    }
+
+    function selectDay(idx, animate) {
+      currentDay = idx;
+      const d = DAYS[idx];
+      if (!d) return;
+
+      // Update pill active state
+      document.querySelectorAll('.day-pill').forEach(p =>
+        p.classList.toggle('active', parseInt(p.dataset.idx) === idx)
+      );
+
+      // Update day label
+      const lbl = document.getElementById('storyDayLabel');
+      if (lbl) lbl.textContent = d.label[currentLang] || d.label.en;
+
+      // Image fade
+      const img = document.getElementById('storyImg');
+      if (img) {
+        if (animate && img.src.split('/').pop() !== d.img.split('/').pop()) {
+          img.classList.add('fading');
+          setTimeout(() => {
+            img.src = d.img;
+            img.classList.remove('fading');
+          }, 320);
+        } else {
+          img.src = d.img;
+          img.classList.remove('fading');
+        }
+      }
+
+      // Title & desc
+      const mode = currentMode;
+      const content = (mode === 'science' ? d.science : d.simple)[currentLang]
+                   || (mode === 'science' ? d.science : d.simple).en;
+
+      const titleEl = document.getElementById('storyTitle');
+      if (titleEl) {
+        titleEl.textContent = content.title;
+        titleEl.className = mode === 'science' ? 'story-title-science' : 'story-title-simple';
+      }
+
+      const descEl = document.getElementById('storyDesc');
+      if (descEl) {
+        descEl.textContent = content.desc;
+        descEl.className = 'story-desc ' + (mode === 'science' ? 'story-desc-science' : 'story-desc-simple');
+      }
+
+      const factEl = document.getElementById('storyFact');
+      if (factEl) factEl.textContent = d.fact[currentLang] || d.fact.en;
+    }
+
+    function refreshJourneyLang() {
+      // Rebuild pills with current language
+      document.querySelectorAll('.day-pill').forEach((btn, i) => {
+        btn.textContent = DAYS[i]?.pill[currentLang] || DAYS[i]?.pill.en || '';
+      });
+      // Re-render current day
+      selectDay(currentDay, false);
     }
 
     // ── Init ─────────────────────────────────────────────────
     setLang('he');
+    buildDayPills();
+    selectDay(0, false);
   </script>
 
 </body>
