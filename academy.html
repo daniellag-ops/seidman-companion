@@ -286,16 +286,25 @@
     /* Image area */
     .story-img-wrap {
       position: relative;
-      background: #f0ece6;
-      min-height: 200px;
-      overflow: hidden;
+      background: #fdfbf7;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 28px 0 24px;
     }
-    .story-img {
-      width: 100%;
-      display: block;
+
+    .story-embryo-circle {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      background-image: url('/embryo-stages.jpg');
+      background-size: 700% auto;
+      background-color: #fdfbf7;
+      background-position: -200px 50%;
       transition: opacity 0.35s ease;
+      flex-shrink: 0;
     }
-    .story-img.fading { opacity: 0; }
+    .story-embryo-circle.fading { opacity: 0; }
 
     /* Day label pill — positioned top-left */
     .story-day-label {
@@ -444,7 +453,7 @@
         <div class="story-card">
           <div class="story-img-wrap">
             <span class="story-day-label" id="storyDayLabel">Day 1</span>
-            <img class="story-img" id="storyImg" src="/embryo-day1.png" alt="Embryo development" />
+            <div class="story-embryo-circle" id="storyCircle" style="background-position: -200px 50%"></div>
           </div>
           <div class="story-text">
             <h3 class="story-title-simple" id="storyTitle">The Start of Us</h3>
@@ -546,7 +555,7 @@
       {
         pill: { en: 'Day 1',         he: 'יום 1'          },
         label:{ en: 'Day 1',         he: 'יום 1'          },
-        img: '/embryo-day1.png',
+        sprite: 1,
         simple: {
           en: { title: 'The Start of Us',
                 desc:  'Imagine a tiny seed, perfectly whole. Today, the instructions from egg and sperm have met and fused — quietly, invisibly, inside the lab.' },
@@ -567,7 +576,7 @@
       {
         pill: { en: 'Day 2 · 2-cell', he: 'יום 2 · 2 תאים' },
         label:{ en: 'Day 2',          he: 'יום 2'           },
-        img: '/embryo-day2a.png',
+        sprite: 2,
         simple: {
           en: { title: 'First Steps',
                 desc:  'The seed has split — now there are two. Small and equal, holding the same promise. It is still barely visible to the naked eye, but something has begun.' },
@@ -588,7 +597,7 @@
       {
         pill: { en: 'Day 2 · 4-cell', he: 'יום 2 · 4 תאים' },
         label:{ en: 'Day 2',          he: 'יום 2'           },
-        img: '/embryo-day2b.png',
+        sprite: 2,
         simple: {
           en: { title: 'Growing',
                 desc:  'Four now. Still unhurried, still learning what it means to become. The lab is quiet around it, and your embryo is simply working.' },
@@ -609,7 +618,7 @@
       {
         pill: { en: 'Day 3',     he: 'יום 3'  },
         label:{ en: 'Day 3',     he: 'יום 3'  },
-        img: '/embryo-day3.png',
+        sprite: 3,
         simple: {
           en: { title: 'Waking Up',
                 desc:  'Something remarkable happens today — your embryo switches on its own genetic code for the very first time. It is no longer running on borrowed instructions.' },
@@ -630,7 +639,7 @@
       {
         pill: { en: 'Day 4',     he: 'יום 4'  },
         label:{ en: 'Day 4',     he: 'יום 4'  },
-        img: '/embryo-day4.png',
+        sprite: 4,
         simple: {
           en: { title: 'Coming Together',
                 desc:  'The cells press close, edges blurring into each other. They are learning to cooperate — losing their individuality in service of something larger.' },
@@ -651,7 +660,7 @@
       {
         pill: { en: 'Day 5',     he: 'יום 5'  },
         label:{ en: 'Day 5',     he: 'יום 5'  },
-        img: '/embryo-day5a.png',
+        sprite: 5,
         simple: {
           en: { title: 'A World Inside',
                 desc:  'A hollow has opened at the centre. Two families of cells are beginning to know what they will become — one will be your baby, one will be the placenta.' },
@@ -672,7 +681,7 @@
       {
         pill: { en: 'Day 5–6',   he: 'יום 5–6' },
         label:{ en: 'Day 5–6',   he: 'יום 5–6' },
-        img: '/embryo-day5a.png',
+        sprite: 5,
         simple: {
           en: { title: 'Ready',
                 desc:  'The embryo has grown into its full form — expanded, rounded, distinct. The shell around it is thinning, as if preparing for something important.' },
@@ -693,7 +702,7 @@
       {
         pill: { en: 'Day 6–7',   he: 'יום 6–7' },
         label:{ en: 'Day 6–7',   he: 'יום 6–7' },
-        img: '/embryo-day6.png',
+        sprite: 6,
         simple: {
           en: { title: 'Breaking Free',
                 desc:  'The embryo pushes gently through its shell — hatching, like all new beginnings. If transferred, this is the moment it would reach for the uterine wall.' },
@@ -744,18 +753,22 @@
       const lbl = document.getElementById('storyDayLabel');
       if (lbl) lbl.textContent = d.label[currentLang] || d.label.en;
 
-      // Image fade
-      const img = document.getElementById('storyImg');
-      if (img) {
-        if (animate && img.src.split('/').pop() !== d.img.split('/').pop()) {
-          img.classList.add('fading');
+      // Sprite crop update with fade
+      const circle = document.getElementById('storyCircle');
+      if (circle) {
+        const xOffset = -(d.sprite * 200);
+        const newPos = xOffset + 'px 50%';
+        if (animate && circle.dataset.sprite !== String(d.sprite)) {
+          circle.classList.add('fading');
           setTimeout(() => {
-            img.src = d.img;
-            img.classList.remove('fading');
+            circle.style.backgroundPosition = newPos;
+            circle.dataset.sprite = d.sprite;
+            circle.classList.remove('fading');
           }, 320);
         } else {
-          img.src = d.img;
-          img.classList.remove('fading');
+          circle.style.backgroundPosition = newPos;
+          circle.dataset.sprite = d.sprite;
+          circle.classList.remove('fading');
         }
       }
 
