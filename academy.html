@@ -289,9 +289,13 @@
     }
     .story-embryo-img {
       width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
       display: block;
-      border-radius: 28px 28px 0 0;
+      border-radius: 16px 16px 0 0;
+      transition: opacity 0.3s ease;
     }
+    .story-embryo-img.fading { opacity: 0; }
 
     /* Day label pill — positioned top-left */
     .story-day-label {
@@ -439,7 +443,7 @@
         <!-- Storybook card -->
         <div class="story-card">
           <div class="story-img-wrap">
-              <img class="story-embryo-img" src="/embryo-stages.jpg" alt="Embryo development stages" />
+              <img class="story-embryo-img" id="storyImg" src="/embryo-oocyte.png" alt="" />
             </div>
           <div class="story-text">
             <h3 class="story-title-simple" id="storyTitle">The Start of Us</h3>
@@ -541,6 +545,7 @@
       {
         pill: { en: 'Day 1',         he: 'יום 1'          },
         label:{ en: 'Day 1',         he: 'יום 1'          },
+        img: '/embryo-oocyte.png',
         simple: {
           en: { title: 'The Start of Us',
                 desc:  'Imagine a tiny seed, perfectly whole. Today, the instructions from egg and sperm have met and fused — quietly, invisibly, inside the lab.' },
@@ -561,6 +566,7 @@
       {
         pill: { en: 'Day 2 · 2-cell', he: 'יום 2 · 2 תאים' },
         label:{ en: 'Day 2',          he: 'יום 2'           },
+        img: '/embryo-2pn.png',
         simple: {
           en: { title: 'First Steps',
                 desc:  'The seed has split — now there are two. Small and equal, holding the same promise. It is still barely visible to the naked eye, but something has begun.' },
@@ -581,6 +587,7 @@
       {
         pill: { en: 'Day 2 · 4-cell', he: 'יום 2 · 4 תאים' },
         label:{ en: 'Day 2',          he: 'יום 2'           },
+        img: '/embryo-2cell.png',
         simple: {
           en: { title: 'Growing',
                 desc:  'Four now. Still unhurried, still learning what it means to become. The lab is quiet around it, and your embryo is simply working.' },
@@ -601,6 +608,7 @@
       {
         pill: { en: 'Day 3',     he: 'יום 3'  },
         label:{ en: 'Day 3',     he: 'יום 3'  },
+        img: '/embryo-4cell.png',
         simple: {
           en: { title: 'Waking Up',
                 desc:  'Something remarkable happens today — your embryo switches on its own genetic code for the very first time. It is no longer running on borrowed instructions.' },
@@ -621,6 +629,7 @@
       {
         pill: { en: 'Day 4',     he: 'יום 4'  },
         label:{ en: 'Day 4',     he: 'יום 4'  },
+        img: '/embryo-8cell.png',
         simple: {
           en: { title: 'Coming Together',
                 desc:  'The cells press close, edges blurring into each other. They are learning to cooperate — losing their individuality in service of something larger.' },
@@ -641,6 +650,7 @@
       {
         pill: { en: 'Day 5',     he: 'יום 5'  },
         label:{ en: 'Day 5',     he: 'יום 5'  },
+        img: '/embryo-morula.png',
         simple: {
           en: { title: 'A World Inside',
                 desc:  'A hollow has opened at the centre. Two families of cells are beginning to know what they will become — one will be your baby, one will be the placenta.' },
@@ -661,6 +671,7 @@
       {
         pill: { en: 'Day 5–6',   he: 'יום 5–6' },
         label:{ en: 'Day 5–6',   he: 'יום 5–6' },
+        img: '/embryo-blastocyst.png',
         simple: {
           en: { title: 'Ready',
                 desc:  'The embryo has grown into its full form — expanded, rounded, distinct. The shell around it is thinning, as if preparing for something important.' },
@@ -681,6 +692,7 @@
       {
         pill: { en: 'Day 6–7',   he: 'יום 6–7' },
         label:{ en: 'Day 6–7',   he: 'יום 6–7' },
+        img: '/embryo-hatching.png',
         simple: {
           en: { title: 'Breaking Free',
                 desc:  'The embryo pushes gently through its shell — hatching, like all new beginnings. If transferred, this is the moment it would reach for the uterine wall.' },
@@ -732,6 +744,18 @@
       if (lbl) lbl.textContent = d.label[currentLang] || d.label.en;
 
 
+
+      // Image cross-fade
+      const imgEl = document.getElementById('storyImg');
+      if (imgEl && d.img) {
+        if (animate && imgEl.getAttribute('src') !== d.img) {
+          imgEl.classList.add('fading');
+          setTimeout(() => { imgEl.src = d.img; imgEl.classList.remove('fading'); }, 280);
+        } else {
+          imgEl.src = d.img;
+          imgEl.classList.remove('fading');
+        }
+      }
 
       // Title & desc
       const mode = currentMode;
