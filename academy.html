@@ -297,7 +297,9 @@
       justify-content: center;
       transition: background 0.15s, color 0.15s;
       box-shadow: 2px 2px 0 rgba(74,55,40,0.15);
-      flex-shrink: 0;
+      position: relative;
+      z-index: 999;
+      pointer-events: all;
     }
     .story-nav-arrow:hover { background: var(--brown); color: #fff; }
     .story-nav-arrow:disabled { opacity: 0.3; cursor: default; }
@@ -354,6 +356,7 @@
       border-radius: 100px;
       letter-spacing: 0.3px;
       z-index: 2;
+      pointer-events: none;
     }
     html[dir="rtl"] .story-day-label { left: auto; right: 14px; }
 
