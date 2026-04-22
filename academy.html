@@ -538,6 +538,7 @@
   </footer>
 
   <script>
+  document.addEventListener('DOMContentLoaded', function () {
     // ── i18n ─────────────────────────────────────────────────
     let currentLang = 'he';
 
@@ -841,10 +842,14 @@
     }
 
     function prevDay() {
+      console.log('[Academy] prevDay called, currentDay=', currentDay);
       if (currentDay > 0) selectDay(currentDay - 1, true);
+      else console.log('[Academy] already at first day');
     }
     function nextDay() {
+      console.log('[Academy] nextDay called, currentDay=', currentDay);
       if (currentDay < DAYS.length - 1) selectDay(currentDay + 1, true);
+      else console.log('[Academy] already at last day');
     }
 
     function refreshJourneyLang() {
@@ -860,6 +865,8 @@
     setLang('he');
     buildDayPills();
     selectDay(0, false);
+    console.log('[Academy] init complete, DAYS.length=', DAYS.length);
+  }); // DOMContentLoaded
   </script>
 
 </body>
