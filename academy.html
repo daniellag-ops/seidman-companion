@@ -538,7 +538,6 @@
   </footer>
 
   <script>
-  document.addEventListener('DOMContentLoaded', function () {
     // ── i18n ─────────────────────────────────────────────────
     let currentLang = 'he';
 
@@ -866,11 +865,10 @@
     buildDayPills();
     selectDay(0, false);
 
-    // Wire arrow buttons (must be inside DOMContentLoaded so functions are in scope)
+    // Wire arrow buttons
     document.getElementById('arrowPrev').addEventListener('click', prevDay);
     document.getElementById('arrowNext').addEventListener('click', nextDay);
     console.log('[Academy] init complete, DAYS.length=', DAYS.length);
-  }); // DOMContentLoaded
   </script>
 
 </body>
