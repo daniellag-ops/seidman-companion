@@ -243,7 +243,7 @@
       display: flex;
       gap: 8px;
       overflow-x: auto;
-      padding-bottom: 4px;
+      padding: 2px 4px 8px;
       scroll-snap-type: x mandatory;
       -webkit-overflow-scrolling: touch;
       scrollbar-width: none;
@@ -253,23 +253,66 @@
     .day-pill {
       flex-shrink: 0;
       scroll-snap-align: start;
-      padding: 7px 15px;
+      padding: 8px 16px;
       border-radius: 100px;
-      border: 1.5px solid var(--border);
-      background: transparent;
+      border: 2px solid var(--border);
+      background: #fff;
       font-family: 'Nunito', sans-serif;
-      font-size: 12px;
+      font-size: 13px;
       font-weight: 700;
-      color: var(--brown2);
+      color: var(--brown);
       cursor: pointer;
       transition: all 0.15s ease;
       white-space: nowrap;
+      box-shadow: 2px 2px 0 rgba(74,55,40,0.08);
     }
-    .day-pill:hover { border-color: var(--teal); color: var(--teal); background: rgba(14,107,107,0.04); }
+    .day-pill:hover { border-color: var(--teal); color: var(--teal); }
     .day-pill.active {
       background: var(--brown);
       border-color: var(--brown);
       color: #fff;
+      box-shadow: 2px 2px 0 rgba(74,55,40,0.25);
+    }
+
+    /* Image nav with arrows */
+    .story-img-nav {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .story-nav-arrow {
+      flex-shrink: 0;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 2px solid var(--brown);
+      background: #fff;
+      color: var(--brown);
+      font-size: 18px;
+      line-height: 1;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s, color 0.15s;
+      box-shadow: 2px 2px 0 rgba(74,55,40,0.15);
+      flex-shrink: 0;
+    }
+    .story-nav-arrow:hover { background: var(--brown); color: #fff; }
+    .story-nav-arrow:disabled { opacity: 0.3; cursor: default; }
+    .story-nav-arrow:disabled:hover { background: #fff; color: var(--brown); }
+    .story-img-nav .story-card { flex: 1; min-width: 0; }
+
+    /* Day counter */
+    .story-day-counter {
+      text-align: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--brown2);
+      font-family: 'Nunito', sans-serif;
+      letter-spacing: 0.5px;
+      margin-top: -4px;
     }
 
     /* Storybook card */
@@ -440,9 +483,14 @@
         <!-- Day pills -->
         <div class="day-pills-scroll" id="dayPillsRow" role="group" aria-label="Select day"></div>
 
-        <!-- Storybook card -->
-        <div class="story-card">
-          <div class="story-img-wrap">
+        <!-- Day counter -->
+        <div class="story-day-counter" id="storyCounter">1 / 8</div>
+
+        <!-- Storybook card + arrows -->
+        <div class="story-img-nav">
+          <button class="story-nav-arrow" id="arrowPrev" onclick="prevDay()" aria-label="Previous day">&#8592;</button>
+          <div class="story-card">
+            <div class="story-img-wrap">
               <img class="story-embryo-img" id="storyImg" src="/embryo-oocyte.png" alt="" />
             </div>
           <div class="story-text">
@@ -453,7 +501,9 @@
             <span class="story-fact-icon">💡</span>
             <span class="story-fact-text" id="storyFact"></span>
           </div>
-        </div>
+          </div><!-- /story-card -->
+          <button class="story-nav-arrow" id="arrowNext" onclick="nextDay()" aria-label="Next day">&#8594;</button>
+        </div><!-- /story-img-nav -->
 
       </div>
     </section>
@@ -734,10 +784,22 @@
       const d = DAYS[idx];
       if (!d) return;
 
-      // Update pill active state
-      document.querySelectorAll('.day-pill').forEach(p =>
-        p.classList.toggle('active', parseInt(p.dataset.idx) === idx)
-      );
+      // Update pill active state + scroll into view
+      document.querySelectorAll('.day-pill').forEach(p => {
+        const active = parseInt(p.dataset.idx) === idx;
+        p.classList.toggle('active', active);
+        if (active) p.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      });
+
+      // Counter
+      const counter = document.getElementById('storyCounter');
+      if (counter) counter.textContent = (idx + 1) + ' / ' + DAYS.length;
+
+      // Arrow states
+      const prev = document.getElementById('arrowPrev');
+      const next = document.getElementById('arrowNext');
+      if (prev) prev.disabled = idx === 0;
+      if (next) next.disabled = idx === DAYS.length - 1;
 
       // Update day label
       const lbl = document.getElementById('storyDayLabel');
@@ -776,6 +838,13 @@
 
       const factEl = document.getElementById('storyFact');
       if (factEl) factEl.textContent = d.fact[currentLang] || d.fact.en;
+    }
+
+    function prevDay() {
+      if (currentDay > 0) selectDay(currentDay - 1, true);
+    }
+    function nextDay() {
+      if (currentDay < DAYS.length - 1) selectDay(currentDay + 1, true);
     }
 
     function refreshJourneyLang() {
