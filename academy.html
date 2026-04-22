@@ -488,7 +488,7 @@
 
         <!-- Storybook card + arrows -->
         <div class="story-img-nav">
-          <button class="story-nav-arrow" id="arrowPrev" onclick="prevDay()" aria-label="Previous day">&#8592;</button>
+          <button class="story-nav-arrow" id="arrowPrev" aria-label="Previous day">&#8592;</button>
           <div class="story-card">
             <div class="story-img-wrap">
               <img class="story-embryo-img" id="storyImg" src="/embryo-oocyte.png" alt="" />
@@ -502,7 +502,7 @@
             <span class="story-fact-text" id="storyFact"></span>
           </div>
           </div><!-- /story-card -->
-          <button class="story-nav-arrow" id="arrowNext" onclick="nextDay()" aria-label="Next day">&#8594;</button>
+          <button class="story-nav-arrow" id="arrowNext" aria-label="Next day">&#8594;</button>
         </div><!-- /story-img-nav -->
 
       </div>
@@ -865,6 +865,10 @@
     setLang('he');
     buildDayPills();
     selectDay(0, false);
+
+    // Wire arrow buttons (must be inside DOMContentLoaded so functions are in scope)
+    document.getElementById('arrowPrev').addEventListener('click', prevDay);
+    document.getElementById('arrowNext').addEventListener('click', nextDay);
     console.log('[Academy] init complete, DAYS.length=', DAYS.length);
   }); // DOMContentLoaded
   </script>
