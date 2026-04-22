@@ -446,8 +446,8 @@
       </div>
 
       <div class="acad-lang-toggle">
-        <button class="acad-lang-btn" onclick="setLang('en')">EN</button>
-        <button class="acad-lang-btn active" onclick="setLang('he')">&#1506;&#1489;</button>
+        <button class="acad-lang-btn" id="langEN">EN</button>
+        <button class="acad-lang-btn active" id="langHE">&#1506;&#1489;</button>
       </div>
 
     </div>
@@ -467,8 +467,8 @@
     <!-- Simple / Science toggle -->
     <div class="acad-mode-wrap">
       <div class="acad-mode-track" role="group">
-        <button class="acad-mode-btn active" id="modeSimple"  onclick="setMode('simple')" >Simple</button>
-        <button class="acad-mode-btn"        id="modeScience" onclick="setMode('science')">Science</button>
+        <button class="acad-mode-btn active" id="modeSimple"  >Simple</button>
+        <button class="acad-mode-btn"        id="modeScience" >Science</button>
       </div>
     </div>
 
@@ -774,7 +774,7 @@
         btn.className = 'day-pill' + (i === 0 ? ' active' : '');
         btn.textContent = d.pill[currentLang] || d.pill.en;
         btn.dataset.idx = i;
-        btn.onclick = () => selectDay(i, true);
+        btn.addEventListener('click', () => selectDay(i, true));
         row.appendChild(btn);
       });
     }
@@ -868,6 +868,15 @@
     // Wire arrow buttons
     document.getElementById('arrowPrev').addEventListener('click', prevDay);
     document.getElementById('arrowNext').addEventListener('click', nextDay);
+
+    // Wire lang buttons
+    document.getElementById('langEN').addEventListener('click', () => setLang('en'));
+    document.getElementById('langHE').addEventListener('click', () => setLang('he'));
+
+    // Wire mode buttons
+    document.getElementById('modeSimple').addEventListener('click', () => setMode('simple'));
+    document.getElementById('modeScience').addEventListener('click', () => setMode('science'));
+
     console.log('[Academy] init complete, DAYS.length=', DAYS.length);
   </script>
 
